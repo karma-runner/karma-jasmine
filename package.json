@@ -1,0 +1,32 @@
+{
+  "name": "testacular-jasmine",
+  "version": "0.0.1",
+  "description": "A Testacular plugin - adapter for Jasmine testing framework.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/testacular/testacular-jasmine.git"
+  },
+  "keywords": [
+    "testacular-plugin",
+    "adapter",
+    "jasmine"
+  ],
+  "author": "Vojta Jina <vojta.jina@gmail.com>",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "grunt": "~0.4.0rc5",
+    "grunt-contrib-jshint": "~0.1.1rc5",
+    "testacular": "~0.5.0",
+    "testacular-jasmine": "~0.1.0",
+    "gruntacular": "~0.1.0"
+  },
+  "peerDependencies": {
+    "testacular": "~0.5"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,7 @@
+.*
+src
+test
+tasks
+
+Gruntfile.coffee
+testacular.conf.js
