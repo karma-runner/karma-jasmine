@@ -45,7 +45,7 @@ module.exports = (grunt) ->
         reporters: ['dots']
 
   grunt.loadTasks 'tasks'
-  grunt.loadTasks '../testacular/tasks'
+  # grunt.loadTasks '../testacular/tasks'
   grunt.loadNpmTasks 'grunt-contrib-jshint'
   grunt.loadNpmTasks 'gruntacular'
 
