@@ -5,8 +5,12 @@ files = [
   'test/*.js'
 ];
 
-browsers = ['Chrome'];
+browsers = process.env.TRAVIS ? ['Firefox'] : ['Chrome'];
 
-plugins = ['testacular-jasmine', 'testacular-chrome-launcher'];
+plugins = [
+  'testacular-jasmine',
+  'testacular-chrome-launcher',
+  'testacular-firefox-launcher'
+];
 
 autoWatch = true;
