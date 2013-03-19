@@ -1,17 +1,17 @@
 {
-  "name": "testacular-jasmine",
+  "name": "karma-jasmine",
   "version": "0.0.1",
-  "description": "A Testacular plugin - adapter for Jasmine testing framework.",
+  "description": "A Karma plugin - adapter for Jasmine testing framework.",
   "main": "lib/index.js",
   "scripts": {
     "test": "grunt test"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/testacular/testacular-jasmine.git"
+    "url": "git://github.com/karma-runner/karma-jasmine.git"
   },
   "keywords": [
-    "testacular-plugin",
+    "karma-plugin",
     "adapter",
     "jasmine"
   ],
@@ -21,12 +21,12 @@
   "devDependencies": {
     "grunt": "~0.4.0rc5",
     "grunt-contrib-jshint": "~0.1.1rc5",
-    "testacular": "*",
-    "testacular-jasmine": "*",
-    "gruntacular": "~0.1.0"
+    "karma": "*",
+    "karma-jasmine": "*",
+    "grunt-karma": "~0.3"
   },
   "peerDependencies": {
-    "testacular": "~0.7"
+    "karma": "~0.9"
   },
   "license": "MIT"
 }

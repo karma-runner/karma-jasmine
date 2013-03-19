@@ -8,9 +8,9 @@ files = [
 browsers = process.env.TRAVIS ? ['Firefox'] : ['Chrome'];
 
 plugins = [
-  'testacular-jasmine',
-  'testacular-chrome-launcher',
-  'testacular-firefox-launcher'
+  'karma-jasmine',
+  'karma-chrome-launcher',
+  'karma-firefox-launcher'
 ];
 
 autoWatch = true;

@@ -37,20 +37,20 @@ module.exports = (grunt) ->
         boss: true
         globals: {}
 
-    testacular:
+    karma:
       adapter:
-        configFile: 'testacular.conf.js'
+        configFile: 'karma.conf.js'
         autoWatch: false
         singleRun: true
         reporters: ['dots']
 
   grunt.loadTasks 'tasks'
-  # grunt.loadTasks '../testacular/tasks'
+  # grunt.loadTasks '../karma/tasks'
   grunt.loadNpmTasks 'grunt-contrib-jshint'
-  grunt.loadNpmTasks 'gruntacular'
+  grunt.loadNpmTasks 'grunt-karma'
 
   grunt.registerTask 'default', ['build', 'jshint', 'test']
-  grunt.registerTask 'test', ['testacular']
+  grunt.registerTask 'test', ['karma']
 
   # TODO(vojta): release task
   # grunt.registerTask 'release', 'Build, bump and publish to NPM.', (type) ->

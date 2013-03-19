@@ -4,15 +4,15 @@
  */
 
 describe('jasmine adapter', function() {
-  var Testacular = window.__testacular__.constructor;
+  var Karma = window.__karma__.constructor;
 
-  describe('TestacularReporter', function() {
-    var reporter, testacular, failedIds, env, suite, spec;
+  describe('KarmaReporter', function() {
+    var reporter, karma, failedIds, env, suite, spec;
 
     beforeEach(function() {
-      testacular = new Testacular(new MockSocket(), {});
-      reporter = new TestacularReporter(testacular);
-      spyOn(testacular, 'result');
+      karma = new Karma(new MockSocket(), {});
+      reporter = new KarmaReporter(karma);
+      spyOn(karma, 'result');
 
       env = new jasmine.Env();
       var parentSuite = new jasmine.Suite(env, 'parent');
@@ -22,7 +22,7 @@ describe('jasmine adapter', function() {
 
 
     it('should report success result', function() {
-      testacular.result.andCallFake(function(result) {
+      karma.result.andCallFake(function(result) {
         expect(result.id).toBe(spec.id);
         expect(result.description).toBe('should test');
         expect(result.suite).toEqual(['parent', 'child']);
@@ -31,20 +31,20 @@ describe('jasmine adapter', function() {
       });
 
       reporter.reportSpecResults(spec);
-      expect(testacular.result).toHaveBeenCalled();
+      expect(karma.result).toHaveBeenCalled();
     });
 
 
     it('should report fail result', function() {
       spec.fail(new Error('whatever'));
 
-      testacular.result.andCallFake(function(result) {
+      karma.result.andCallFake(function(result) {
         expect(result.success).toBe(false);
         expect(result.log.length).toBe(1);
       });
 
       reporter.reportSpecResults(spec);
-      expect(testacular.result).toHaveBeenCalled();
+      expect(karma.result).toHaveBeenCalled();
     });
 
 
@@ -58,7 +58,7 @@ describe('jasmine adapter', function() {
 
       spec.fail(error);
 
-      testacular.result.andCallFake(function(result) {
+      karma.result.andCallFake(function(result) {
         expect(result.log).toEqual([
           "Error: Expected 'function' to be 'fxunction'.\n"+
             "    at [object Object].<anonymous> (http://localhost:8080/test/resourceSpec.js:2:3)"
@@ -66,7 +66,7 @@ describe('jasmine adapter', function() {
       });
 
       reporter.reportSpecResults(spec);
-      expect(testacular.result).toHaveBeenCalled();
+      expect(karma.result).toHaveBeenCalled();
     });
 
 
@@ -76,14 +76,14 @@ describe('jasmine adapter', function() {
         return counter++;
       });
 
-      testacular.result.andCallFake(function(result) {
+      karma.result.andCallFake(function(result) {
         expect(result.time).toBe(1); // 4 - 3
       });
 
       reporter.reportSpecStarting(spec);
       reporter.reportSpecResults(spec);
 
-      expect(testacular.result).toHaveBeenCalled();
+      expect(karma.result).toHaveBeenCalled();
     });
   });
 
@@ -135,7 +135,7 @@ describe('jasmine adapter', function() {
     var tc, jasmineEnv, start;
 
     beforeEach(function() {
-      tc = new Testacular(new MockSocket(), {});
+      tc = new Karma(new MockSocket(), {});
 
       spyOn(tc, 'info');
       spyOn(tc, 'complete');
@@ -148,28 +148,28 @@ describe('jasmine adapter', function() {
 
 
   describe('createDumpFn', function() {
-    var dump, testacular;
+    var dump, karma;
 
     beforeEach(function() {
-      testacular = jasmine.createSpyObj('__testacular__', ['info']);
+      karma = jasmine.createSpyObj('__karma__', ['info']);
     });
 
 
     it('should serialize and call info', function() {
-      dump = createDumpFn(testacular, function(value) {
+      dump = createDumpFn(karma, function(value) {
         return value + 'x';
       });
 
       dump(1, 'a');
-      expect(testacular.info).toHaveBeenCalledWith({dump: ['1x', 'ax']});
+      expect(karma.info).toHaveBeenCalledWith({dump: ['1x', 'ax']});
     });
 
 
     it('should allow no serialize', function() {
-      dump = createDumpFn(testacular);
+      dump = createDumpFn(karma);
 
       dump(1, 'a');
-      expect(testacular.info).toHaveBeenCalledWith({dump: [1, 'a']});
+      expect(karma.info).toHaveBeenCalledWith({dump: [1, 'a']});
     });
   });
 

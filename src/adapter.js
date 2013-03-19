@@ -34,7 +34,7 @@ var indexOf = function(collection, item) {
 /**
  * Very simple reporter for jasmine
  */
-var TestacularReporter = function(tc) {
+var KarmaReporter = function(tc) {
 
   this.reportRunnerStarting = function(runner) {
     tc.info({total: runner.specs().length});
@@ -101,7 +101,7 @@ var createStartFn = function(tc, jasmineEnvPassedIn) {
     // in production we ask for it lazily, so that adapter can be loaded even before jasmine
     var jasmineEnv = jasmineEnvPassedIn || window.jasmine.getEnv();
 
-    jasmineEnv.addReporter(new TestacularReporter(tc));
+    jasmineEnv.addReporter(new KarmaReporter(tc));
     jasmineEnv.execute();
   };
 };

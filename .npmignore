@@ -4,4 +4,4 @@ test
 tasks
 
 Gruntfile.coffee
-testacular.conf.js
+karma.conf.js
