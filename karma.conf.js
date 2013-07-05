@@ -1,16 +1,13 @@
-frameworks = ['jasmine'];
+module.exports = function(config) {
+  config.set({
+    frameworks: ['jasmine'],
+    files: [
+      'src/*.js',
+      'test/*.js'
+    ],
 
-files = [
-  'src/*.js',
-  'test/*.js'
-];
+    browsers: process.env.TRAVIS ? ['Firefox'] : ['Chrome'],
 
-browsers = process.env.TRAVIS ? ['Firefox'] : ['Chrome'];
-
-plugins = [
-  'karma-jasmine',
-  'karma-chrome-launcher',
-  'karma-firefox-launcher'
-];
-
-autoWatch = true;
+    autoWatch: true
+  });
+};
