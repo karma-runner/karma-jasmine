@@ -48,6 +48,7 @@ module.exports = (grunt) ->
   # grunt.loadTasks '../karma/tasks'
   grunt.loadNpmTasks 'grunt-contrib-jshint'
   grunt.loadNpmTasks 'grunt-karma'
+  grunt.loadNpmTasks 'grunt-auto-release'
 
   grunt.registerTask 'default', ['build', 'jshint', 'test']
   grunt.registerTask 'test', ['karma']
