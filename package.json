@@ -30,5 +30,8 @@
   "peerDependencies": {
     "karma": "~0.9"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "contributors": [
+    "Friedel Ziegelmayer <friedel.ziegelmayer@gmail.com>"
+  ]
 }
