@@ -16,7 +16,6 @@ module.exports = (grunt) ->
           src: '<%= files.adapter %>'
         options:
           browser: true,
-          es5: true,
           strict: false
           undef: false
           camelcase: false
