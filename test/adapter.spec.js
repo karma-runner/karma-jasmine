@@ -21,6 +21,36 @@ describe('jasmine adapter', function() {
     });
 
 
+    it('should report all spec names', function() {
+      spyOn(karma, 'info').andCallFake(function(info) {
+        expect(info.total).toBe(2);
+        expect(info.specs).toEqual({
+          one: {
+            nested: {
+              _: ['should do something']
+            },
+            _: []
+          },
+          two: {
+            _: ['should not do anything']
+          }
+        });
+      });
+
+      env.describe('one', function() {
+        env.describe('nested', function() {
+          env.it('should do something', function() {});
+        });
+      });
+
+      env.describe('two', function() {
+        env.it('should not do anything', function() {});
+      });
+
+      reporter.reportRunnerStarting(env.currentRunner());
+    });
+
+
     it('should report success result', function() {
       karma.result.andCallFake(function(result) {
         expect(result.id).toBe(spec.id);

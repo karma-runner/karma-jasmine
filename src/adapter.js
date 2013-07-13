@@ -37,7 +37,34 @@ var indexOf = function(collection, item) {
 var KarmaReporter = function(tc) {
 
   this.reportRunnerStarting = function(runner) {
-    tc.info({total: runner.specs().length});
+    var topLevelSuites = runner.topLevelSuites();
+    var specNames = {};
+
+    var processSuite = function(suite, pointer) {
+      var childSuite;
+      var childPointer;
+
+      for (var i = 0; i < suite.suites_.length; i++) {
+        childSuite = suite.suites_[i];
+        childPointer = pointer[childSuite.description] = {};
+        processSuite(childSuite, childPointer);
+      }
+
+      pointer._ = [];
+      for (var j = 0; j < suite.specs_.length; j++) {
+        pointer._.push(suite.specs_[j].description);
+      }
+    }
+
+    var suite;
+    var pointer;
+    for (var k = 0; k < topLevelSuites.length; k++) {
+      suite = topLevelSuites[k];
+      pointer = specNames[suite.description] = {};
+      processSuite(suite, pointer);
+    }
+
+    tc.info({total: runner.specs().length, specs: specNames});
   };
 
   this.reportRunnerResults = function(runner) {
