@@ -54,7 +54,7 @@ var KarmaReporter = function(tc) {
       for (var j = 0; j < suite.specs_.length; j++) {
         pointer._.push(suite.specs_[j].description);
       }
-    }
+    };
 
     var suite;
     var pointer;
