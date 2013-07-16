@@ -177,33 +177,6 @@ describe('jasmine adapter', function() {
   });
 
 
-  describe('createDumpFn', function() {
-    var dump, karma;
-
-    beforeEach(function() {
-      karma = jasmine.createSpyObj('__karma__', ['info']);
-    });
-
-
-    it('should serialize and call info', function() {
-      dump = createDumpFn(karma, function(value) {
-        return value + 'x';
-      });
-
-      dump(1, 'a');
-      expect(karma.info).toHaveBeenCalledWith({dump: ['1x', 'ax']});
-    });
-
-
-    it('should allow no serialize', function() {
-      dump = createDumpFn(karma);
-
-      dump(1, 'a');
-      expect(karma.info).toHaveBeenCalledWith({dump: [1, 'a']});
-    });
-  });
-
-
   describe('indexOf', function() {
     it('should return index of given item', function() {
       var collection = [{}, {}, {}];
