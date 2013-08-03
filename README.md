@@ -10,8 +10,8 @@ The easiest way is to keep `karma-jasmine` as a devDependency in your `package.j
 ```json
 {
   "devDependencies": {
-    "karma": "~0.9",
-    "karma-jasmine": "~0.0.1"
+    "karma": "~0.10",
+    "karma-jasmine": "~0.1"
   }
 }
 ```
@@ -27,7 +27,7 @@ npm install karma-jasmine --save-dev
 module.exports = function(config) {
   config.set({
     frameworks: ['jasmine'],
-    
+
     files: [
       '*.js'
     ]
