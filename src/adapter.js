@@ -31,13 +31,19 @@ var indexOf = function(collection, item) {
 };
 
 
+// TODO(vojta): Karma might provide this
+var getCurrentTransport = function() {
+  var location = window.parent.location;
+  return window.parent.io.sockets[location.protocol + '//' + location.host].transport.name;
+};
+
+
 /**
  * Very simple reporter for jasmine
  */
 var KarmaReporter = function(tc) {
 
-  this.reportRunnerStarting = function(runner) {
-    var topLevelSuites = runner.topLevelSuites();
+  var getAllSpecNames = function(topLevelSuites) {
     var specNames = {};
 
     var processSuite = function(suite, pointer) {
@@ -62,6 +68,19 @@ var KarmaReporter = function(tc) {
       suite = topLevelSuites[k];
       pointer = specNames[suite.description] = {};
       processSuite(suite, pointer);
+    }
+
+    return specNames;
+  };
+
+  this.reportRunnerStarting = function(runner) {
+    var transport = getCurrentTransport();
+    var specNames = null;
+
+    // This structure can be pretty huge and it blows up socke.io connection, when polling.
+    // https://github.com/LearnBoost/socket.io-client/issues/569
+    if (transport === 'websocket' || transport === 'flashsocket') {
+      specNames = getAllSpecNames(runner.topLevelSuites());
     }
 
     tc.info({total: runner.specs().length, specs: specNames});
