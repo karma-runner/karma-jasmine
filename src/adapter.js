@@ -1,7 +1,7 @@
-var formatFailedStep = function(step) {
+var formatFailedStep = function(failedExpectation) {
 
-  var stack = step.trace.stack;
-  var message = step.message;
+  var stack = failedExpectation.stack;
+  var message = failedExpectation.message;
   if (stack) {
     // remove the trailing dot
     var firstLine = stack.substring(0, stack.indexOf('\n') - 1);
@@ -78,69 +78,61 @@ var KarmaReporter = function(tc) {
     return specNames;
   };
 
-  this.reportRunnerStarting = function(runner) {
+  this.jasmineStarted = function(options) {
     var transport = getCurrentTransport();
-    var specNames = null;
+    // TODO(max): specNames are missing (no way to get them in 2.0.0-rc2, I guess)
+    var specNames = [];
 
     // This structure can be pretty huge and it blows up socke.io connection, when polling.
     // https://github.com/LearnBoost/socket.io-client/issues/569
     if (transport === 'websocket' || transport === 'flashsocket') {
-      specNames = getAllSpecNames(runner.topLevelSuites());
+      //specNames = getAllSpecNames(runner.topLevelSuites());
     }
 
-    tc.info({total: runner.specs().length, specs: specNames});
+    tc.info({total: options.totalSpecsDefined || 0, specs: specNames});
   };
 
-  this.reportRunnerResults = function(runner) {
+  this.jasmineDone = function() {
     tc.complete({
       coverage: window.__coverage__
     });
   };
 
-  this.reportSuiteResults = function(suite) {
-    // memory clean up
-    suite.after_ = null;
-    suite.before_ = null;
-    suite.queue = null;
+  this.specStarted = function(specResult) {
+    specResult.time = new Date().getTime();
   };
 
-  this.reportSpecStarting = function(spec) {
-    spec.results_.time = new Date().getTime();
-  };
+  this.specDone = function(specResult) {
+    var skipped = specResult.status === 'disabled' || specResult.status === 'pending';
 
-  this.reportSpecResults = function(spec) {
+    var suites = [];
+    suites.push(specResult.fullName.slice(0, specResult.fullName.length - specResult.description.length - 1));
+    suites.push(specResult.description);
+
     var result = {
-      id: spec.id,
-      description: spec.description,
-      suite: [],
-      success: spec.results_.failedCount === 0,
-      skipped: spec.results_.skipped,
-      time: spec.results_.skipped ? 0 : new Date().getTime() - spec.results_.time,
+      id: specResult.id,
+      description: specResult.description,
+      suites: suites,
+      //fullName: specResult.fullName,
+      success: specResult.failedExpectations.length === 0,
+      skipped: skipped,
+      time: skipped ? 0 : new Date().getTime() - specResult.time,
       log: []
     };
 
-    var suitePointer = spec.suite;
-    while (suitePointer) {
-      result.suite.unshift(suitePointer.description);
-      suitePointer = suitePointer.parentSuite;
-    }
-
-    if (!result.success) {
-      var steps = spec.results_.items_;
-      for (var i = 0; i < steps.length; i++) {
-        if (!steps[i].passed_) {
-          result.log.push(formatFailedStep(steps[i]));
-        }
-      }
+    for (var i = 0; i < specResult.failedExpectations.length; i++) {
+      result.log.push(formatFailedStep(specResult.failedExpectations[i]));
     }
 
     tc.result(result);
 
+    delete specResult.time;
+
     // memory clean up
-    spec.results_ = null;
-    spec.spies_ = null;
-    spec.queue = null;
-  };
+    // spec.results_ = null;
+    // spec.spies_ = null;
+    // spec.queue = null;
+};
 
   this.log = function() {};
 };
