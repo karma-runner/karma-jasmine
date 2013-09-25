@@ -4,8 +4,8 @@
  */
 
 describe('jasmine adapter', function() {
-  // TODO(max): Remove window.karma below
-  var Karma = (window.karma || window.__karma__).constructor;
+
+  var Karma = window.__karma__.constructor;
 
   describe('KarmaReporter', function() {
     var karma, reporter, spec, specResult;

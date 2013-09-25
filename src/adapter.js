@@ -138,12 +138,81 @@ var KarmaReporter = function(tc) {
 };
 
 
+// we pass jasmineEnv during testing
+// in production we ask for it lazily, so that adapter can be loaded even before jasmine
 var createStartFn = function(tc, jasmineEnvPassedIn) {
-  return function(config) {
-    // we pass jasmineEnv during testing
-    // in production we ask for it lazily, so that adapter can be loaded even before jasmine
-    var jasmineEnv = jasmineEnvPassedIn || window.jasmine.getEnv();
 
+  // TODO(max): Should we define jasmine global?
+
+  // Bootstrap jasmine-core: Create an Env, and attach global
+  // functions (jasmine interface) such that spec scripts can execute
+  var jasmineEnv = (function(env) {
+
+    var jasmineInterface = {
+      describe: function(description, specDefinitions) {
+        return env.describe(description, specDefinitions);
+      },
+
+      xdescribe: function(description, specDefinitions) {
+        return env.xdescribe(description, specDefinitions);
+      },
+
+      it: function(desc, func) {
+        return env.it(desc, func);
+      },
+
+      xit: function(desc, func) {
+        return env.xit(desc, func);
+      },
+
+      beforeEach: function(beforeEachFunction) {
+        return env.beforeEach(beforeEachFunction);
+      },
+
+      afterEach: function(afterEachFunction) {
+        return env.afterEach(afterEachFunction);
+      },
+
+      expect: function(actual) {
+        return env.expect(actual);
+      },
+
+      pending: function() {
+        return env.pending();
+      },
+
+      addMatchers: function(matchers) {
+        return env.addMatchers(matchers);
+      },
+
+      spyOn: function(obj, methodName) {
+        return env.spyOn(obj, methodName);
+      },
+
+      clock: env.clock,
+      setTimeout: env.clock.setTimeout,
+      clearTimeout: env.clock.clearTimeout,
+      setInterval: env.clock.setInterval,
+      clearInterval: env.clock.clearInterval,
+      jsApiReporter: new window.j$.JsApiReporter({
+        timer: new window.j$.Timer()
+      })
+    };
+
+    function extend(destination, source) {
+      for (var property in source) {
+        destination[property] = source[property];
+      }
+      return destination;
+    }
+
+    extend(window, jasmineInterface);
+
+    return env;
+
+  }( jasmineEnvPassedIn || getJasmineRequireObj().core(jasmineRequire).getEnv()) );
+
+  return function(config) {
     jasmineEnv.addReporter(new KarmaReporter(tc));
     jasmineEnv.execute();
   };
