@@ -82,7 +82,7 @@ var KarmaReporter = function(tc) {
     var transport = getCurrentTransport();
     var specNames = null;
 
-    // This structure can be pretty huge and it blows up socke.io connection, when polling.
+    // This structure can be pretty huge and it blows up socket.io connection, when polling.
     // https://github.com/LearnBoost/socket.io-client/issues/569
     if (transport === 'websocket' || transport === 'flashsocket') {
       specNames = getAllSpecNames(runner.topLevelSuites());
