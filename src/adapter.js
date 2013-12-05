@@ -44,7 +44,6 @@ var getCurrentTransport = function() {
 };
 
 
-
 /**
  * Very simple reporter for jasmine
  */
