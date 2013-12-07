@@ -33,14 +33,17 @@ var indexOf = function(collection, item) {
 
 // TODO(vojta): Karma might provide this
 var getCurrentTransport = function() {
-  var location = window.parent.location;
+  var parentWindow = window.opener || window.parent;
+  var location = parentWindow.location;
+  var hostname = location.protocol + '//' + location.host;
 
-  // probably running in debug.html (there's no socket.io) or in debug mode with socket io but no socket on this host
-  if (!window.parent.io || !window.parent.io.sockets[location.protocol + '//' + location.host]) {
+  // Probably running in debug.html (there's no socket.io),
+  // or in debug mode with socket.io but no socket on this host.
+  if (!parentWindow.io || !parentWindow.io.sockets[hostname]) {
     return null;
   }
 
-  return window.parent.io.sockets[location.protocol + '//' + location.host].transport.name;
+  return parentWindow.io.sockets[hostname].transport.name;
 };
 
 
