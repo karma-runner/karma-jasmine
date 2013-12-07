@@ -35,7 +35,11 @@ var indexOf = function(collection, item) {
 var getCurrentTransport = function() {
   var parentWindow = window.opener || window.parent;
   var location = parentWindow.location;
-  var hostname = location.protocol + '//' + location.host;
+  var hostname = 'http://' + location.host;
+
+  if (!location.port) {
+    hostname += ':80';
+  }
 
   // Probably running in debug.html (there's no socket.io),
   // or in debug mode with socket.io but no socket on this host.
