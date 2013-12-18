@@ -10,7 +10,7 @@ var formatFailedStep = function(step) {
     }
 
     // remove jasmine stack entries
-    return stack.replace(/\n.+jasmine\.js\?\d*\:.+(?=(\n|$))/g, '');
+    return stack.replace(/\n.+jasmine\.js\?\w*\:.+(?=(\n|$))/g, '');
   }
 
   return message;

@@ -148,8 +148,8 @@ describe('jasmine adapter', function() {
         message: "Error: Expected 'function' to be 'fxunction'",
         trace: {
           stack: "Error: Expected 'function' to be 'fxunction'.\n" +
-                 "    at new <anonymous> (http://localhost:8080/lib/jasmine/jasmine.js?123412234:102:32)\n" +
-                 "    at [object Object].toBe (http://localhost:8080/lib/jasmine/jasmine.js?123:1171:29)\n" +
+                 "    at new <anonymous> (http://localhost:8080/lib/jasmine/jasmine.js?123412asd:102:32)\n" +
+                 "    at [object Object].toBe (http://localhost:8080/lib/jasmine/jasmine.js?12sd3:1171:29)\n" +
                  "    at [object Object].<anonymous> (http://localhost:8080/test/resourceSpec.js:2:3)\n" +
                  "    at [object Object].execute (http://localhost:8080/lib/jasmine/jasmine.js?123:1001:15)"
         }
