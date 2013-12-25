@@ -1,12 +1,13 @@
 var formatFailedStep = function(step) {
-
-  var stack = step.trace.stack;
+  var stack   = step.stack;
   var message = step.message;
+
   if (stack) {
     // remove the trailing dot
     var firstLine = stack.substring(0, stack.indexOf('\n') - 1);
+
     if (message && message.indexOf(firstLine) === -1) {
-      stack = message + '\n' + stack;
+      stack = message +'\n'+ stack;
     }
 
     // remove jasmine stack entries
@@ -16,12 +17,13 @@ var formatFailedStep = function(step) {
   return message;
 };
 
+
 var indexOf = function(collection, item) {
   if (collection.indexOf) {
     return collection.indexOf(item);
   }
 
-  for (var i = 0, ii = collection.length; i < ii; i++) {
+  for (var i = 0, l = collection.length; i < l; i++) {
     if (collection[i] === item) {
       return i;
     }
@@ -31,126 +33,129 @@ var indexOf = function(collection, item) {
 };
 
 
-// TODO(vojta): Karma might provide this
-var getCurrentTransport = function() {
-  var parentWindow = window.opener || window.parent;
-  var location = parentWindow.location;
-  var hostname = 'http://' + location.host;
+var SuiteNode = function(name, parent) {
+  this.name = name;
+  this.parent = parent;
+  this.children = [];
 
-  if (!location.port) {
-    hostname += ':80';
+  this.addChild = function(name) {
+    var suite = new SuiteNode(name, this);
+    this.children.push(suite);
+    return suite;
+  };
+};
+
+
+var getAllSpecNames = function(topSuite) {
+  var specNames = {};
+
+  function processSuite(suite, pointer) {
+    var child;
+    var childPointer;
+
+    for (var i = 0; i < suite.children.length; i++) {
+      child = suite.children[i];
+
+      if (child.children) {
+        childPointer = pointer[child.description] = {_: []};
+        processSuite(child, childPointer);
+      } else {
+        pointer._.push(child.description);
+      }
+    }
   }
 
-  // Probably running in debug.html (there's no socket.io),
-  // or in debug mode with socket.io but no socket on this host.
-  if (!parentWindow.io || !parentWindow.io.sockets[hostname]) {
-    return null;
-  }
+  processSuite(topSuite, specNames);
 
-  return parentWindow.io.sockets[hostname].transport.name;
+  return specNames;
 };
 
 
 /**
- * Very simple reporter for jasmine
+ * Very simple reporter for Jasmine.
  */
-var KarmaReporter = function(tc) {
+var KarmaReporter = function(tc, jasmineEnv) {
 
-  var getAllSpecNames = function(topLevelSuites) {
-    var specNames = {};
+  var currentSuite = new SuiteNode();
 
-    var processSuite = function(suite, pointer) {
-      var childSuite;
-      var childPointer;
+  /**
+   * Jasmine 2.0 dispatches the following events:
+   *
+   *  - jasmineStarted
+   *  - jasmineDone
+   *  - suiteStarted
+   *  - suiteDone
+   *  - specStarted
+   *  - specDone
+   */
 
-      for (var i = 0; i < suite.suites_.length; i++) {
-        childSuite = suite.suites_[i];
-        childPointer = pointer[childSuite.description] = {};
-        processSuite(childSuite, childPointer);
-      }
-
-      pointer._ = [];
-      for (var j = 0; j < suite.specs_.length; j++) {
-        pointer._.push(suite.specs_[j].description);
-      }
-    };
-
-    var suite;
-    var pointer;
-    for (var k = 0; k < topLevelSuites.length; k++) {
-      suite = topLevelSuites[k];
-      pointer = specNames[suite.description] = {};
-      processSuite(suite, pointer);
-    }
-
-    return specNames;
+  this.jasmineStarted = function(data) {
+    // TODO(vojta): Do not send spec names when polling.
+    tc.info({
+      total: data.totalSpecsDefined,
+      specs: getAllSpecNames(jasmineEnv.topSuite())
+    });
   };
 
-  this.reportRunnerStarting = function(runner) {
-    var transport = getCurrentTransport();
-    var specNames = null;
 
-    // This structure can be pretty huge and it blows up socket.io connection, when polling.
-    // https://github.com/LearnBoost/socket.io-client/issues/569
-    if (transport === 'websocket' || transport === 'flashsocket') {
-      specNames = getAllSpecNames(runner.topLevelSuites());
-    }
-
-    tc.info({total: runner.specs().length, specs: specNames});
-  };
-
-  this.reportRunnerResults = function(runner) {
+  this.jasmineDone = function() {
     tc.complete({
       coverage: window.__coverage__
     });
   };
 
-  this.reportSuiteResults = function(suite) {
-    // memory clean up
-    suite.after_ = null;
-    suite.before_ = null;
-    suite.queue = null;
+
+  this.suiteStarted = function(result) {
+    currentSuite = currentSuite.addChild(result);
   };
 
-  this.reportSpecStarting = function(spec) {
-    spec.results_.time = new Date().getTime();
+
+  this.suiteDone = function(result) {
+    // In the case of xdescribe, only "suiteDone" is fired.
+    // We need to skip that.
+    if (result.description !== currentSuite.name) {
+      return;
+    }
+
+    currentSuite = currentSuite.parent;
   };
 
-  this.reportSpecResults = function(spec) {
+
+  this.specStarted = function(specResult) {
+    specResult.startTime = new Date().getTime();
+  };
+
+
+  this.specDone = function(specResult) {
+    var skipped = specResult.status === 'disabled' || specResult.status === 'pending';
+
     var result = {
-      id: spec.id,
-      description: spec.description,
-      suite: [],
-      success: spec.results_.failedCount === 0,
-      skipped: spec.results_.skipped,
-      time: spec.results_.skipped ? 0 : new Date().getTime() - spec.results_.time,
-      log: []
+      description : specResult.description,
+      id          : specResult.id,
+      log         : [],
+      skipped     : skipped,
+      success     : specResult.failedExpectations.length === 0,
+      suite       : [],
+      time        : skipped ? 0 : new Date().getTime() - specResult.startTime
     };
 
-    var suitePointer = spec.suite;
-    while (suitePointer) {
-      result.suite.unshift(suitePointer.description);
-      suitePointer = suitePointer.parentSuite;
+    // generate ordered list of (nested) suite names
+    var suitePointer = currentSuite;
+    while (suitePointer.parent) {
+      result.suite.unshift(suitePointer.name);
+      suitePointer = suitePointer.parent;
     }
 
     if (!result.success) {
-      var steps = spec.results_.items_;
-      for (var i = 0; i < steps.length; i++) {
-        if (!steps[i].passed_) {
-          result.log.push(formatFailedStep(steps[i]));
-        }
+      var steps = specResult.failedExpectations;
+      for (var i = 0, l = steps.length; i < l; i++) {
+        result.log.push(formatFailedStep(steps[i]));
       }
     }
 
     tc.result(result);
-
-    // memory clean up
-    spec.results_ = null;
-    spec.spies_ = null;
-    spec.queue = null;
+    delete specResult.startTime;
   };
-
-  this.log = function() {};
 };
 
 
@@ -160,7 +165,7 @@ var createStartFn = function(tc, jasmineEnvPassedIn) {
     // in production we ask for it lazily, so that adapter can be loaded even before jasmine
     var jasmineEnv = jasmineEnvPassedIn || window.jasmine.getEnv();
 
-    jasmineEnv.addReporter(new KarmaReporter(tc));
+    jasmineEnv.addReporter(new KarmaReporter(tc, jasmineEnv));
     jasmineEnv.execute();
   };
 };
