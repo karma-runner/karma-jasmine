@@ -33,6 +33,21 @@ var indexOf = function(collection, item) {
 };
 
 
+var ResultsNode = function(result, parent) {
+  this.result = result;
+  this.parent = parent;
+  this.children = [];
+
+  this.addChild = function(result) {
+    this.children.push(new ResultsNode(result, this));
+  };
+
+  this.last = function() {
+    return this.children[this.children.length - 1];
+  };
+};
+
+
 /**
  * Very simple reporter for jasmine
  */
@@ -61,8 +76,23 @@ var KarmaReporter = function(tc) {
   };
 
 
-  this.suiteStarted = function(){};
-  this.suiteDone = function(){};
+  var topResults = new ResultsNode({}, null),
+      currentParent = topResults;
+
+
+  this.suiteStarted = function(result){
+    currentParent.addChild(result);
+    currentParent = currentParent.last();
+  };
+
+
+  this.suiteDone = function(result){
+    if (currentParent == topResults) {
+      return;
+    }
+
+    currentParent = currentParent.parent;
+  };
 
 
   this.specStarted = function(specResult) {
@@ -79,9 +109,15 @@ var KarmaReporter = function(tc) {
       log         : [],
       skipped     : skipped,
       success     : specResult.failedExpectations.length === 0,
-      suite       : [ specResult.fullName.replace(' '+specResult.description, '') ],
+      suite       : [],
       time        : skipped ? 0 : new Date().getTime() - specResult.time
     };
+
+    var suitePointer = currentParent;
+    while(suitePointer.result.description){
+      result.suite.unshift(suitePointer.result.description);
+      suitePointer = suitePointer.parent;
+    }
 
     if (!result.success) {
       var steps = specResult.failedExpectations;
