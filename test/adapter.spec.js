@@ -16,9 +16,7 @@ describe('jasmine adapter', function(){
 
       spyOn(karma, 'result');
 
-
       var jasmine = getJasmineRequireObj().core(jasmineRequire);
-
 
       // @see jasmine.js (2.0) -> getJasmineRequireObj().Spec
       spec = new jasmine.Spec({
@@ -131,13 +129,11 @@ describe('jasmine adapter', function(){
 
       expect(karma.result).toHaveBeenCalled();
     });
-
   });
 
 
 
   describe('formatFailedStep', function(){
-
     it('should prepend the stack with message if browser does not', function(){
       // FF does not have the message in the stack trace
 
@@ -179,7 +175,6 @@ describe('jasmine adapter', function(){
 
       expect( formatFailedStep(step) ).toBe( message );
     });
-
   });
 
 
@@ -197,13 +192,11 @@ describe('jasmine adapter', function(){
       jasmineEnv = new jasmine.Env();
       start = createStartFn(tc, jasmineEnv);
     });
-
   });
 
 
 
   describe('indexOf', function(){
-
     it('should return index of given item', function(){
       var collection = [ {}, {}, {} ];
       collection.indexOf = null; // so that we can test it even on
@@ -212,7 +205,6 @@ describe('jasmine adapter', function(){
       expect(indexOf(collection, collection[1])).toBe(1);
       expect(indexOf(collection, collection[2])).toBe(2);
     });
-
   });
 
 });
