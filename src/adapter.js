@@ -33,13 +33,13 @@ var indexOf = function(collection, item) {
 };
 
 
-var ResultsNode = function(result, parent) {
+var SuiteNode = function(result, parent) {
   this.result = result;
   this.parent = parent;
   this.children = [];
 
   this.addChild = function(result) {
-    this.children.push(new ResultsNode(result, this));
+    this.children.push(new SuiteNode(result, this));
   };
 
   this.lastChild = function() {
@@ -76,22 +76,22 @@ var KarmaReporter = function(tc) {
   };
 
 
-  var topResults = new ResultsNode({}, null),
-      currentParent = topResults;
+  var rootSuite = new SuiteNode({}, null),
+      currentSuite = rootSuite;
 
 
   this.suiteStarted = function(result){
-    currentParent.addChild(result);
-    currentParent = currentParent.lastChild();
+    currentSuite.addChild(result);
+    currentSuite = currentSuite.lastChild();
   };
 
 
   this.suiteDone = function(result){
-    if (currentParent === topResults) {
+    if (currentSuite === rootSuite) {
       return;
     }
 
-    currentParent = currentParent.parent;
+    currentSuite = currentSuite.parent;
   };
 
 
@@ -113,7 +113,8 @@ var KarmaReporter = function(tc) {
       time        : skipped ? 0 : new Date().getTime() - specResult.time
     };
 
-    var suitePointer = currentParent;
+    // generate ordered list of (nested) suite names
+    var suitePointer = currentSuite;
     while(suitePointer.result.description){
       result.suite.unshift(suitePointer.result.description);
       suitePointer = suitePointer.parent;
