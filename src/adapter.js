@@ -42,8 +42,8 @@ var ResultsNode = function(result, parent) {
     this.children.push(new ResultsNode(result, this));
   };
 
-  this.last = function() {
-    return this.children[this.children.length - 1];
+  this.lastChild = function() {
+    return this.children.pop();
   };
 };
 
@@ -82,12 +82,12 @@ var KarmaReporter = function(tc) {
 
   this.suiteStarted = function(result){
     currentParent.addChild(result);
-    currentParent = currentParent.last();
+    currentParent = currentParent.lastChild();
   };
 
 
   this.suiteDone = function(result){
-    if (currentParent == topResults) {
+    if (currentParent === topResults) {
       return;
     }
 
