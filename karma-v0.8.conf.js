@@ -1,6 +1,7 @@
 files = [
   JASMINE,
   JASMINE_ADAPTER,
+  'lib/jasmine.js',
   'src/*.js',
   'test/*.js'
 ];
