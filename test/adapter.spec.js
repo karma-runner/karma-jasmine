@@ -8,7 +8,7 @@ describe('jasmine adapter', function(){
 
 
   describe('KarmaReporter', function(){
-    var reporter, karma, failedIds, env, suite, spec;
+    var reporter, karma, env, parentSuite, suite, spec;
 
     beforeEach(function(){
       karma = new Karma( new MockSocket(), {} );
@@ -18,7 +18,21 @@ describe('jasmine adapter', function(){
 
       var jasmine = getJasmineRequireObj().core(jasmineRequire);
 
-      // @see jasmine.js (2.0) -> getJasmineRequireObj().Spec
+      env = jasmine.getEnv();
+
+      parentSuite = new jasmine.Suite({
+        env: env,
+        id: 'suite0',
+        description: 'Parent Suite'
+      });
+
+      suite = new jasmine.Suite({
+        env: env,
+        id: 'suite1',
+        parentSuite: parentSuite,
+        description: 'Child Suite'
+      });
+
       spec = new jasmine.Spec({
         id: 'spec0',
         description: 'contains spec with an expectation',
@@ -27,11 +41,6 @@ describe('jasmine adapter', function(){
           return 'A suite contains spec with an expectation';
         }
       });
-
-      //env = new jasmine.Env();
-      //var parentSuite = new jasmine.Suite(env, 'parent');
-      //suite = new jasmine.Suite(env, 'child', function() {}, parentSuite);
-      //spec = new jasmine.Spec(env, suite, 'should test');
     });
 
 
@@ -69,11 +78,13 @@ describe('jasmine adapter', function(){
       karma.result.andCallFake(function(result){
         expect(result.id).toBe(spec.id);
         expect(result.description).toBe('contains spec with an expectation');
-        expect(result.suite).toEqual(['A suite']);
+        expect(result.suite).toEqual([ 'Parent Suite', 'Child Suite' ]);
         expect(result.success).toBe(true);
         expect(result.skipped).toBe(false);
       });
 
+      reporter.suiteStarted(parentSuite.result);
+      reporter.suiteStarted(suite.result);
       reporter.specDone(spec.result);
       expect(karma.result).toHaveBeenCalled();
     });
