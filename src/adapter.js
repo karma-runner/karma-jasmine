@@ -43,7 +43,7 @@ var SuiteNode = function(result, parent) {
   };
 
   this.lastChild = function() {
-    return this.children.pop();
+    return this.children[ this.children.length - 1 ];
   };
 };
 
