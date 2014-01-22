@@ -11,14 +11,13 @@ describe('jasmine adapter', function(){
     var reporter, karma, env, parentSuite, suite, spec;
 
     beforeEach(function(){
+      var jasmine = getJasmineRequireObj().core(jasmineRequire);
+      env = jasmine.getEnv();
+
       karma = new Karma( new MockSocket(), {} );
-      reporter = new KarmaReporter(karma);
+      reporter = new KarmaReporter(karma, env);
 
       spyOn(karma, 'result');
-
-      var jasmine = getJasmineRequireObj().core(jasmineRequire);
-
-      env = jasmine.getEnv();
 
       parentSuite = new jasmine.Suite({
         env: env,
@@ -44,7 +43,7 @@ describe('jasmine adapter', function(){
     });
 
 
-    xit('should report all spec names', function(){
+    it('should report all spec names', function(){
       spyOn(karma, 'info').andCallFake(function(info){
         expect(info.total).toBe(2);
         expect(info.specs).toEqual({
@@ -70,7 +69,7 @@ describe('jasmine adapter', function(){
         env.it('should not do anything', function(){});
       });
 
-      reporter.reportRunnerStarting(env.currentRunner());
+      reporter.jasmineStarted({totalSpecsDefined: 2});
     });
 
 
@@ -190,7 +189,7 @@ describe('jasmine adapter', function(){
 
 
 
-  xdescribe('startFn', function(){
+  describe('startFn', function(){
     var tc, jasmineEnv, start;
 
     beforeEach(function(){

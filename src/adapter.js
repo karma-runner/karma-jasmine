@@ -51,8 +51,7 @@ var SuiteNode = function(result, parent) {
 /**
  * Very simple reporter for jasmine
  */
-var KarmaReporter = function(tc) {
-
+var KarmaReporter = function(tc, jasmineEnv) {
   /**
    * Jasmine 2.0 dispatches the following events:
    *
@@ -63,11 +62,33 @@ var KarmaReporter = function(tc) {
    *  - specStarted
    *  - specDone
    */
+  function getAllSpecNames() {
+    var specNames = {};
+
+    function processSuite(suite, pointer) {
+      var child;
+      var childPointer;
+
+      for (var i = 0; i < suite.children.length; i++) {
+        child = suite.children[i];
+
+        if (child.children) {
+          childPointer = pointer[child.description] = {_: []};
+          processSuite(child, childPointer);
+        } else {
+          pointer._.push(child.description);
+        }
+      }
+    }
+
+    processSuite(jasmineEnv.topSuite(), specNames);
+
+    return specNames;
+  }
 
   this.jasmineStarted = function(data) {
-    tc.info({ total: data.totalSpecsDefined, specs: null });
+    tc.info({ total: data.totalSpecsDefined, specs: getAllSpecNames() });
   };
-
 
   this.jasmineDone = function() {
     tc.complete({
@@ -140,7 +161,7 @@ var createStartFn = function(tc, jasmineEnvPassedIn) {
     // in production we ask for it lazily, so that adapter can be loaded even before jasmine
     var jasmineEnv = jasmineEnvPassedIn || window.jasmine.getEnv();
 
-    jasmineEnv.addReporter( new KarmaReporter(tc) );
+    jasmineEnv.addReporter( new KarmaReporter(tc, jasmineEnv) );
     jasmineEnv.execute();
   };
 };
