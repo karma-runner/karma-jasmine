@@ -87,7 +87,7 @@ var KarmaReporter = function(tc) {
 
 
   this.suiteDone = function(result){
-    if (currentSuite === rootSuite) {
+    if (currentSuite === rootSuite || currentSuite.result.description !== result.description) {
       return;
     }
 
