@@ -106,7 +106,7 @@ var KarmaReporter = function(tc, jasmineEnv) {
 
 
   this.suiteStarted = function(result) {
-    currentSuite = currentSuite.addChild(result);
+    currentSuite = currentSuite.addChild(result.description);
   };
 
 
