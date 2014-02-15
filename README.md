@@ -2,14 +2,18 @@
 
 > Adapter for the [Jasmine](http://pivotal.github.io/jasmine/) testing framework.
 
+
 ## Installation
 
+### Jasmine 1.3 ([docs](http://pivotal.github.io/jasmine/))
+
 The easiest way is to keep `karma-jasmine` as a devDependency in your `package.json`.
+
 ```json
 {
   "devDependencies": {
     "karma": "~0.10",
-    "karma-jasmine": "~0.1"
+    "karma-jasmine": "~0.1.0"
   }
 }
 ```
@@ -18,6 +22,25 @@ You can simple do it by:
 ```bash
 npm install karma-jasmine --save-dev
 ```
+
+
+### Jasmine 2.0 ([docs](http://jasmine.github.io/2.0/introduction.html))
+
+The easiest way is to keep `karma-jasmine` as a devDependency in your `package.json`.
+```json
+{
+  "devDependencies": {
+    "karma": "~0.10",
+    "karma-jasmine": "~0.2.0"
+  }
+}
+```
+
+You can simple do it by:
+```bash
+npm install karma-jasmine@2_0 --save-dev
+```
+
 
 ## Configuration
 ```js
