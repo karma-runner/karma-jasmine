@@ -33,13 +33,13 @@ var indexOf = function(collection, item) {
 };
 
 
-var SuiteNode = function(name, parent) {
-  this.name = name;
+var SuiteNode = function(result, parent) {
+  this.description = result ? result.description : '';
   this.parent = parent;
   this.children = [];
 
-  this.addChild = function(name) {
-    var suite = new SuiteNode(name, this);
+  this.addChild = function(result) {
+    var suite = new SuiteNode(result, this);
     this.children.push(suite);
     return suite;
   };
@@ -89,6 +89,10 @@ var KarmaReporter = function(tc, jasmineEnv) {
    *  - specDone
    */
 
+
+  /**
+   * @param {{totalSpecsDefined: number}} data
+   */
   this.jasmineStarted = function(data) {
     // TODO(vojta): Do not send spec names when polling.
     tc.info({
@@ -105,15 +109,29 @@ var KarmaReporter = function(tc, jasmineEnv) {
   };
 
 
+  /**
+   * @param {{}} result
+   * @param {string} result.description
+   * @param {string} result.fullName
+   * @param {string} result.id
+   * @param {string} result.status
+   */
   this.suiteStarted = function(result) {
     currentSuite = currentSuite.addChild(result.description);
   };
 
 
+  /**
+   * @param {{}} result
+   * @param {string} result.description
+   * @param {string} result.fullName
+   * @param {string} result.id
+   * @param {string} result.status
+   */
   this.suiteDone = function(result) {
     // In the case of xdescribe, only "suiteDone" is fired.
     // We need to skip that.
-    if (result.description !== currentSuite.name) {
+    if (result.description !== currentSuite.description) {
       return;
     }
 
@@ -121,11 +139,27 @@ var KarmaReporter = function(tc, jasmineEnv) {
   };
 
 
+  /**
+   * @param {{}} specResult
+   * @param {string} specResult.description
+   * @param {Array} specResult.failedExpectations
+   * @param {string} specResult.fullName
+   * @param {string} specResult.id
+   */
   this.specStarted = function(specResult) {
     specResult.startTime = new Date().getTime();
   };
 
 
+  /**
+   * @param {{}} specResult
+   * @param {string} specResult.description
+   * @param {Array} specResult.failedExpectations
+   * @param {string} specResult.fullName
+   * @param {string} specResult.id
+   * @param {number} specResult.startTime
+   * @param {string} specResult.status
+   */
   this.specDone = function(specResult) {
     var skipped = specResult.status === 'disabled' || specResult.status === 'pending';
 
@@ -142,7 +176,7 @@ var KarmaReporter = function(tc, jasmineEnv) {
     // generate ordered list of (nested) suite names
     var suitePointer = currentSuite;
     while (suitePointer.parent) {
-      result.suite.unshift(suitePointer.name);
+      result.suite.unshift(suitePointer.description);
       suitePointer = suitePointer.parent;
     }
 
