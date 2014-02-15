@@ -166,6 +166,6 @@ var createStartFn = function(tc, jasmineEnvPassedIn) {
     var jasmineEnv = jasmineEnvPassedIn || window.jasmine.getEnv();
 
     jasmineEnv.addReporter(new KarmaReporter(tc, jasmineEnv));
-    jasmineEnv.execute();
+    jasmineEnv.executeFiltered();
   };
 };
