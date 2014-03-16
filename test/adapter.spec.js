@@ -14,7 +14,7 @@ describe('jasmine adapter', function(){
       var jasmine = getJasmineRequireObj().core(jasmineRequire);
       env = jasmine.getEnv();
 
-      karma = new Karma( new MockSocket(), {} );
+      karma = new Karma(new MockSocket(), null, null, null, {search: ''});
       reporter = new KarmaReporter(karma, env);
 
       spyOn(karma, 'result');

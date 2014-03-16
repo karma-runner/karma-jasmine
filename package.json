@@ -20,9 +20,11 @@
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-jshint": "~0.6",
-    "karma": "~0.9",
-    "karma-jasmine": "*",
-    "grunt-karma": "~0.4",
+    "karma": "~0.12.0",
+    "karma-jasmine": "~0.1.0",
+    "karma-chrome-launcher": "~0.1.0",
+    "karma-firefox-launcher": "~0.1.0",
+    "grunt-karma": "~0.8.0",
     "grunt-auto-release": "~0.0.2",
     "grunt-npm": "~0.0.2",
     "grunt-bump": "~0.0.7"
