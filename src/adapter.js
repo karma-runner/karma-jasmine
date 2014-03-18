@@ -60,6 +60,7 @@ var getAllSpecNames = function(topSuite) {
         childPointer = pointer[child.description] = {_: []};
         processSuite(child, childPointer);
       } else {
+        if (!pointer._) pointer._ = [];
         pointer._.push(child.description);
       }
     }
