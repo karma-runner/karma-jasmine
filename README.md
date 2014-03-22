@@ -12,7 +12,7 @@ The easiest way is to keep `karma-jasmine` as a devDependency in your `package.j
 ```json
 {
   "devDependencies": {
-    "karma": "~0.10",
+    "karma": "~0.12.0",
     "karma-jasmine": "~0.1.0"
   }
 }
@@ -30,7 +30,7 @@ The easiest way is to keep `karma-jasmine` as a devDependency in your `package.j
 ```json
 {
   "devDependencies": {
-    "karma": "~0.10",
+    "karma": "~0.12.0",
     "karma-jasmine": "~0.2.0"
   }
 }
