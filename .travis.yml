@@ -9,3 +9,4 @@ before_script:
 
 script:
   - grunt
+  - ./integration-tests.sh
