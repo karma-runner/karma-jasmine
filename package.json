@@ -30,7 +30,8 @@
     "grunt-bump": "~0.0.7"
   },
   "peerDependencies": {
-    "karma": ">=0.9"
+    "karma": ">=0.9",
+    "jasmine-core": "*"
   },
   "license": "MIT",
   "contributors": [
