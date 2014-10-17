@@ -1,6 +1,11 @@
 language: node_js
 node_js:
-  - 0.8
+  - "0.8"
+
+# Make sure we have new NPM.
+before_install:
+  - '[ "${TRAVIS_NODE_VERSION}" != "0.8"  ] || npm install -g npm@1.4.28'
+  - npm install -g npm
 
 before_script:
   - export DISPLAY=:99.0
