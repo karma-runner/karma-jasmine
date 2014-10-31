@@ -1,8 +1,10 @@
+var path = require('path');
+
 module.exports = function(config) {
   config.set({
     frameworks: ['jasmine'],
     files: [
-      'lib/jasmine.js',
+      path.dirname(require.resolve('jasmine-core')) + '/jasmine-core/jasmine.js',
       'src/*.js',
       'test/*.js'
     ],
