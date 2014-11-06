@@ -2,6 +2,8 @@
  Tests for adapter/jasmine.js
  These tests are executed in browser.
  */
+/*global getJasmineRequireObj,jasmineRequire,MockSocket,KarmaReporter*/
+/*global formatFailedStep,indexOf,createStartFn,getGrepOption,KarmaSpecFilter,createSpecFilter*/
 
 /* jshint globalstrict: true */
 'use strict';
@@ -158,7 +160,7 @@ describe('jasmine adapter', function(){
       var counter = 3;
 
       spyOn(Date.prototype, 'getTime').andCallFake(function(){
-        return counter++;
+        return counter+=1;
       });
 
       karma.result.andCallFake(function(result){
@@ -259,4 +261,56 @@ describe('jasmine adapter', function(){
   });
 
 
+  describe('getGrepOption', function() {
+    it('should get grep option from config if args is array', function() {
+      expect(getGrepOption(['--grep', 'test'])).toEqual('test');
+    });
+
+    it('should return empty string if args does not contain grep option', function() {
+      expect(getGrepOption([])).toEqual('');
+    });
+
+    it('should get grep option from args if args is string', function() {
+      expect(getGrepOption('--grep=test')).toEqual('test');
+    });
+  });
+
+
+  describe('KarmaSpecFilter', function() {
+    var specFilter;
+
+    beforeEach(function() {
+      specFilter = new KarmaSpecFilter({
+        filterString: function() {
+          return 'test';
+        }
+      });
+    });
+
+    it('should create spec filter', function() {
+      expect(specFilter).toBeDefined();
+    });
+
+    it('should filter spec by name', function() {
+      expect(specFilter.matches('bar')).toEqual(false);
+      expect(specFilter.matches('test')).toEqual(true);
+    });
+  });
+
+
+  describe('createSpecFilter', function() {
+    it('should create spec filter in jasmine', function() {
+      var jasmineEnvMock = {};
+      var karmaConfMock = {
+        args: ['--grep', 'test']
+      };
+      var specMock = {
+        getFullName: jasmine.createSpy('getFullName').andReturn('test')
+      };
+
+      createSpecFilter(karmaConfMock, jasmineEnvMock);
+
+      expect(jasmineEnvMock.specFilter(specMock)).toEqual(true);
+    });
+  });
 });
