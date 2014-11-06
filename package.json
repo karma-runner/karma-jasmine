@@ -1,6 +1,6 @@
 {
   "name": "karma-jasmine",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "A Karma plugin - adapter for Jasmine testing framework.",
   "main": "lib/index.js",
   "scripts": {
@@ -27,19 +27,23 @@
     "grunt-karma": "~0.8.0",
     "grunt-auto-release": "~0.0.2",
     "grunt-npm": "~0.0.2",
-    "grunt-bump": "~0.0.7"
+    "grunt-bump": "~0.0.7",
+    "jasmine-core": "~2.0.0"
   },
   "peerDependencies": {
-    "karma": ">=0.9"
+    "karma": ">=0.9",
+    "jasmine-core": "*"
   },
   "license": "MIT",
   "contributors": [
     "Friedel Ziegelmayer <friedel.ziegelmayer@gmail.com>",
     "Maksim Ryzhikov <rv.maksim@gmail.com>",
     "Barry Fitzgerald <barfitzgerald@gmail.com>",
+    "Cornelius Schmale <github@cschmale.de>",
     "Niels Dequeker <niels.dequeker@gmail.com>",
     "Robin Gloster <robin@loc-com.de>",
     "Sergey Tatarintsev <sevinf@yandex-team.ru>",
+    "jiverson <jiverson222@gmail.com>",
     "rpark <objectiv@gmail.com>"
   ]
 }

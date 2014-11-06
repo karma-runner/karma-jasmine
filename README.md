@@ -41,7 +41,11 @@ You can simple do it by:
 npm install karma-jasmine@2_0 --save-dev
 ```
 
-
+__Note:__
+Since `karma-jasmine 0.3.0` the jasmine library is no longer bundled with `karma-jasmine` and you have to install it on your own. You can simple do it by:
+```bash
+npm install jasmine-core --save-dev
+```
 ## Configuration
 ```js
 // karma.conf.js
