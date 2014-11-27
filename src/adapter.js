@@ -79,6 +79,14 @@ var getAllSpecNames = function(topSuite) {
  */
 var KarmaReporter = function(tc, jasmineEnv) {
 
+  /**
+   * @param suite
+   * @returns {boolean} Return true if it is system jasmine top level suite
+   */
+  var isTopLevelSuite = function (suite) {
+    return suite.description === 'Jasmine_TopLevel_Suite';
+  };
+
   var currentSuite = new SuiteNode();
 
   /**
@@ -109,7 +117,9 @@ var KarmaReporter = function(tc, jasmineEnv) {
 
 
   this.suiteStarted = function(result) {
-    currentSuite = currentSuite.addChild(result.description);
+    if (!isTopLevelSuite(result)) {
+      currentSuite = currentSuite.addChild(result.description);
+    }
   };
 
 
