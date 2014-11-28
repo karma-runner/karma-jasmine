@@ -122,6 +122,23 @@ describe('jasmine adapter', function(){
       expect(karma.result).toHaveBeenCalled();
     });
 
+    it('should remove special top level suite from result', function () {
+      karma.result.andCallFake(function(result){
+        expect(result.suite).toEqual([ 'Child Suite' ]);
+      });
+
+      reporter.suiteStarted({
+        id: 'suite0',
+        description: 'Jasmine_TopLevel_Suite'
+      });
+      reporter.suiteStarted(suite.result);
+      spec.result.failedExpectations.push({ stack: "stack" });
+
+      reporter.specDone(spec.result);
+
+      expect(karma.result).toHaveBeenCalled();
+    });
+
 
     it('should report time for every spec', function(){
       var counter = 3;
