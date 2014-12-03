@@ -1,6 +1,6 @@
 # karma-jasmine [![Build Status](https://travis-ci.org/karma-runner/karma-jasmine.svg?branch=master)](https://travis-ci.org/karma-runner/karma-jasmine)
 
-> Adapter for the [Jasmine](http://pivotal.github.io/jasmine/) testing framework.
+> Adapter for the [Jasmine](http://jasmine.github.io/) testing framework.
 
 
 ## Installation
