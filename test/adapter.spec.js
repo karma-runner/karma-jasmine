@@ -35,7 +35,9 @@ describe('jasmine adapter', function(){
       spec = new jasmine.Spec({
         id: 'spec0',
         description: 'contains spec with an expectation',
-        fn: function(){},
+        queueableFn: {
+          fn: function(){}
+        },
         getSpecName : function(){
           return 'A suite contains spec with an expectation';
         }
