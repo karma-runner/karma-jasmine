@@ -105,23 +105,32 @@ describe('jasmine adapter', function(){
 
 
     it('should remove jasmine-specific frames from the exception stack traces', function(){
-      var stack = "Error: Expected 'function' to be 'fxunction'.\n" +
-                  "    at new <anonymous> (http://localhost:8080/lib/jasmine/jasmine.js?123412234:102:32)\n" +
-                  "    at [object Object].toBe (http://localhost:8080/lib/jasmine/jasmine.js?123:1171:29)\n" +
-                  "    at [object Object].<anonymous> (http://localhost:8080/test/resourceSpec.js:2:3)\n" +
-                  "    at [object Object].execute (http://localhost:8080/lib/jasmine/jasmine.js?123:1001:15)";
+      var step = {};
+
+      step.message = 'Expected true to be false.';
+      step.stack = 'Error: Expected true to be false.\n' +
+        '    at stack (/foo/bar/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:1441:17)\n' +
+        '    at buildExpectationResult (/foo/bar/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:1411:14)\n' +
+        '    at Spec.Env.expectationResultFactory (/foo/bar/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:533:18)\n' +
+        '    at Spec.addExpectationResult (/foo/bar/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:293:34)\n' +
+        '    at Expectation.addExpectationResult (/foo/bar/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:477:21)\n' +
+        '    at Expectation.toBe (/foo/bar/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:1365:12)\n' +
+        '    at /foo/bar/baz.spec.js:23:29\n' +
+        '    at /foo/bar/baz.js:18:20\n';
 
       karma.result.andCallFake(function(result){
         expect(result.log).toEqual([
-          "Error: Expected 'function' to be 'fxunction'.\n"+
-            "    at [object Object].<anonymous> (http://localhost:8080/test/resourceSpec.js:2:3)"
+          'Expected true to be false.\n' +
+          '    at /foo/bar/baz.spec.js:23:29\n' +
+          '    at /foo/bar/baz.js:18:20'
         ]);
       });
 
-      spec.result.failedExpectations.push({ stack: stack });
+      spec.result.failedExpectations.push(step);
       reporter.specDone(spec.result);
 
       expect(karma.result).toHaveBeenCalled();
+
     });
 
     it('should remove special top level suite from result', function () {
@@ -187,23 +196,6 @@ describe('jasmine adapter', function(){
       expect( formatFailedStep(step) ).toBe( 'MESSAGE' );
     });
 
-
-    it('should remove jasmine-specific frames from the exception stack traces', function(){
-      var step = {
-        passed  : false,
-        message : "Error: Expected 'function' to be 'fxunction'",
-        stack   : "Error: Expected 'function' to be 'fxunction'.\n" +
-                  "    at new <anonymous> (http://localhost:8080/lib/jasmine/jasmine.js?123412asd:102:32)\n" +
-                  "    at [object Object].toBe (http://localhost:8080/lib/jasmine/jasmine.js?12sd3:1171:29)\n" +
-                  "    at [object Object].<anonymous> (http://localhost:8080/test/resourceSpec.js:2:3)\n" +
-                  "    at [object Object].execute (http://localhost:8080/lib/jasmine/jasmine.js?123:1001:15)"
-      };
-
-      var message = "Error: Expected 'function' to be 'fxunction'.\n" +
-                      "    at [object Object].<anonymous> (http://localhost:8080/test/resourceSpec.js:2:3)";
-
-      expect( formatFailedStep(step) ).toBe( message );
-    });
   });
 
 
@@ -223,6 +215,45 @@ describe('jasmine adapter', function(){
     });
   });
 
+
+  describe('isRelevantStackEntry', function(){
+    it('should be a function', function(){
+      expect(typeof isRelevantStackEntry).toBe('function');
+    });
+    it('should return false for empty strings', function(){
+      expect(isRelevantStackEntry('')).toBe(false);
+    });
+    it('should return false for strings with "jasmine-core"', function () {
+      expect(isRelevantStackEntry('/foo/jasmine-core/bar.js')).toBe(false);
+    });
+    it('should return false for strings with "karma-jasmine"', function () {
+      expect(isRelevantStackEntry('/foo/karma-jasmine/bar.js')).toBe(false);
+    });
+    it('should return false for strings with "karma.js"', function () {
+      expect(isRelevantStackEntry('/foo/karma.js:183')).toBe(false);
+    });
+    it('should return false for strings with "context.html"', function () {
+      expect(isRelevantStackEntry('/foo/context.html:13')).toBe(false);
+    });
+    it('should return true for all other strings', function(){
+      expect(isRelevantStackEntry('/foo/bar/baz.js:13:1')).toBe(true);
+    });
+  });
+
+
+  describe('getRelevantStackFrom', function(){
+    it('should be a function', function(){
+      expect(typeof getRelevantStackFrom).toBe('function');
+    });
+    it('should split by newline and return all values for which isRelevantStackEntry returns true', function () {
+      isRelevantStackEntry = jasmine.createSpy('isRelevantStackEntry').andReturn(true);
+      expect(getRelevantStackFrom('a\nb\nc')).toEqual(['a', 'b', 'c'])
+    });
+    it('should not return any values for which isRelevantStackEntry returns false', function () {
+      isRelevantStackEntry = jasmine.createSpy('isRelevantStackEntry').andReturn(false);
+      expect(getRelevantStackFrom('a\nb\nc')).toEqual([])
+    });
+  });
 
 
   describe('indexOf', function(){
