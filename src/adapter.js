@@ -235,14 +235,22 @@ function KarmaReporter(tc, jasmineEnv) {
   };
 }
 
-
-function createStartFn(tc, jasmineEnvPassedIn) {
+/**
+ * Karma starter function factory.
+ *
+ * This function is invoked from the wrapper.
+ * @see  adapter.wrapper
+ *
+ * @param  {Object}   karma        Karma runner instance.
+ * @param  {Object}   [jasmineEnv] Optional Jasmine environment for testing.
+ * @return {Function}              Karma starter function.
+ */
+function createStartFn(karma, jasmineEnv) {
+  // This function will be assigned to `window.__karma__.start`:
   return function () {
-    // we pass jasmineEnv during testing
-    // in production we ask for it lazily, so that adapter can be loaded even before jasmine
-    var jasmineEnv = jasmineEnvPassedIn || window.jasmine.getEnv();
+    jasmineEnv = jasmineEnv || window.jasmine.getEnv();
 
-    jasmineEnv.addReporter(new KarmaReporter(tc, jasmineEnv));
+    jasmineEnv.addReporter(new KarmaReporter(karma, jasmineEnv));
     jasmineEnv.execute();
   };
 }
