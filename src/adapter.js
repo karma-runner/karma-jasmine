@@ -105,27 +105,29 @@ function SuiteNode(name, parent) {
   };
 }
 
-function getAllSpecNames(topSuite) {
-  var specNames = {};
 
-  function processSuite(suite, pointer) {
-    var child;
-    var childPointer;
+function processSuite(suite, pointer) {
+  var child;
+  var childPointer;
 
-    for (var i = 0; i < suite.children.length; i++) {
-      child = suite.children[i];
+  for (var i = 0; i < suite.children.length; i++) {
+    child = suite.children[i];
 
-      if (child.children) {
-        childPointer = pointer[child.description] = {_: []};
-        processSuite(child, childPointer);
-      } else {
-        if (!pointer._) {
-          pointer._ = [];
-        }
-        pointer._.push(child.description);
+    if (child.children) {
+      childPointer = pointer[child.description] = {_: []};
+      processSuite(child, childPointer);
+    } else {
+      if (!pointer._) {
+        pointer._ = [];
       }
+      pointer._.push(child.description);
     }
   }
+}
+
+
+function getAllSpecNames(topSuite) {
+  var specNames = {};
 
   processSuite(topSuite, specNames);
 
