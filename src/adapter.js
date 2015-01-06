@@ -1,3 +1,6 @@
+/* jshint globalstrict: true */
+'use strict';
+
 /**
  * Decision maker for whether a stack entry is considered relevant.
  * @param  {String}  entry Error stack entry.

@@ -3,6 +3,9 @@
  These tests are executed in browser.
  */
 
+/* jshint globalstrict: true */
+'use strict';
+
 describe('jasmine adapter', function(){
   var Karma = window.__karma__.constructor;
 
