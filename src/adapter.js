@@ -237,7 +237,7 @@ function KarmaReporter(tc, jasmineEnv) {
 
 
 function createStartFn(tc, jasmineEnvPassedIn) {
-  return function(config) {
+  return function() {
     // we pass jasmineEnv during testing
     // in production we ask for it lazily, so that adapter can be loaded even before jasmine
     var jasmineEnv = jasmineEnvPassedIn || window.jasmine.getEnv();
