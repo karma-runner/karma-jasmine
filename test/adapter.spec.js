@@ -247,11 +247,11 @@ describe('jasmine adapter', function(){
     });
     it('should split by newline and return all values for which isRelevantStackEntry returns true', function () {
       isRelevantStackEntry = jasmine.createSpy('isRelevantStackEntry').andReturn(true);
-      expect(getRelevantStackFrom('a\nb\nc')).toEqual(['a', 'b', 'c'])
+      expect(getRelevantStackFrom('a\nb\nc')).toEqual(['a', 'b', 'c']);
     });
     it('should not return any values for which isRelevantStackEntry returns false', function () {
       isRelevantStackEntry = jasmine.createSpy('isRelevantStackEntry').andReturn(false);
-      expect(getRelevantStackFrom('a\nb\nc')).toEqual([])
+      expect(getRelevantStackFrom('a\nb\nc')).toEqual([]);
     });
   });
 
