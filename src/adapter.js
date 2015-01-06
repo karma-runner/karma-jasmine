@@ -93,21 +93,6 @@ function formatFailedStep(step) {
 }
 
 
-var indexOf = function(collection, item) {
-  if (collection.indexOf) {
-    return collection.indexOf(item);
-  }
-
-  for (var i = 0, l = collection.length; i < l; i++) {
-    if (collection[i] === item) {
-      return i;
-    }
-  }
-
-  return -1;
-};
-
-
 var SuiteNode = function(name, parent) {
   this.name = name;
   this.parent = parent;
