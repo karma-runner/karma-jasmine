@@ -101,7 +101,7 @@ function SuiteNode(name, parent) {
   this.parent = parent;
   this.children = [];
 
-  this.addChild = function(name) {
+  this.addChild = function (name) {
     var suite = new SuiteNode(name, this);
     this.children.push(suite);
     return suite;
@@ -164,7 +164,7 @@ function KarmaReporter(tc, jasmineEnv) {
    *  - specDone
    */
 
-  this.jasmineStarted = function(data) {
+  this.jasmineStarted = function (data) {
     // TODO(vojta): Do not send spec names when polling.
     tc.info({
       total: data.totalSpecsDefined,
@@ -173,21 +173,21 @@ function KarmaReporter(tc, jasmineEnv) {
   };
 
 
-  this.jasmineDone = function() {
+  this.jasmineDone = function () {
     tc.complete({
       coverage: window.__coverage__
     });
   };
 
 
-  this.suiteStarted = function(result) {
+  this.suiteStarted = function (result) {
     if (!isTopLevelSuite(result)) {
       currentSuite = currentSuite.addChild(result.description);
     }
   };
 
 
-  this.suiteDone = function(result) {
+  this.suiteDone = function (result) {
     // In the case of xdescribe, only "suiteDone" is fired.
     // We need to skip that.
     if (result.description !== currentSuite.name) {
@@ -198,12 +198,12 @@ function KarmaReporter(tc, jasmineEnv) {
   };
 
 
-  this.specStarted = function(specResult) {
+  this.specStarted = function (specResult) {
     specResult.startTime = new Date().getTime();
   };
 
 
-  this.specDone = function(specResult) {
+  this.specDone = function (specResult) {
     var skipped = specResult.status === 'disabled' || specResult.status === 'pending';
 
     var result = {
@@ -237,7 +237,7 @@ function KarmaReporter(tc, jasmineEnv) {
 
 
 function createStartFn(tc, jasmineEnvPassedIn) {
-  return function() {
+  return function () {
     // we pass jasmineEnv during testing
     // in production we ask for it lazily, so that adapter can be loaded even before jasmine
     var jasmineEnv = jasmineEnvPassedIn || window.jasmine.getEnv();
