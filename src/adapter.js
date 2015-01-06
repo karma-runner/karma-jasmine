@@ -93,7 +93,7 @@ function formatFailedStep(step) {
 }
 
 
-var SuiteNode = function(name, parent) {
+function SuiteNode(name, parent) {
   this.name = name;
   this.parent = parent;
   this.children = [];
@@ -103,10 +103,9 @@ var SuiteNode = function(name, parent) {
     this.children.push(suite);
     return suite;
   };
-};
+}
 
-
-var getAllSpecNames = function(topSuite) {
+function getAllSpecNames(topSuite) {
   var specNames = {};
 
   function processSuite(suite, pointer) {
@@ -131,23 +130,23 @@ var getAllSpecNames = function(topSuite) {
   processSuite(topSuite, specNames);
 
   return specNames;
-};
+}
 
 
 /**
  * Very simple reporter for Jasmine.
  */
-var KarmaReporter = function(tc, jasmineEnv) {
+function KarmaReporter(tc, jasmineEnv) {
+
+  var currentSuite = new SuiteNode();
 
   /**
    * @param suite
    * @returns {boolean} Return true if it is system jasmine top level suite
    */
-  var isTopLevelSuite = function (suite) {
+  function isTopLevelSuite(suite) {
     return suite.description === 'Jasmine_TopLevel_Suite';
-  };
-
-  var currentSuite = new SuiteNode();
+  }
 
   /**
    * Jasmine 2.0 dispatches the following events:
@@ -229,10 +228,10 @@ var KarmaReporter = function(tc, jasmineEnv) {
     tc.result(result);
     delete specResult.startTime;
   };
-};
+}
 
 
-var createStartFn = function(tc, jasmineEnvPassedIn) {
+function createStartFn(tc, jasmineEnvPassedIn) {
   return function(config) {
     // we pass jasmineEnv during testing
     // in production we ask for it lazily, so that adapter can be loaded even before jasmine
@@ -241,4 +240,4 @@ var createStartFn = function(tc, jasmineEnvPassedIn) {
     jasmineEnv.addReporter(new KarmaReporter(tc, jasmineEnv));
     jasmineEnv.execute();
   };
-};
+}
