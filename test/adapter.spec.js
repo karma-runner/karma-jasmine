@@ -3,6 +3,9 @@
  These tests are executed in browser.
  */
 
+/* jshint globalstrict: true */
+'use strict';
+
 describe('jasmine adapter', function(){
   var Karma = window.__karma__.constructor;
 
@@ -247,24 +250,13 @@ describe('jasmine adapter', function(){
     });
     it('should split by newline and return all values for which isRelevantStackEntry returns true', function () {
       isRelevantStackEntry = jasmine.createSpy('isRelevantStackEntry').andReturn(true);
-      expect(getRelevantStackFrom('a\nb\nc')).toEqual(['a', 'b', 'c'])
+      expect(getRelevantStackFrom('a\nb\nc')).toEqual(['a', 'b', 'c']);
     });
     it('should not return any values for which isRelevantStackEntry returns false', function () {
       isRelevantStackEntry = jasmine.createSpy('isRelevantStackEntry').andReturn(false);
-      expect(getRelevantStackFrom('a\nb\nc')).toEqual([])
+      expect(getRelevantStackFrom('a\nb\nc')).toEqual([]);
     });
   });
 
-
-  describe('indexOf', function(){
-    it('should return index of given item', function(){
-      var collection = [ {}, {}, {} ];
-      collection.indexOf = null; // so that we can test it even on
-
-      expect(indexOf(collection, {})).toBe(-1);
-      expect(indexOf(collection, collection[1])).toBe(1);
-      expect(indexOf(collection, collection[2])).toBe(2);
-    });
-  });
 
 });

@@ -1,3 +1,6 @@
+/* jshint globalstrict: true */
+'use strict';
+
 /**
  * Decision maker for whether a stack entry is considered relevant.
  * @param  {String}  entry Error stack entry.
@@ -93,76 +96,62 @@ function formatFailedStep(step) {
 }
 
 
-var indexOf = function(collection, item) {
-  if (collection.indexOf) {
-    return collection.indexOf(item);
-  }
-
-  for (var i = 0, l = collection.length; i < l; i++) {
-    if (collection[i] === item) {
-      return i;
-    }
-  }
-
-  return -1;
-};
-
-
-var SuiteNode = function(name, parent) {
+function SuiteNode(name, parent) {
   this.name = name;
   this.parent = parent;
   this.children = [];
 
-  this.addChild = function(name) {
+  this.addChild = function (name) {
     var suite = new SuiteNode(name, this);
     this.children.push(suite);
     return suite;
   };
-};
+}
 
 
-var getAllSpecNames = function(topSuite) {
-  var specNames = {};
+function processSuite(suite, pointer) {
+  var child;
+  var childPointer;
 
-  function processSuite(suite, pointer) {
-    var child;
-    var childPointer;
+  for (var i = 0; i < suite.children.length; i++) {
+    child = suite.children[i];
 
-    for (var i = 0; i < suite.children.length; i++) {
-      child = suite.children[i];
-
-      if (child.children) {
-        childPointer = pointer[child.description] = {_: []};
-        processSuite(child, childPointer);
-      } else {
-        if (!pointer._) {
-          pointer._ = [];
-        }
-        pointer._.push(child.description);
+    if (child.children) {
+      childPointer = pointer[child.description] = {_: []};
+      processSuite(child, childPointer);
+    } else {
+      if (!pointer._) {
+        pointer._ = [];
       }
+      pointer._.push(child.description);
     }
   }
+}
+
+
+function getAllSpecNames(topSuite) {
+  var specNames = {};
 
   processSuite(topSuite, specNames);
 
   return specNames;
-};
+}
 
 
 /**
  * Very simple reporter for Jasmine.
  */
-var KarmaReporter = function(tc, jasmineEnv) {
+function KarmaReporter(tc, jasmineEnv) {
+
+  var currentSuite = new SuiteNode();
 
   /**
    * @param suite
    * @returns {boolean} Return true if it is system jasmine top level suite
    */
-  var isTopLevelSuite = function (suite) {
+  function isTopLevelSuite(suite) {
     return suite.description === 'Jasmine_TopLevel_Suite';
-  };
-
-  var currentSuite = new SuiteNode();
+  }
 
   /**
    * Jasmine 2.0 dispatches the following events:
@@ -175,7 +164,7 @@ var KarmaReporter = function(tc, jasmineEnv) {
    *  - specDone
    */
 
-  this.jasmineStarted = function(data) {
+  this.jasmineStarted = function (data) {
     // TODO(vojta): Do not send spec names when polling.
     tc.info({
       total: data.totalSpecsDefined,
@@ -184,21 +173,21 @@ var KarmaReporter = function(tc, jasmineEnv) {
   };
 
 
-  this.jasmineDone = function() {
+  this.jasmineDone = function () {
     tc.complete({
       coverage: window.__coverage__
     });
   };
 
 
-  this.suiteStarted = function(result) {
+  this.suiteStarted = function (result) {
     if (!isTopLevelSuite(result)) {
       currentSuite = currentSuite.addChild(result.description);
     }
   };
 
 
-  this.suiteDone = function(result) {
+  this.suiteDone = function (result) {
     // In the case of xdescribe, only "suiteDone" is fired.
     // We need to skip that.
     if (result.description !== currentSuite.name) {
@@ -209,12 +198,12 @@ var KarmaReporter = function(tc, jasmineEnv) {
   };
 
 
-  this.specStarted = function(specResult) {
+  this.specStarted = function (specResult) {
     specResult.startTime = new Date().getTime();
   };
 
 
-  this.specDone = function(specResult) {
+  this.specDone = function (specResult) {
     var skipped = specResult.status === 'disabled' || specResult.status === 'pending';
 
     var result = {
@@ -244,16 +233,24 @@ var KarmaReporter = function(tc, jasmineEnv) {
     tc.result(result);
     delete specResult.startTime;
   };
-};
+}
 
+/**
+ * Karma starter function factory.
+ *
+ * This function is invoked from the wrapper.
+ * @see  adapter.wrapper
+ *
+ * @param  {Object}   karma        Karma runner instance.
+ * @param  {Object}   [jasmineEnv] Optional Jasmine environment for testing.
+ * @return {Function}              Karma starter function.
+ */
+function createStartFn(karma, jasmineEnv) {
+  // This function will be assigned to `window.__karma__.start`:
+  return function () {
+    jasmineEnv = jasmineEnv || window.jasmine.getEnv();
 
-var createStartFn = function(tc, jasmineEnvPassedIn) {
-  return function(config) {
-    // we pass jasmineEnv during testing
-    // in production we ask for it lazily, so that adapter can be loaded even before jasmine
-    var jasmineEnv = jasmineEnvPassedIn || window.jasmine.getEnv();
-
-    jasmineEnv.addReporter(new KarmaReporter(tc, jasmineEnv));
+    jasmineEnv.addReporter(new KarmaReporter(karma, jasmineEnv));
     jasmineEnv.execute();
   };
-};
+}
