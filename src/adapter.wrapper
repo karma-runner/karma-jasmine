@@ -3,6 +3,7 @@
 %CONTENT%
 
 
+createSpecFilter(window.__karma__.config, jasmine.getEnv());
 window.__karma__.start = createStartFn(window.__karma__);
 
 })(window);

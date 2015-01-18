@@ -236,6 +236,67 @@ function KarmaReporter(tc, jasmineEnv) {
 }
 
 /**
+ * Extract grep option from karma config
+ * @param {[Array|string]} clientArguments The karma client arguments
+ * @return {string} The value of grep option by default empty string
+ */
+var getGrepOption = function(clientArguments) {
+  var clientArgString = clientArguments || '';
+
+  if (Object.prototype.toString.call(clientArguments) === '[object Array]') {
+    clientArgString = clientArguments.join('=');
+  }
+
+  var match = /--grep=(.*)/.exec(clientArgString);
+  return match ? match[1] : '';
+};
+
+/**
+ * Extract grep option from karma config
+ * @param {[Array|string]} clientArguments The karma client arguments
+ * @return {string} The value of grep option by default empty string
+ */
+var getGrepOption = function(clientArguments) {
+  var clientArgString = clientArguments || '';
+
+  if (Object.prototype.toString.call(clientArguments) === '[object Array]') {
+    clientArgString = clientArguments.join('=');
+  }
+
+  var match = /--grep=(.*)/.exec(clientArgString);
+  return match ? match[1] : '';
+};
+
+/**
+ * Create jasmine spec filter
+ * @param {Object} options Spec filter options
+ */
+var KarmaSpecFilter = function(options) {
+  var filterString = options && options.filterString() && options.filterString().replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+  var filterPattern = new RegExp(filterString);
+
+  this.matches = function(specName) {
+    return filterPattern.test(specName);
+  };
+};
+
+/**
+ * @param {Object} config The karma config
+ * @param {Object} jasmineEnv jasmine environment object
+ */
+var createSpecFilter = function(config, jasmineEnv) {
+  var specFilter = new KarmaSpecFilter({
+    filterString: function() {
+      return getGrepOption(config.args);
+    }
+  });
+
+  jasmineEnv.specFilter = function(spec) {
+    return specFilter.matches(spec.getFullName());
+  };
+};
+
+/**
  * Karma starter function factory.
  *
  * This function is invoked from the wrapper.

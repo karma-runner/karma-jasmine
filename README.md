@@ -60,6 +60,27 @@ module.exports = function(config) {
 };
 ```
 
+If you want run only some tests matching a given pattern you can do this in the following way
+
+```bash
+karma start &
+karma run -- --grep=<pattern>
+```
+
+or
+
+```js
+module.exports = function(config) {
+  config.set({
+    ...
+    client: {
+      args: ['--grep', '<pattern>'],
+      ...
+    }
+  });
+};
+```
+
 ----
 
 For more information on Karma see the [homepage].
