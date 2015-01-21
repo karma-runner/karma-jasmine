@@ -18,7 +18,7 @@ The easiest way is to keep `karma-jasmine` as a devDependency in your `package.j
 }
 ```
 
-You can simple do it by:
+You can simply do it by:
 ```bash
 npm install karma-jasmine --save-dev
 ```
@@ -36,13 +36,13 @@ The easiest way is to keep `karma-jasmine` as a devDependency in your `package.j
 }
 ```
 
-You can simple do it by:
+You can simply do it by:
 ```bash
 npm install karma-jasmine@2_0 --save-dev
 ```
 
 __Note:__
-Since `karma-jasmine 0.3.0` the jasmine library is no longer bundled with `karma-jasmine` and you have to install it on your own. You can simple do it by:
+Since `karma-jasmine 0.3.0` the jasmine library is no longer bundled with `karma-jasmine` and you have to install it on your own. You can simply do it by:
 ```bash
 npm install jasmine-core --save-dev
 ```
@@ -60,7 +60,7 @@ module.exports = function(config) {
 };
 ```
 
-If you want run only some tests matching a given pattern you can do this in the following way
+If you want to run only some tests matching a given pattern you can do this in the following way
 
 ```bash
 karma start &
