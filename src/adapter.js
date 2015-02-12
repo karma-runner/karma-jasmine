@@ -141,7 +141,7 @@ function getAllSpecNames(topSuite) {
 /**
  * Very simple reporter for Jasmine.
  */
-function KarmaReporter(tc, jasmineEnv) {
+function KarmaReporter(tc, jasmineEnv, options) {
 
   var currentSuite = new SuiteNode();
 
@@ -199,7 +199,7 @@ function KarmaReporter(tc, jasmineEnv) {
 
 
   this.specStarted = function (specResult) {
-    specResult.startTime = new Date().getTime();
+    specResult.startTime = options.timer.now();
   };
 
 
@@ -208,12 +208,13 @@ function KarmaReporter(tc, jasmineEnv) {
 
     var result = {
       description : specResult.description,
+      fullName    : specResult.fullName,
       id          : specResult.id,
       log         : [],
       skipped     : skipped,
       success     : specResult.failedExpectations.length === 0,
       suite       : [],
-      time        : skipped ? 0 : new Date().getTime() - specResult.startTime
+      time        : skipped ? 0 : options.timer.now() - specResult.startTime
     };
 
     // generate ordered list of (nested) suite names
@@ -311,7 +312,7 @@ function createStartFn(karma, jasmineEnv) {
   return function () {
     jasmineEnv = jasmineEnv || window.jasmine.getEnv();
 
-    jasmineEnv.addReporter(new KarmaReporter(karma, jasmineEnv));
+    jasmineEnv.addReporter(new KarmaReporter(karma, jasmineEnv, {timer: new jasmine.Timer()}));
     jasmineEnv.execute();
   };
 }
