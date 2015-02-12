@@ -312,7 +312,11 @@ function createStartFn(karma, jasmineEnv) {
   return function () {
     jasmineEnv = jasmineEnv || window.jasmine.getEnv();
 
-    jasmineEnv.addReporter(new KarmaReporter(karma, jasmineEnv, {timer: new jasmine.Timer()}));
+    var options = {
+      timer: (window.jasmine ? new window.jasmine.Timer() : {now : function() {return new Date().getTime();}})
+    };
+
+    jasmineEnv.addReporter(new KarmaReporter(karma, jasmineEnv, options));
     jasmineEnv.execute();
   };
 }
