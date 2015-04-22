@@ -252,22 +252,6 @@ var getGrepOption = function(clientArguments) {
 };
 
 /**
- * Extract grep option from karma config
- * @param {[Array|string]} clientArguments The karma client arguments
- * @return {string} The value of grep option by default empty string
- */
-var getGrepOption = function(clientArguments) {
-  var clientArgString = clientArguments || '';
-
-  if (Object.prototype.toString.call(clientArguments) === '[object Array]') {
-    clientArgString = clientArguments.join('=');
-  }
-
-  var match = /--grep=(.*)/.exec(clientArgString);
-  return match ? match[1] : '';
-};
-
-/**
  * Create jasmine spec filter
  * @param {Object} options Spec filter options
  */
