@@ -79,7 +79,7 @@ function formatFailedStep(step) {
     // Now we probably have a repetition case where:
     // relevantMessage: ["Expected true to be false."]
     // relevantStack:   ["Error: Expected true to be false.", ...]
-    if (relevantStack[0].indexOf(step.message) !== -1) {
+    if (relevantStack.length && relevantStack[0].indexOf(step.message) !== -1) {
       // The message seems preferable, so we remove the first value from
       // the stack to get rid of repetition :
       relevantStack.shift();
