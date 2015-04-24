@@ -53,7 +53,12 @@ function formatFailedStep(step) {
 
   var relevantMessage = [];
   var relevantStack = [];
-  var dirtyRelevantStack = getRelevantStackFrom(step.stack);
+
+  // Remove the message prior to processing the stack to prevent issues like
+  // https://github.com/karma-runner/karma-jasmine/issues/79
+  var stack = step.stack.replace('Error: ' + step.message, '');
+
+  var dirtyRelevantStack = getRelevantStackFrom(stack);
 
   // PhantomJS returns multiline error message for errors coming from specs
   // (for example when calling a non-existing function). This error is present
