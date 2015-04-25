@@ -201,6 +201,18 @@ describe('jasmine adapter', function(){
       expect( formatFailedStep(step) ).toBe( 'MESSAGE' );
     });
 
+
+    it('should properly format message containing new-line characters', function(){
+      // FF does not have the message in the stack trace
+
+      var step = {
+        passed  : false,
+        message : 'Jasmine fail\nmessage',
+        stack   : 'Error: Jasmine fail\nmessage\n@file.js:123'
+      };
+
+      expect( formatFailedStep(step) ).toMatch( 'Jasmine fail\nmessage\n@file.js:123' );
+    });
   });
 
 
