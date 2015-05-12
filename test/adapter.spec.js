@@ -20,7 +20,7 @@ describe('jasmine adapter', function(){
       env = jasmine.getEnv();
 
       karma = new Karma(new MockSocket(), null, null, null, {search: ''});
-      reporter = new KarmaReporter(karma, env);
+      reporter = new KarmaReporter(karma, env, {timer: {now: function() {return new Date().getTime();}}});
 
       spyOn(karma, 'result');
 
