@@ -2,17 +2,16 @@
 'use strict';
 
 /**
- * Decision maker for whether a stack entry is considered relevant.
+ * Decision maker for whether a stack entry is considered external to jasmine and karma.
  * @param  {String}  entry Error stack entry.
- * @return {Boolean}       True if relevant, False otherwise.
+ * @return {Boolean}       True if external, False otherwise.
  */
-function isRelevantStackEntry(entry) {
-  // discard empty and falsy entries:
-  return (entry ? true : false) &&
-    // discard entries related to jasmine and karma-jasmine:
-    !/\/(jasmine-core|karma-jasmine)\//.test(entry) &&
-    // discard karma specifics, e.g. "at http://localhost:7018/karma.js:185"
-    !/\/(karma.js|context.html):/.test(entry);
+function isExternalStackEntry(entry) {
+    return (entry ? true : false) &&
+      // entries related to jasmine and karma-jasmine:
+      !/\/(jasmine-core|karma-jasmine)\//.test(entry) &&
+      // karma specifics, e.g. "at http://localhost:7018/karma.js:185"
+      !/\/(karma.js|context.html):/.test(entry);
 }
 
 /**
@@ -21,13 +20,26 @@ function isRelevantStackEntry(entry) {
  * @return {Array}        A list of relevant stack entries.
  */
 function getRelevantStackFrom(stack) {
-  var relevantStack = [];
+  var filteredStack = [],
+      relevantStack = [];
 
   stack = stack.split('\n');
 
   for (var i = 0; i < stack.length; i += 1) {
-    if (isRelevantStackEntry(stack[i])) {
-      relevantStack.push(stack[i]);
+    if (isExternalStackEntry(stack[i])) {
+      filteredStack.push(stack[i]);
+    }
+  }
+
+  // If the filtered stack is empty, i.e. the error originated entirely from within jasmine or karma, then the whole stack
+  // should be relevant.
+  if (filteredStack.length === 0) {
+    filteredStack = stack;
+  }
+
+  for (i = 0; i < filteredStack.length; i += 1) {
+    if (filteredStack[i]) {
+      relevantStack.push(filteredStack[i]);
     }
   }
 
