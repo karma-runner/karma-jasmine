@@ -31,26 +31,6 @@ var indexOf = function(collection, item) {
 };
 
 
-// TODO(vojta): Karma might provide this
-var getCurrentTransport = function() {
-  var parentWindow = window.opener || window.parent;
-  var location = parentWindow.location;
-  var hostname = 'http://' + location.host;
-
-  if (!location.port) {
-    hostname += ':80';
-  }
-
-  // Probably running in debug.html (there's no socket.io),
-  // or in debug mode with socket.io but no socket on this host.
-  if (!parentWindow.io || !parentWindow.io.sockets[hostname]) {
-    return null;
-  }
-
-  return parentWindow.io.sockets[hostname].transport.name;
-};
-
-
 /**
  * Very simple reporter for jasmine
  */
@@ -87,15 +67,7 @@ var KarmaReporter = function(tc) {
   };
 
   this.reportRunnerStarting = function(runner) {
-    var transport = getCurrentTransport();
-    var specNames = null;
-
-    // This structure can be pretty huge and it blows up socket.io connection, when polling.
-    // https://github.com/LearnBoost/socket.io-client/issues/569
-    if (transport === 'websocket' || transport === 'flashsocket') {
-      specNames = getAllSpecNames(runner.topLevelSuites());
-    }
-
+    var specNames = getAllSpecNames(runner.topLevelSuites());
     tc.info({total: runner.specs().length, specs: specNames});
   };
 
