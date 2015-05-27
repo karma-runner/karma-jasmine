@@ -77,18 +77,21 @@ function formatFailedStep(step) {
   // in both `step.message` and `step.stack` at the same time, but stack seems
   // preferable, so we iterate relevant stack, compare it to message:
   for (var i = 0; i < dirtyRelevantStack.length; i += 1) {
-    if (step.message && step.message.indexOf(dirtyRelevantStack[i]) === -1) {
+    // Stack entry contains an extra "Error: ..." before the message
+    // so we remove it before we check if the error is present in `step.message`
+    var currentStackEntry = dirtyRelevantStack[i].replace(/^Error: /, '');
+    if (step.message && step.message.indexOf(currentStackEntry) === -1) {
       // Stack entry is not in the message,
       // we consider it to be a relevant stack:
-      relevantStack.push(dirtyRelevantStack[i]);
+      relevantStack.push(currentStackEntry);
     } else {
       // Stack entry is already in the message,
       // we consider it to be a suitable message alternative:
-      relevantMessage.push(dirtyRelevantStack[i]);
+      relevantMessage.push(currentStackEntry);
     }
   }
 
-  // In most cases the above will leave us with an empty message...
+  // In some cases the above will leave us with an empty message...
   if (relevantMessage.length === 0) {
     // Let's reuse the original message:
     relevantMessage.push(step.message);
