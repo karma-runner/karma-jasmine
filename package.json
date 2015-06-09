@@ -31,7 +31,6 @@
     "jasmine-core": "~2.1.0"
   },
   "peerDependencies": {
-    "karma": ">=0.9",
     "jasmine-core": "*"
   },
   "license": "MIT",
