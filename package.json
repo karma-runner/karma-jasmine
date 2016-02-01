@@ -21,14 +21,14 @@
     "grunt": "~0.4.1",
     "grunt-contrib-jshint": "~0.6",
     "karma": "",
-    "karma-jasmine": "~0.1.0",
-    "karma-chrome-launcher": "~0.1.0",
+    "karma-jasmine": "~0.3.0",
+    "karma-chrome-launcher": "~0.2.0",
     "karma-firefox-launcher": "~0.1.0",
-    "grunt-karma": "~0.8.0",
+    "grunt-karma": "~0.12.0",
     "grunt-auto-release": "~0.0.2",
     "grunt-npm": "~0.0.2",
     "grunt-bump": "~0.0.7",
-    "jasmine-core": "~2.1.0"
+    "jasmine-core": "~2.3.4"
   },
   "peerDependencies": {
     "jasmine-core": "*"

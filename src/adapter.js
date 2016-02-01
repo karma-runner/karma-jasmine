@@ -258,14 +258,27 @@ function KarmaReporter(tc, jasmineEnv) {
  * @return {string} The value of grep option by default empty string
  */
 var getGrepOption = function(clientArguments) {
-  var clientArgString = clientArguments || '';
+  var grepRegex = /^--grep=(.*)$/;
 
   if (Object.prototype.toString.call(clientArguments) === '[object Array]') {
-    clientArgString = clientArguments.join('=');
-  }
+    var indexOfGrep = clientArguments.indexOf('--grep');
 
-  var match = /--grep=(.*)/.exec(clientArgString);
-  return match ? match[1] : '';
+    if(indexOfGrep !== -1) {
+      return clientArguments[indexOfGrep + 1];
+    }
+
+    return clientArguments
+            .filter(function(arg) {
+              return grepRegex.test(arg);
+            })
+            .map(function(arg) {
+              return arg.replace(grepRegex, '$1');
+            })[0] || '';
+  } else if (typeof clientArguments === 'string') {
+    var match = /--grep=([^=]+)/.exec(clientArguments);
+
+    return match ? match[1] : '';
+  }
 };
 
 /**
