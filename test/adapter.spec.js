@@ -51,7 +51,7 @@ describe('jasmine adapter', function(){
 
 
     it('should report all spec names', function(){
-      spyOn(karma, 'info').andCallFake(function(info){
+      spyOn(karma, 'info').and.callFake(function(info){
         expect(info.total).toBe(2);
         expect(info.specs).toEqual({
           one: {
@@ -81,7 +81,7 @@ describe('jasmine adapter', function(){
 
 
     it('should report success result', function(){
-      karma.result.andCallFake(function(result){
+      karma.result.and.callFake(function(result){
         expect(result.id).toBe(spec.id);
         expect(result.description).toBe('contains spec with an expectation');
         expect(result.suite).toEqual([ 'Parent Suite', 'Child Suite' ]);
@@ -97,7 +97,7 @@ describe('jasmine adapter', function(){
 
 
     it('should report fail result', function(){
-      karma.result.andCallFake(function(result){
+      karma.result.and.callFake(function(result){
         expect(result.success).toBe(false);
         expect(result.log.length).toBe(1);
       });
@@ -123,7 +123,7 @@ describe('jasmine adapter', function(){
         '    at /foo/bar/baz.spec.js:23:29\n' +
         '    at /foo/bar/baz.js:18:20\n';
 
-      karma.result.andCallFake(function(result){
+      karma.result.and.callFake(function(result){
         expect(result.log).toEqual([
           'Expected true to be false.\n' +
           '    at /foo/bar/baz.spec.js:23:29\n' +
@@ -151,7 +151,7 @@ describe('jasmine adapter', function(){
         '    at Expectation.toBe (/foo/bar/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:1365:12)\n';
 
 
-      karma.result.andCallFake(function(result){
+      karma.result.and.callFake(function(result){
         expect(result.log).toEqual([
           'Expected true to be false.\n' +
           '    at stack (/foo/bar/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:1441:17)\n' +
@@ -171,7 +171,7 @@ describe('jasmine adapter', function(){
     });
 
     it('should remove special top level suite from result', function () {
-      karma.result.andCallFake(function(result){
+      karma.result.and.callFake(function(result){
         expect(result.suite).toEqual([ 'Child Suite' ]);
       });
 
@@ -191,11 +191,11 @@ describe('jasmine adapter', function(){
     it('should report time for every spec', function(){
       var counter = 3;
 
-      spyOn(Date.prototype, 'getTime').andCallFake(function(){
+      spyOn(Date.prototype, 'getTime').and.callFake(function(){
         return counter+=1;
       });
 
-      karma.result.andCallFake(function(result){
+      karma.result.and.callFake(function(result){
         expect(result.time).toBe(1); // 4 - 3
       });
 
@@ -296,17 +296,17 @@ describe('jasmine adapter', function(){
     });
 
     it('should split by newline and return all values for which isExternalStackEntry returns true', function () {
-      isExternalStackEntry = jasmine.createSpy('isExternalStackEntry').andReturn(true);
+      isExternalStackEntry = jasmine.createSpy('isExternalStackEntry').and.returnValue(true);
       expect(getRelevantStackFrom('a\nb\nc')).toEqual(['a', 'b', 'c']);
     });
 
     it('should return the all stack entries if every entry is irrelevant', function () {
-      isExternalStackEntry = jasmine.createSpy('isExternalStackEntry').andReturn(false);
+      isExternalStackEntry = jasmine.createSpy('isExternalStackEntry').and.returnValue(false);
       expect(getRelevantStackFrom('a\nb\nc')).toEqual(['a', 'b', 'c']);
     });
 
     it('should return only the relevant stack entries if the stack contains relevant entries', function () {
-      isExternalStackEntry = jasmine.createSpy('isExternalStackEntry').andCallFake(function (entry) {
+      isExternalStackEntry = jasmine.createSpy('isExternalStackEntry').and.callFake(function (entry) {
         return entry !== 'b';
       });
       expect(getRelevantStackFrom('a\nb\nc')).toEqual(['a', 'c']);
@@ -358,7 +358,7 @@ describe('jasmine adapter', function(){
         args: ['--grep', 'test']
       };
       var specMock = {
-        getFullName: jasmine.createSpy('getFullName').andReturn('test')
+        getFullName: jasmine.createSpy('getFullName').and.returnValue('test')
       };
 
       createSpecFilter(karmaConfMock, jasmineEnvMock);
