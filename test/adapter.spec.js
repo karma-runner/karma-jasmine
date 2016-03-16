@@ -96,13 +96,39 @@ describe('jasmine adapter', function(){
     });
 
 
+    it('should report executedExpectCount 0 if no expectations', function(){
+      karma.result.and.callFake(function(result){
+        expect(result.executedExpectationsCount).toBe(0);
+      });
+
+      reporter.specDone(spec.result);
+
+      expect(karma.result).toHaveBeenCalled();
+    });
+
+
     it('should report fail result', function(){
       karma.result.and.callFake(function(result){
         expect(result.success).toBe(false);
         expect(result.log.length).toBe(1);
+        expect(result.executedExpectationsCount).toBe(1);
       });
 
       spec.result.failedExpectations.push( {} );
+      reporter.specDone(spec.result);
+
+      expect(karma.result).toHaveBeenCalled();
+    });
+
+
+    it('should report executedExpectCount as sum of passed and failed expectations', function(){
+      karma.result.and.callFake(function(result){
+        expect(result.executedExpectationsCount).toBe(2);
+      });
+
+      spec.result.passedExpectations.push( {} );
+      spec.result.failedExpectations.push( {} );
+      
       reporter.specDone(spec.result);
 
       expect(karma.result).toHaveBeenCalled();
