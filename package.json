@@ -1,6 +1,6 @@
 {
   "name": "karma-jasmine",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "A Karma plugin - adapter for Jasmine testing framework.",
   "main": "lib/index.js",
   "scripts": {
@@ -42,13 +42,14 @@
   "contributors": [
     "Maksim Ryzhikov <rv.maksim@gmail.com>",
     "olegskl <sklyanchuk@gmail.com>",
-    "Cornelius Schmale <github@cschmale.de>",
-    "Arthur Thornton <arthur@thestorefront.com>",
-    "Friedel Ziegelmayer <friedel.ziegelmayer@gmail.com>",
+    "dignifiedquire <dignifiedquire@gmail.com>",
     "Friedel Ziegelmayer <dignifiedquire@gmail.com>",
+    "Cornelius Schmale <github@cschmale.de>",
+    "Friedel Ziegelmayer <friedel.ziegelmayer@gmail.com>",
+    "Arthur Thornton <arthur@thestorefront.com>",
     "Mark Ethan Trostler <mark@zzo.com>",
     "Richard Park <objectiv@gmail.com>",
-    "dignifiedquire <dignifiedquire@gmail.com>",
+    "Stefan Dragnev <dragnev@telerik.com>",
     "jiverson <jiverson222@gmail.com>",
     "Aaron Hartwig <aaron.hartwig@whyhigh.com>",
     "rpark <objectiv@gmail.com>",
@@ -56,10 +57,10 @@
     "Barry Fitzgerald <barfitzgerald@gmail.com>",
     "Marek Vavrecan <vavrecan@gmail.com>",
     "Matthew Hill <Matthew.Hill4@bskyb.com>",
+    "Milan Lempera <milanlempera@gmail.com>",
     "Niels Dequeker <niels.dequeker@gmail.com>",
     "Robin Gloster <robin@loc-com.de>",
     "Sahat Yalkabov <sakhat@gmail.com>",
-    "Sergey Tatarintsev <sevinf@yandex-team.ru>",
-    "Stefan Dragnev <dragnev@telerik.com>"
+    "Sergey Tatarintsev <sevinf@yandex-team.ru>"
   ]
 }
