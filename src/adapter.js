@@ -251,7 +251,8 @@ function KarmaReporter (tc, jasmineEnv) {
 var getGrepOption = function (clientArguments) {
   var grepRegex = /^--grep=(.*)$/
 
-  if (Object.prototype.toString.call(clientArguments) === '[object Array]') {
+  // IE 8 may not always have the polyfilled indexOf method
+  if (clientArguments.indexOf && Object.prototype.toString.call(clientArguments) === '[object Array]') {
     var indexOfGrep = clientArguments.indexOf('--grep')
 
     if (indexOfGrep !== -1) {
