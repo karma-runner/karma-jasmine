@@ -252,17 +252,15 @@ var getGrepOption = function (clientArguments) {
   var grepRegex = /^--grep=(.*)$/
 
   if (Object.prototype.toString.call(clientArguments) === '[object Array]') {
-    var indexOfGrep = clientArguments.indexOf('--grep')
+    var indexOfGrep = indexOf(clientArguments, '--grep')
 
     if (indexOfGrep !== -1) {
       return clientArguments[indexOfGrep + 1]
     }
 
-    return clientArguments
-      .filter(function (arg) {
+    return map(filter(clientArguments ,function (arg) {
         return grepRegex.test(arg)
-      })
-      .map(function (arg) {
+      }), function (arg) {
         return arg.replace(grepRegex, '$1')
       })[0] || ''
   } else if (typeof clientArguments === 'string') {
@@ -321,35 +319,41 @@ function createStartFn (karma, jasmineEnv) {
   }
 }
 
-// Polyfills for correct work adapter in IE8
-if (!('indexOf' in Array.prototype)) {
-  Array.prototype.indexOf = function (find, i /*opt*/) {
-    if (i === undefined) {i = 0;}
-    if (i < 0) {i += this.length;}
-    if (i < 0) {i = 0;}
-    for (var n = this.length; i < n; i++) {
-      if (i in this && this[i] === find) {
-        return i;}}
-    return -1
+
+function indexOf(collection, find, i /*opt*/) {
+  if (collection.indexOf) {
+    return collection.indexOf(find, i);
   }
+  
+  if (i === undefined) {i = 0;}
+  if (i < 0) {i += collection.length;}
+  if (i < 0) {i = 0;}
+  for (var n = collection.length; i < n; i++) {
+    if (i in collection && collection[i] === find) {
+      return i;}}
+  return -1
 }
 
-if (!('map' in Array.prototype)) {
-  Array.prototype.map = function (mapper, that /*opt*/) {
-    var other = new Array(this.length)
-    for (var i = 0, n = this.length; i < n; i++) {
-      if (i in this) {
-        other[i] = mapper.call(that, this[i], i, this);}}
-    return other
+function filter(collection, filter, that /*opt*/) {
+  if (collection.filter) {
+    return collection.filter(filter, that);
   }
+  
+  var other = [], v
+  for (var i = 0, n = collection.length; i < n; i++) {
+    if (i in collection && filter.call(that, v = collection[i], i, collection)) {
+      other.push(v);}}
+  return other
 }
 
-if (!('filter' in Array.prototype)) {
-  Array.prototype.filter = function (filter, that /*opt*/) {
-    var other = [], v
-    for (var i = 0, n = this.length; i < n; i++) {
-      if (i in this && filter.call(that, v = this[i], i, this)) {
-        other.push(v);}}
-    return other
+function map(collection, mapper, that /*opt*/) {
+  if (collection.map) {
+    return collection.map(mapper, that);
   }
+  
+  var other = new Array(collection.length)
+  for (var i = 0, n = collection.length; i < n; i++) {
+    if (i in collection) {
+      other[i] = mapper.call(that, collection[i], i, collection);}}
+  return other
 }
