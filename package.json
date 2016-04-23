@@ -36,7 +36,8 @@
     "load-grunt-tasks": "^3.4.1"
   },
   "peerDependencies": {
-    "jasmine-core": "*"
+    "jasmine-core": "*",
+    "karma": "*"
   },
   "license": "MIT",
   "contributors": [
