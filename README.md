@@ -70,6 +70,23 @@ module.exports = function(config) {
 }
 ```
 
+If you want async tests done execution to be executed on the next JavaScript message queue, you can do this by setting the `jasmineDoneToMessageQueue` config value.
+
+```js
+// karma.conf.js
+module.exports = function(config) {
+  config.set({
+    frameworks: ['jasmine'],
+
+    files: [
+      '*.js'
+    ],
+    
+    jasmineDoneToMessageQueue: true
+  })
+}
+```
+
 ----
 
 For more information on Karma see the [homepage].
