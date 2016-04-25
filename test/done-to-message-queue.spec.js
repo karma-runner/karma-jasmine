@@ -1,123 +1,126 @@
+/* global shimJasmineItDoneToMessageQueueIfAsync */
 'use strict'
 
-function trackCalls(name) {
-  trackCalls.calls = trackCalls.calls || [];
-  trackCalls.calls.push(name);
+// trivial utility to track order of calls
+function trackCalls (name) {
+  trackCalls.calls = trackCalls.calls || []
+  trackCalls.calls.push(name)
 }
 trackCalls.reset = function () {
-  trackCalls.calls = [];
+  trackCalls.calls = []
 }
 
-function itFnStubWithDone(done) {
-  trackCalls('itFnStubWithDone before done');
-  done();
-  trackCalls('itFnStubWithDone after done');  
+function asyncFnStub (done) {
+  trackCalls('asyncFnStub before done')
+  done()
+  trackCalls('asyncFnStub after done')
 }
 
-function itStub(done) {
+function generateItStub (done) {
   return function (description, fn, timeout) {
-    trackCalls('itStub before itFnStubWithDone');
-    fn(done);
-    trackCalls('itStub after itFnStubWithDone');
-  };  
+    trackCalls('itStub before asyncFnStub')
+    fn(done)
+    trackCalls('itStub after asyncFnStub')
+  }
 }
 
 describe('done-to-message-queue', function () {
   describe('order of operations without shim', function () {
     it('should call done before track calls after done is logged', function (done) {
-      trackCalls.reset();
-      expect(trackCalls.calls.length).toBe(0);
-      
-      var doneMock = function() { trackCalls('doneMock')};
-      
-      itStub(doneMock)('test', itFnStubWithDone, 0);
-      
+      trackCalls.reset()
+      expect(trackCalls.calls.length).toBe(0)
+
+      var doneMock = function () { trackCalls('doneMock') }
+
+      generateItStub(doneMock)('test', asyncFnStub, 0)
+
       setTimeout(function () {
         expect(trackCalls.calls).toEqual([
-          'itStub before itFnStubWithDone',
-          'itFnStubWithDone before done',
+          'itStub before asyncFnStub',
+          'asyncFnStub before done',
           'doneMock',
-          'itFnStubWithDone after done',
-          'itStub after itFnStubWithDone',
-          ]);
-        done();
-      }, 10);
-    });
-  });
-  
+          'asyncFnStub after done',
+          'itStub after asyncFnStub'
+        ])
+        done()
+      }, 10)
+    })
+  })
+
   describe('order of operations with shim', function () {
     it('should call done after track calls after done is logged', function (done) {
-      trackCalls.reset();
-      expect(trackCalls.calls.length).toBe(0);
-      var doneMock = function() { trackCalls('doneMock')};
-      var global = { it: itStub(doneMock) };
-      shimJasmineItDoneToMessageQueueIfAsync(global);
-      
+      trackCalls.reset()
+      expect(trackCalls.calls.length).toBe(0)
+      var doneMock = function () { trackCalls('doneMock') }
+      var global = { it: generateItStub(doneMock) }
+      shimJasmineItDoneToMessageQueueIfAsync(global)
+
+      // set a timeout before call to it to show it will occur after current execution loop but before done execution loop.
       setTimeout(function () {
-        trackCalls('test setTimeout');
-      });
-      global.it('test', itFnStubWithDone, 0);
-      
+        trackCalls('test setTimeout')
+      })
+      global.it('test', asyncFnStub, 0)
+
       setTimeout(function () {
         expect(trackCalls.calls).toEqual([
-          'itStub before itFnStubWithDone',
-          'itFnStubWithDone before done',
-          'itFnStubWithDone after done',
-          'itStub after itFnStubWithDone',
+          'itStub before asyncFnStub',
+          'asyncFnStub before done',
+          'asyncFnStub after done',
+          'itStub after asyncFnStub',
           'test setTimeout',
-          'doneMock',
-          ]);
-        done();
-      }, 10);
-    });
-  });
-  
+          'doneMock'
+        ])
+        done()
+      }, 10)
+    })
+  })
+
   describe('shimJasmineItDoneToMessageQueueIfAsync', function () {
-    var itMock;
-    var doneMock;
-    var doneFailMock = 'doneFailMock';
-    var global = {};
+    var itMock
+    var doneMock
+    var doneFailMock = 'doneFailMock'
+    var global = {}
 
     beforeEach(function () {
-      doneMock = jasmine.createSpy('doneMock');
-      doneMock['doneFailMock'] = doneFailMock;
-      itMock = jasmine.createSpy('it').and.callFake(function (description, fn, timeout) { fn(doneMock) });
-      global.it = itMock;
-      shimJasmineItDoneToMessageQueueIfAsync(global);
-    });
+      doneMock = jasmine.createSpy('doneMock')
+      doneMock['doneFailMock'] = doneFailMock
+      itMock = jasmine.createSpy('it').and.callFake(function (description, fn, timeout) { fn(doneMock) })
+      global.it = itMock
+      shimJasmineItDoneToMessageQueueIfAsync(global)
+    })
 
     it('itMock should not equal global.it', function () {
-      expect(global.it).not.toBe(itMock);
-    });
+      expect(global.it).not.toBe(itMock)
+    })
 
     it('itMock should be called with exact parameters if fn does not take arguments', function () {
-      var description = 'test desc';
+      var description = 'test desc'
       var fn = jasmine.createSpy('mock test')
-      var timeout = 100;
+      var timeout = 100
 
-      expect(itMock).not.toHaveBeenCalled();
-      expect(fn).not.toHaveBeenCalled();
+      expect(itMock).not.toHaveBeenCalled()
+      expect(fn).not.toHaveBeenCalled()
 
-      global.it(description, fn, timeout);
+      global.it(description, fn, timeout)
 
-      expect(itMock).toHaveBeenCalledWith(description, fn, timeout);
-      expect(fn).toHaveBeenCalled();
-    });
+      expect(itMock).toHaveBeenCalledWith(description, fn, timeout)
+      expect(fn).toHaveBeenCalled()
+    })
 
     it('itMock should be called with exact parameters expet fn if fn does take arguments', function (done) {
-      var description = 'test desc';
+      var description = 'test desc'
       var fn = function (testDone) {
-        expect(testDone).not.toBe(doneMock);
-        expect(testDone['doneFailMock']).toBe(doneFailMock);
-        done();
-      };
-      var timeout = 100;
+        expect(testDone).not.toBe(doneMock)
+        expect(testDone['doneFailMock']).toBe(doneFailMock)
+        done()
+      }
+      var timeout = 100
 
-      expect(itMock).not.toHaveBeenCalled();
+      expect(itMock).not.toHaveBeenCalled()
 
-      global.it(description, fn, timeout);
+      global.it(description, fn, timeout)
 
-      expect(itMock).toHaveBeenCalledWith(description, fn, timeout);
-    });
-  });
-});
+      expect(itMock).toHaveBeenCalledWith(description, fn, timeout)
+    })
+  })
+})

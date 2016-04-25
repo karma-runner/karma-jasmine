@@ -2,7 +2,7 @@ function shimJasmineItDoneToMessageQueueIfAsync(global) {
   var oldIt = global.it
 
   function puntToMessageQueueIfAsync(fn) {
-    if (fn.length === 0) {
+    if (fn.length === 0) { // same logic as is used in jasmine to determine if done param should be provided to test fn
       return fn
     }
 
