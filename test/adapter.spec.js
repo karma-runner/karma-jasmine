@@ -9,7 +9,10 @@
 'use strict'
 
 describe('jasmine adapter', function () {
-  var Karma = window.__karma__.constructor
+  var Karma
+  beforeAll(function () {
+    Karma = window.__karma__.constructor
+  })
 
   describe('KarmaReporter', function () {
     var reporter, karma, env, parentSuite, suite, spec
