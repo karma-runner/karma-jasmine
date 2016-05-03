@@ -26,13 +26,13 @@
     "grunt-conventional-changelog": "^6.1.0",
     "grunt-conventional-github-releaser": "^1.0.0",
     "grunt-eslint": "^18.0.0",
-    "grunt-karma": "~0.12.1",
+    "grunt-karma": "1.x || ~0.12.1",
     "grunt-npm": "0.0.2",
     "jasmine-core": "~2.4.1",
-    "karma": "",
-    "karma-chrome-launcher": "~0.2.2",
-    "karma-firefox-launcher": "~0.1.7",
-    "karma-jasmine": "~0.3.7",
+    "karma": "1.x || ",
+    "karma-chrome-launcher": "1.x || ~0.2.2",
+    "karma-firefox-launcher": "1.x || ~0.1.7",
+    "karma-jasmine": "1.x || ~0.3.7",
     "load-grunt-tasks": "^3.4.1"
   },
   "peerDependencies": {
