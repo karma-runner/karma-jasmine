@@ -1,3 +1,8 @@
+<a name="1.0.0"></a>
+# [1.0.0](https://github.com/karma-runner/karma-jasmine/compare/v0.3.8...v1.0.0) (2016-05-03)
+
+
+
 <a name="0.3.8"></a>
 ## [0.3.8](https://github.com/karma-runner/karma-jasmine/compare/v0.3.7...v0.3.8) (2016-03-16)
 
