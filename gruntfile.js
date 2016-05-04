@@ -1,5 +1,5 @@
 module.exports = function (grunt) {
-  grunt.loadTasks('tasks');
+  grunt.loadTasks('tasks')
   grunt.initConfig({
     pkgFile: 'package.json',
     build: {
@@ -65,7 +65,7 @@ module.exports = function (grunt) {
 
   require('load-grunt-tasks')(grunt)
 
-  grunt.registerTask('test', ['karma'])
+  grunt.registerTask('test', ['build', 'karma'])
   grunt.registerTask('default', ['eslint', 'test'])
 
   grunt.registerTask('release', 'Bump the version and publish to NPM.', function (type) {
