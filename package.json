@@ -1,6 +1,6 @@
 {
   "name": "karma-jasmine",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "A Karma plugin - adapter for Jasmine testing framework.",
   "main": "lib/index.js",
   "scripts": {
@@ -43,10 +43,10 @@
   "contributors": [
     "Maksim Ryzhikov <rv.maksim@gmail.com>",
     "olegskl <sklyanchuk@gmail.com>",
-    "dignifiedquire <dignifiedquire@gmail.com>",
     "Mark Ethan Trostler <mark@zzo.com>",
-    "Friedel Ziegelmayer <dignifiedquire@gmail.com>",
+    "dignifiedquire <dignifiedquire@gmail.com>",
     "Cornelius Schmale <github@cschmale.de>",
+    "Friedel Ziegelmayer <dignifiedquire@gmail.com>",
     "Friedel Ziegelmayer <friedel.ziegelmayer@gmail.com>",
     "Arthur Thornton <arthur@thestorefront.com>",
     "Richard Park <objectiv@gmail.com>",
