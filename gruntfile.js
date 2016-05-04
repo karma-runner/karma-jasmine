@@ -1,4 +1,5 @@
 module.exports = function (grunt) {
+  grunt.loadTasks('tasks');
   grunt.initConfig({
     pkgFile: 'package.json',
     build: {
@@ -69,6 +70,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('release', 'Bump the version and publish to NPM.', function (type) {
     grunt.task.run([
+      'build',
       'npm-contributors',
       'bump:' + (type || 'patch') + ':bump-only',
       'conventionalChangelog',
