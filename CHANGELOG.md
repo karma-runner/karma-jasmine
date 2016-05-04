@@ -1,3 +1,13 @@
+<a name="1.0.2"></a>
+## [1.0.2](https://github.com/karma-runner/karma-jasmine/compare/v1.0.1...v1.0.2) (2016-05-04)
+
+
+### Bug Fixes
+
+* **version:** argh, make 'build' a prereq for test and fix gruntfile for eslint([f2a6109](https://github.com/karma-runner/karma-jasmine/commit/f2a6109))
+
+
+
 <a name="1.0.1"></a>
 ## [1.0.1](https://github.com/karma-runner/karma-jasmine/compare/v1.0.0...v1.0.1) (2016-05-04)
 
