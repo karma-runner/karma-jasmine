@@ -3,7 +3,8 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkgFile: 'package.json',
     build: {
-      adapter: ['src/adapter.js']
+      adapter: ['src/adapter.js'],
+      doneToMessageQueue: ['src/done-to-message-queue.js']
     },
     'npm-contributors': {
       options: {
@@ -53,7 +54,7 @@ module.exports = function (grunt) {
     },
     eslint: {
       target: [
-        'src/adapter.js',
+        'src/*.js',
         'lib/*.js',
         'gruntfile.js',
         'karma.conf.js',
