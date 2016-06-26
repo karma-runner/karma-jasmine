@@ -1,4 +1,3 @@
-/* jshint globalstrict: true */
 'use strict'
 
 /**
@@ -324,7 +323,7 @@ function indexOf(collection, find, i /*opt*/) {
   if (collection.indexOf) {
     return collection.indexOf(find, i);
   }
-  
+
   if (i === undefined) {i = 0;}
   if (i < 0) {i += collection.length;}
   if (i < 0) {i = 0;}
@@ -338,7 +337,7 @@ function filter(collection, filter, that /*opt*/) {
   if (collection.filter) {
     return collection.filter(filter, that);
   }
-  
+
   var other = [], v
   for (var i = 0, n = collection.length; i < n; i++) {
     if (i in collection && filter.call(that, v = collection[i], i, collection)) {
@@ -350,7 +349,7 @@ function map(collection, mapper, that /*opt*/) {
   if (collection.map) {
     return collection.map(mapper, that);
   }
-  
+
   var other = new Array(collection.length)
   for (var i = 0, n = collection.length; i < n; i++) {
     if (i in collection) {
