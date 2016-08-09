@@ -54,7 +54,8 @@ module.exports = function (grunt) {
     eslint: {
       target: [
         'src/adapter.js',
-        'lib/*.js',
+        'lib/boot.js',
+        'lib/index.js',
         'gruntfile.js',
         'karma.conf.js',
         'test/*.js',

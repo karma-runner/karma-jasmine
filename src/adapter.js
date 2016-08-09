@@ -1,3 +1,5 @@
+/*eslint no-unused-vars: ["error", { "varsIgnorePattern": "(createSpecFilter|createStartFn)" }]*/
+
 'use strict'
 
 /**
@@ -6,7 +8,7 @@
  * @return {Boolean}       True if external, False otherwise.
  */
 function isExternalStackEntry (entry) {
-  return (entry ? true : false) &&
+  return !!entry &&
   // entries related to jasmine and karma-jasmine:
   !/\/(jasmine-core|karma-jasmine)\//.test(entry) &&
   // karma specifics, e.g. "at http://localhost:7018/karma.js:185"
@@ -19,8 +21,8 @@ function isExternalStackEntry (entry) {
  * @return {Array}        A list of relevant stack entries.
  */
 function getRelevantStackFrom (stack) {
-  var filteredStack = [],
-    relevantStack = []
+  var filteredStack = []
+  var relevantStack = []
 
   stack = stack.split('\n')
 
@@ -60,7 +62,7 @@ function getRelevantStackFrom (stack) {
 function formatFailedStep (step) {
   // Safari seems to have no stack trace,
   // so we just return the error message:
-  if (!step.stack) { return step.message; }
+  if (!step.stack) { return step.message }
 
   var relevantMessage = []
   var relevantStack = []
@@ -257,11 +259,11 @@ var getGrepOption = function (clientArguments) {
       return clientArguments[indexOfGrep + 1]
     }
 
-    return map(filter(clientArguments ,function (arg) {
-        return grepRegex.test(arg)
-      }), function (arg) {
-        return arg.replace(grepRegex, '$1')
-      })[0] || ''
+    return map(filter(clientArguments, function (arg) {
+      return grepRegex.test(arg)
+    }), function (arg) {
+      return arg.replace(grepRegex, '$1')
+    })[0] || ''
   } else if (typeof clientArguments === 'string') {
     var match = /--grep=([^=]+)/.exec(clientArguments)
 
@@ -318,41 +320,47 @@ function createStartFn (karma, jasmineEnv) {
   }
 }
 
-
-function indexOf(collection, find, i /*opt*/) {
+function indexOf (collection, find, i /* opt*/) {
   if (collection.indexOf) {
-    return collection.indexOf(find, i);
+    return collection.indexOf(find, i)
   }
 
-  if (i === undefined) {i = 0;}
-  if (i < 0) {i += collection.length;}
-  if (i < 0) {i = 0;}
+  if (i === undefined) { i = 0 }
+  if (i < 0) { i += collection.length }
+  if (i < 0) { i = 0 }
   for (var n = collection.length; i < n; i++) {
     if (i in collection && collection[i] === find) {
-      return i;}}
+      return i
+    }
+  }
   return -1
 }
 
-function filter(collection, filter, that /*opt*/) {
+function filter (collection, filter, that /* opt*/) {
   if (collection.filter) {
-    return collection.filter(filter, that);
+    return collection.filter(filter, that)
   }
 
-  var other = [], v
+  var other = []
+  var v
   for (var i = 0, n = collection.length; i < n; i++) {
     if (i in collection && filter.call(that, v = collection[i], i, collection)) {
-      other.push(v);}}
+      other.push(v)
+    }
+  }
   return other
 }
 
-function map(collection, mapper, that /*opt*/) {
+function map (collection, mapper, that /* opt*/) {
   if (collection.map) {
-    return collection.map(mapper, that);
+    return collection.map(mapper, that)
   }
 
   var other = new Array(collection.length)
   for (var i = 0, n = collection.length; i < n; i++) {
     if (i in collection) {
-      other[i] = mapper.call(that, collection[i], i, collection);}}
+      other[i] = mapper.call(that, collection[i], i, collection)
+    }
+  }
   return other
 }
