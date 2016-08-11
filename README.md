@@ -70,6 +70,19 @@ module.exports = function(config) {
 }
 ```
 
+If you are having issues with error messages not properly being displayed, you can set the plugin to use the original jasmine's step error.message
+```js
+module.exports = function(config) {
+  config.set({
+    ...
+    client: {
+      jasmine: {
+        useStepErrorMessage: true
+      }
+    }
+  })
+}
+```
 ----
 
 For more information on Karma see the [homepage].
