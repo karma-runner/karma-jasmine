@@ -95,6 +95,30 @@ describe('jasmine adapter', function () {
       expect(karma.result).toHaveBeenCalled()
     })
 
+    it('should report disabled status', function () {
+      spec.result.status = 'disabled'
+
+      karma.result.and.callFake(function (result) {
+        expect(result.skipped).toBe(true)
+        expect(result.disabled).toBe(true)
+      })
+
+      reporter.specDone(spec.result)
+      expect(karma.result).toHaveBeenCalled()
+    })
+
+    it('should report pending status', function () {
+      spec.result.status = 'pending'
+
+      karma.result.and.callFake(function (result) {
+        expect(result.skipped).toBe(true)
+        expect(result.pending).toBe(true)
+      })
+
+      reporter.specDone(spec.result)
+      expect(karma.result).toHaveBeenCalled()
+    })
+
     it('should report executedExpectCount 0 if no expectations', function () {
       karma.result.and.callFake(function (result) {
         expect(result.executedExpectationsCount).toBe(0)
