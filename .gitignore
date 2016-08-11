@@ -2,3 +2,4 @@
 node_modules/
 tmp/
 lib/adapter.js
+integration-tests/
