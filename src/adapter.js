@@ -57,9 +57,11 @@ function getRelevantStackFrom (stack) {
  *
  * @see    https://github.com/karma-runner/karma-jasmine/issues/60
  * @param  {Object} step Step object with stack and message properties.
+ * @param  {Boolean} useStepErrorMessage Whether to use the steps message as the 
+ *   relevant error message or the one from the stack, defaults to from the stack
  * @return {String}      Formatted step.
  */
-function formatFailedStep (step) {
+function formatFailedStep (step, useStepErrorMessage) {
   // Safari seems to have no stack trace,
   // so we just return the error message:
   if (!step.stack) { return step.message }
@@ -82,7 +84,7 @@ function formatFailedStep (step) {
       // Stack entry is not in the message,
       // we consider it to be a relevant stack:
       relevantStack.push(dirtyRelevantStack[i])
-    } else {
+    } else if (!useStepErrorMessage) {
       // Stack entry is already in the message,
       // we consider it to be a suitable message alternative:
       relevantMessage.push(dirtyRelevantStack[i])
@@ -157,6 +159,8 @@ function getAllSpecNames (topSuite) {
  */
 function KarmaReporter (tc, jasmineEnv) {
   var currentSuite = new SuiteNode()
+
+  var jasmineOptions = tc.config.jasmine || {}
 
   /**
    * @param suite
@@ -235,7 +239,7 @@ function KarmaReporter (tc, jasmineEnv) {
     if (!result.success) {
       var steps = specResult.failedExpectations
       for (var i = 0, l = steps.length; i < l; i++) {
-        result.log.push(formatFailedStep(steps[i]))
+        result.log.push(formatFailedStep(steps[i], jasmineOptions.useStepErrorMessage))
       }
     }
 

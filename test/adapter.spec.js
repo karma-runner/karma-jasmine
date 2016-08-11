@@ -22,6 +22,7 @@ describe('jasmine adapter', function () {
       env = jasmine.getEnv()
 
       karma = new Karma(new MockSocket(), null, null, null, {search: ''})
+      karma.config = {} //inject config since the static version doesn't have it
       reporter = new KarmaReporter(karma, env)
 
       spyOn(karma, 'result')
@@ -225,6 +226,95 @@ describe('jasmine adapter', function () {
     })
   })
 
+  describe('KarmaReporter with useStepErrorMessage option', function () {
+    var reporter, karma, env, parentSuite, suite, spec
+
+    function init(options) {
+      var jasmine = getJasmineRequireObj().core(jasmineRequire)
+      env = jasmine.getEnv()
+
+      karma = new Karma(new MockSocket(), null, null, null, {search: ''})
+      karma.config = {jasmine: options}
+      reporter = new KarmaReporter(karma, env)
+
+      spyOn(karma, 'result')
+
+      parentSuite = new jasmine.Suite({
+        env: env,
+        id: 'suite0',
+        description: 'Parent Suite'
+      })
+
+      suite = new jasmine.Suite({
+        env: env,
+        id: 'suite1',
+        parentSuite: parentSuite,
+        description: 'Child Suite'
+      })
+
+      spec = new jasmine.Spec({
+        id: 'spec0',
+        description: 'contains spec with an expectation',
+        queueableFn: {
+          fn: function () {}
+        },
+        getSpecName: function () {
+          return 'A suite contains spec with an expectation'
+        }
+      })
+    }
+
+    it('should use the stack error message when options not set', function () {
+      init()
+
+      var step = {}
+
+      step.message = 'Unexpected call get("a").'
+      step.stack = 'Error: Unexpected call get("a").\n' +
+        'get\n' +
+        'fail@/foo/bar/baz.spec.js:23:29\n' +
+        'other@/foo/bar/baz.js:18:20\n'
+
+      karma.result.and.callFake(function (result) {
+        expect(result.log).toEqual([
+          'get\n' +
+          'fail@/foo/bar/baz.spec.js:23:29\n' +
+          'other@/foo/bar/baz.js:18:20'
+        ])
+      })
+
+      spec.result.failedExpectations.push(step)
+      reporter.specDone(spec.result)
+
+      expect(karma.result).toHaveBeenCalled()
+    })
+
+    it('should use the step error message when option is set', function () {
+      init({useStepErrorMessage: true})
+
+      var step = {}
+
+      step.message = 'Unexpected call get("a").'
+      step.stack = 'Error: Unexpected call get("a").\n' +
+        'get\n' +
+        'fail@/foo/bar/baz.spec.js:23:29\n' +
+        'other@/foo/bar/baz.js:18:20\n'
+
+      karma.result.and.callFake(function (result) {
+        expect(result.log).toEqual([
+          'Unexpected call get("a").\n' +
+          'fail@/foo/bar/baz.spec.js:23:29\n' +
+          'other@/foo/bar/baz.js:18:20'
+        ])
+      })
+
+      spec.result.failedExpectations.push(step)
+      reporter.specDone(spec.result)
+
+      expect(karma.result).toHaveBeenCalled()
+    })
+  })
+
   describe('formatFailedStep', function () {
     it('should prepend the stack with message if browser does not', function () {
       // FF does not have the message in the stack trace
@@ -259,6 +349,30 @@ describe('jasmine adapter', function () {
       }
 
       expect(formatFailedStep(step)).toMatch('Jasmine fail\nmessage\n@file.js:123')
+    })
+
+    it('should use the stack message if option is not set', function () {
+      // FF does not have the message in the stack trace
+
+      var step = {
+        passed: false,
+        message: 'Jasmine fail message with messageInStack',
+        stack: '@file.js:123\nmessageInStack'
+      }
+
+      expect(formatFailedStep(step)).toMatch(/^messageInStack\n/)
+    })
+
+    it('should use the step message if option is set', function () {
+      // FF does not have the message in the stack trace
+
+      var step = {
+        passed: false,
+        message: 'Jasmine fail message with messageInStack',
+        stack: '@file.js:123\nmessageInStack'
+      }
+
+      expect(formatFailedStep(step, true)).toMatch(/^Jasmine fail message with messageInStack\n/)
     })
   })
 
