@@ -276,7 +276,7 @@ var getGrepOption = function (clientArguments) {
  * @param {Object} options Spec filter options
  */
 var KarmaSpecFilter = function (options) {
-  var filterString = options && options.filterString() && options.filterString().replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
+  var filterString = options && options.filterString()
   var filterPattern = new RegExp(filterString)
 
   this.matches = function (specName) {
