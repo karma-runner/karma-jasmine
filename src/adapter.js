@@ -219,6 +219,8 @@ function KarmaReporter (tc, jasmineEnv) {
       id: specResult.id,
       log: [],
       skipped: skipped,
+      disabled: specResult.status === 'disabled',
+      pending: specResult.status === 'pending',
       success: specResult.failedExpectations.length === 0,
       suite: [],
       time: skipped ? 0 : new Date().getTime() - specResult.startTime,
