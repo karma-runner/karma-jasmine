@@ -3,7 +3,8 @@ src
 test
 tasks
 
-Gruntfile.coffee
+gruntfile.js
 karma.conf.js
 karma-v0.8.conf.js
 CONTRIBUTING.md
+integration-tests.sh
