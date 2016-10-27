@@ -78,7 +78,7 @@ function formatFailedStep (step) {
   // in both `step.message` and `step.stack` at the same time, but stack seems
   // preferable, so we iterate relevant stack, compare it to message:
   for (var i = 0; i < dirtyRelevantStack.length; i += 1) {
-    if (step.message && step.message.indexOf(dirtyRelevantStack[i]) === -1) {
+    if (typeof step.message === 'string' && step.message.indexOf(dirtyRelevantStack[i]) === -1) {
       // Stack entry is not in the message,
       // we consider it to be a relevant stack:
       relevantStack.push(dirtyRelevantStack[i])
