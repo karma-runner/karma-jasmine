@@ -158,6 +158,10 @@ function getAllSpecNames (topSuite) {
 function KarmaReporter (tc, jasmineEnv) {
   var currentSuite = new SuiteNode()
 
+  // Save link on native Date object
+  // because user can mock it
+  var _Date = Date
+
   /**
    * @param suite
    * @returns {boolean} Return true if it is system jasmine top level suite
@@ -208,7 +212,7 @@ function KarmaReporter (tc, jasmineEnv) {
   }
 
   this.specStarted = function (specResult) {
-    specResult.startTime = new Date().getTime()
+    specResult.startTime = new _Date().getTime()
   }
 
   this.specDone = function (specResult) {
@@ -223,7 +227,7 @@ function KarmaReporter (tc, jasmineEnv) {
       pending: specResult.status === 'pending',
       success: specResult.failedExpectations.length === 0,
       suite: [],
-      time: skipped ? 0 : new Date().getTime() - specResult.startTime,
+      time: skipped ? 0 : new _Date().getTime() - specResult.startTime,
       executedExpectationsCount: specResult.failedExpectations.length + specResult.passedExpectations.length
     }
 

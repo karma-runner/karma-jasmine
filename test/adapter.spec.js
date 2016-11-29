@@ -247,6 +247,23 @@ describe('jasmine adapter', function () {
 
       expect(karma.result).toHaveBeenCalled()
     })
+
+    describe('time', function () {
+      afterEach(function () {
+        jasmine.clock().uninstall()
+      })
+
+      it('should report correct time if user mock Date object', function () {
+        karma.result.and.callFake(function (result) {
+          expect(result.time >= 0).toBe(true)
+        })
+
+        reporter.specStarted(spec.result)
+
+        jasmine.clock().mockDate(new Date(0))
+        reporter.specDone(spec.result)
+      })
+    })
   })
 
   describe('formatFailedStep', function () {
