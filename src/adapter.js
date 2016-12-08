@@ -189,8 +189,10 @@ function KarmaReporter (tc, jasmineEnv) {
     })
   }
 
-  this.jasmineDone = function () {
+  this.jasmineDone = function (result) {
+    result = result || {}
     tc.complete({
+      order: result.order,
       coverage: window.__coverage__
     })
   }
@@ -319,10 +321,23 @@ var createSpecFilter = function (config, jasmineEnv) {
 function createStartFn (karma, jasmineEnv) {
   // This function will be assigned to `window.__karma__.start`:
   return function () {
+    var clientConfig = karma.config || {}
+    var jasmineConfig = clientConfig.jasmine || {}
+
     jasmineEnv = jasmineEnv || window.jasmine.getEnv()
+
+    setOption(jasmineConfig.stopOnFailure, jasmineEnv.throwOnExpectationFailure)
+    setOption(jasmineConfig.seed, jasmineEnv.seed)
+    setOption(jasmineConfig.random, jasmineEnv.randomizeTests)
 
     jasmineEnv.addReporter(new KarmaReporter(karma, jasmineEnv))
     jasmineEnv.execute()
+  }
+
+  function setOption (option, set) {
+    if (option != null) {
+      set(option)
+    }
   }
 }
 
