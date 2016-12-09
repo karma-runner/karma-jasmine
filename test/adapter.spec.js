@@ -43,7 +43,8 @@ describe('jasmine adapter', function () {
         id: 'spec0',
         description: 'contains spec with an expectation',
         queueableFn: {
-          fn: function () {}
+          fn: function () {
+          }
         },
         getSpecName: function () {
           return 'A suite contains spec with an expectation'
@@ -69,12 +70,14 @@ describe('jasmine adapter', function () {
 
       env.describe('one', function () {
         env.describe('nested', function () {
-          env.it('should do something', function () {})
+          env.it('should do something', function () {
+          })
         })
       })
 
       env.describe('two', function () {
-        env.it('should not do anything', function () {})
+        env.it('should not do anything', function () {
+        })
       })
 
       reporter.jasmineStarted({totalSpecsDefined: 2})
@@ -84,7 +87,7 @@ describe('jasmine adapter', function () {
       karma.result.and.callFake(function (result) {
         expect(result.id).toBe(spec.id)
         expect(result.description).toBe('contains spec with an expectation')
-        expect(result.suite).toEqual([ 'Parent Suite', 'Child Suite' ])
+        expect(result.suite).toEqual(['Parent Suite', 'Child Suite'])
         expect(result.success).toBe(true)
         expect(result.skipped).toBe(false)
       })
@@ -215,7 +218,7 @@ describe('jasmine adapter', function () {
 
     it('should remove special top level suite from result', function () {
       karma.result.and.callFake(function (result) {
-        expect(result.suite).toEqual([ 'Child Suite' ])
+        expect(result.suite).toEqual(['Child Suite'])
       })
 
       reporter.suiteStarted({
@@ -223,7 +226,7 @@ describe('jasmine adapter', function () {
         description: 'Jasmine_TopLevel_Suite'
       })
       reporter.suiteStarted(suite.result)
-      spec.result.failedExpectations.push({ stack: 'stack' })
+      spec.result.failedExpectations.push({stack: 'stack'})
 
       reporter.specDone(spec.result)
 
@@ -246,6 +249,35 @@ describe('jasmine adapter', function () {
       reporter.specDone(spec.result)
 
       expect(karma.result).toHaveBeenCalled()
+    })
+
+    it('should report order on complete', function () {
+      var result = {
+        order: {
+          random: true,
+          seed: '4321'
+        }
+      }
+
+      spyOn(karma, 'complete')
+
+      reporter.jasmineDone(result)
+
+      expect(karma.complete).toHaveBeenCalledWith({
+        order: result.order,
+        coverage: undefined
+      })
+    })
+
+    it('should not fail if result is undefined', function () {
+      spyOn(karma, 'complete')
+
+      reporter.jasmineDone()
+
+      expect(karma.complete).toHaveBeenCalledWith({
+        order: undefined,
+        coverage: undefined
+      })
     })
 
     describe('time', function () {
@@ -306,16 +338,64 @@ describe('jasmine adapter', function () {
   describe('startFn', function () {
     var tc
     var jasmineEnv
+    var jasmineConfig
 
     beforeEach(function () {
-      tc = new Karma(new MockSocket(), {})
+      jasmineConfig = {}
+
+      tc = new Karma(new MockSocket(), {}, null, null, {search: ''})
+      tc.config = {jasmine: jasmineConfig}
 
       spyOn(tc, 'info')
       spyOn(tc, 'complete')
       spyOn(tc, 'result')
 
       jasmineEnv = new jasmine.Env()
-      createStartFn(tc, jasmineEnv)
+    })
+
+    it('should set random order', function () {
+      jasmineConfig.random = true
+      spyOn(jasmineEnv, 'randomizeTests')
+
+      createStartFn(tc, jasmineEnv)()
+
+      expect(jasmineEnv.randomizeTests).toHaveBeenCalledWith(true)
+    })
+
+    it('should set order seed', function () {
+      var seed = '4321'
+
+      jasmineConfig.seed = seed
+      spyOn(jasmineEnv, 'seed')
+
+      createStartFn(tc, jasmineEnv)()
+
+      expect(jasmineEnv.seed).toHaveBeenCalledWith(seed)
+    })
+
+    it('should set stopOnFailure', function () {
+      jasmineConfig.stopOnFailure = true
+      spyOn(jasmineEnv, 'throwOnExpectationFailure')
+
+      createStartFn(tc, jasmineEnv)()
+
+      expect(jasmineEnv.throwOnExpectationFailure).toHaveBeenCalledWith(true)
+    })
+
+    it('should not set random order if client does not pass it', function () {
+      spyOn(jasmineEnv, 'randomizeTests')
+
+      createStartFn(tc, jasmineEnv)()
+
+      expect(jasmineEnv.randomizeTests).not.toHaveBeenCalled()
+    })
+
+    it('should not fail if client does not set config', function () {
+      tc.config = null
+
+      expect(function () {
+        createStartFn(tc, jasmineEnv)()
+      }).not.toThrowError()
     })
   })
 

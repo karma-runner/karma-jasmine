@@ -70,6 +70,22 @@ module.exports = function(config) {
 }
 ```
 
+If you want to pass configuration options directly to jasmine you can do this in the following way
+
+```js
+module.exports = function(config) {
+  config.set({
+    client: {
+      jasmine: {
+        random: true,
+        seed: '4321',
+        stopOnFailure: true
+      }
+    }
+  })
+}
+```
+
 ----
 
 For more information on Karma see the [homepage].
