@@ -1,3 +1,19 @@
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/karma-runner/karma-jasmine/compare/v1.0.2...v1.1.0) (2016-12-09)
+
+
+### Bug Fixes
+
+* Karma reported test duration is negative fix [#143](https://github.com/karma-runner/karma-jasmine/issues/143) ([93452bb](https://github.com/karma-runner/karma-jasmine/commit/93452bb)), closes [#143](https://github.com/karma-runner/karma-jasmine/issues/143)
+
+
+### Features
+
+* report status of the spec closes [#129](https://github.com/karma-runner/karma-jasmine/issues/129) ([5b224e2](https://github.com/karma-runner/karma-jasmine/commit/5b224e2)), closes [#129](https://github.com/karma-runner/karma-jasmine/issues/129)
+* Support --random and --seed flags ([0b59d69](https://github.com/karma-runner/karma-jasmine/commit/0b59d69)), closes [#145](https://github.com/karma-runner/karma-jasmine/issues/145) [#137](https://github.com/karma-runner/karma-jasmine/issues/137)
+
+
+
 <a name="1.0.2"></a>
 ## [1.0.2](https://github.com/karma-runner/karma-jasmine/compare/v1.0.1...v1.0.2) (2016-05-04)
 
