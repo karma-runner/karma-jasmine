@@ -145,6 +145,23 @@ describe('jasmine adapter', function () {
       expect(karma.result).toHaveBeenCalled()
     })
 
+    it('should report errors in afterAll blocks', function () {
+      spyOn(karma, 'complete')
+      spyOn(karma, 'error')
+
+      var result = {
+        failedExpectations: []
+      }
+
+      reporter.jasmineDone(result)
+      expect(karma.error).not.toHaveBeenCalled()
+
+      result.failedExpectations.push({})
+
+      reporter.jasmineDone(result)
+      expect(karma.error).toHaveBeenCalled()
+    })
+
     it('should report executedExpectCount as sum of passed and failed expectations', function () {
       karma.result.and.callFake(function (result) {
         expect(result.executedExpectationsCount).toBe(2)

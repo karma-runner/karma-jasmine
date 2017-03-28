@@ -170,6 +170,18 @@ function KarmaReporter (tc, jasmineEnv) {
     return suite.description === 'Jasmine_TopLevel_Suite'
   }
 
+  function handleGlobalErrors (result) {
+    if (result.failedExpectations && result.failedExpectations.length) {
+      var message = 'An error was thrown in afterAll'
+      var steps = result.failedExpectations
+      for (var i = 0, l = steps.length; i < l; i++) {
+        message += '\n' + formatFailedStep(steps[i])
+      }
+
+      tc.error(message)
+    }
+  }
+
   /**
    * Jasmine 2.0 dispatches the following events:
    *
@@ -191,6 +203,10 @@ function KarmaReporter (tc, jasmineEnv) {
 
   this.jasmineDone = function (result) {
     result = result || {}
+
+    // Any errors in top-level afterAll blocks are given here.
+    handleGlobalErrors(result)
+
     tc.complete({
       order: result.order,
       coverage: window.__coverage__
@@ -209,6 +225,10 @@ function KarmaReporter (tc, jasmineEnv) {
     if (result.description !== currentSuite.name) {
       return
     }
+
+    // Any errors in afterAll blocks are given here, except for top-level
+    // afterAll blocks.
+    handleGlobalErrors(result)
 
     currentSuite = currentSuite.parent
   }
