@@ -1,0 +1,7 @@
+(function(global) {
+
+%CONTENT%
+
+shimJasmineItDoneToMessageQueueIfAsync(global);
+
+})(typeof window !== 'undefined' ? window : global);

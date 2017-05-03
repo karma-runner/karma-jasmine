@@ -86,6 +86,26 @@ module.exports = function(config) {
 }
 ```
 
+If you want async tests' done execution to be executed on the next JavaScript message queue, you can do this by setting the `jasmineDoneToMessageQueue` config value.
+A scenario where this is useful is when testing angular promises. If you have a promise that calls `done` in the `$digest` it will end the test prior to finishing the $digest
+loop. If there is a downstream exception, within a `$watch` for example, the test will not fail which can be confusing. Since `$digest` is blocking, pushing the call to `done`
+to the message queue will ensure it occurs after the `$digest` loop completes.
+
+```js
+// karma.conf.js
+module.exports = function(config) {
+  config.set({
+    frameworks: ['jasmine'],
+
+    files: [
+      '*.js'
+    ],
+    
+    jasmineDoneToMessageQueue: true
+  })
+}
+```
+
 ----
 
 For more information on Karma see the [homepage].
