@@ -163,14 +163,6 @@ function KarmaReporter (tc, jasmineEnv) {
   var _Date = Date
   var startTimeCurrentSpec = new _Date().getTime()
 
-  /**
-   * @param suite
-   * @returns {boolean} Return true if it is system jasmine top level suite
-   */
-  function isTopLevelSuite (suite) {
-    return suite.description === 'Jasmine_TopLevel_Suite'
-  }
-
   function handleGlobalErrors (result) {
     if (result.failedExpectations && result.failedExpectations.length) {
       var message = 'An error was thrown in afterAll'
@@ -215,9 +207,7 @@ function KarmaReporter (tc, jasmineEnv) {
   }
 
   this.suiteStarted = function (result) {
-    if (!isTopLevelSuite(result)) {
-      currentSuite = currentSuite.addChild(result.description)
-    }
+    currentSuite = currentSuite.addChild(result.description)
   }
 
   this.suiteDone = function (result) {
