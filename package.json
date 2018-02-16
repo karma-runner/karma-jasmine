@@ -28,8 +28,8 @@
     "grunt-eslint": "^18.0.0",
     "grunt-karma": "2.x",
     "grunt-npm": "0.0.2",
-    "jasmine-core": "~2.4.1",
     "karma": "2.x || ",
+    "jasmine-core": "~3.0.0",
     "karma-chrome-launcher": "1.x || ~0.2.2",
     "karma-firefox-launcher": "1.x || ~0.1.7",
     "load-grunt-tasks": "^3.4.1"
