@@ -161,6 +161,7 @@ function KarmaReporter (tc, jasmineEnv) {
   // Save link on native Date object
   // because user can mock it
   var _Date = Date
+  var startTimeCurrentSpec = new _Date().getTime();
 
   /**
    * @param suite
@@ -234,7 +235,7 @@ function KarmaReporter (tc, jasmineEnv) {
   }
 
   this.specStarted = function (specResult) {
-    specResult.startTime = new _Date().getTime()
+    startTimeCurrentSpec = new _Date().getTime()
   }
 
   this.specDone = function (specResult) {
@@ -249,7 +250,7 @@ function KarmaReporter (tc, jasmineEnv) {
       pending: specResult.status === 'pending',
       success: specResult.failedExpectations.length === 0,
       suite: [],
-      time: skipped ? 0 : new _Date().getTime() - specResult.startTime,
+      time: skipped ? 0 : new _Date().getTime() - startTimeCurrentSpec,
       executedExpectationsCount: specResult.failedExpectations.length + specResult.passedExpectations.length
     }
 

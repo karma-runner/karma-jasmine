@@ -253,6 +253,14 @@ describe('jasmine adapter', function () {
     it('should report time for every spec', function () {
       var counter = 3
 
+      function copySpecResult() {
+        var copy = {}
+        for(var i in spec.result) {
+          copy[i] = spec.result[i]
+        }
+        return copy
+      }
+
       spyOn(Date.prototype, 'getTime').and.callFake(function () {
         counter += 1
         return counter
@@ -262,8 +270,8 @@ describe('jasmine adapter', function () {
         expect(result.time).toBe(1) // 4 - 3
       })
 
-      reporter.specStarted(spec.result)
-      reporter.specDone(spec.result)
+      reporter.specStarted(copySpecResult())
+      reporter.specDone(copySpecResult())
 
       expect(karma.result).toHaveBeenCalled()
     })
