@@ -1,15 +1,13 @@
 sudo: false
 language: node_js
 node_js:
-  - "0.10"
-  - "0.12"
   - "4.0"
   - "5.0"
   - "stable"
 
 # Make sure we have new NPM.
 before_install:
-  - if [[ "`node --version`" = v0* ]] || [[ "`node --version`" = v4* ]]; then npm install -g npm@latest-3; fi
+  - if [[ "`node --version`" = v4* ]]; then npm install -g npm@latest-3; fi
 
 before_script:
   - export DISPLAY=:99.0
