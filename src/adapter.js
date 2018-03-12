@@ -232,6 +232,7 @@ function KarmaReporter (tc, jasmineEnv) {
     var skipped = specResult.status === 'disabled' || specResult.status === 'pending' || specResult.status === 'excluded'
 
     var result = {
+      fullName: specResult.fullName,
       description: specResult.description,
       id: specResult.id,
       log: [],
