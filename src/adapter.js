@@ -161,7 +161,7 @@ function KarmaReporter (tc, jasmineEnv) {
   // Save link on native Date object
   // because user can mock it
   var _Date = Date
-  var startTimeCurrentSpec = new _Date().getTime();
+  var startTimeCurrentSpec = new _Date().getTime()
 
   /**
    * @param suite
@@ -234,7 +234,7 @@ function KarmaReporter (tc, jasmineEnv) {
     currentSuite = currentSuite.parent
   }
 
-  this.specStarted = function (specResult) {
+  this.specStarted = function () {
     startTimeCurrentSpec = new _Date().getTime()
   }
 
