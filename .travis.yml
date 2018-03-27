@@ -1,10 +1,9 @@
 sudo: false
 language: node_js
 node_js:
-  - "0.10"
-  - "0.12"
   - "4.0"
-  - "5.0"
+  - "6.0"
+  - "8.0"
   - "stable"
 
 # Make sure we have new NPM.
