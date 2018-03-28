@@ -262,8 +262,8 @@ describe('jasmine adapter', function () {
         expect(result.time).toBe(1) // 4 - 3
       })
 
-      reporter.specStarted(spec.result)
-      reporter.specDone(spec.result)
+      reporter.specStarted(Object.assign({}, spec.result))
+      reporter.specDone(Object.assign({}, spec.result))
 
       expect(karma.result).toHaveBeenCalled()
     })
