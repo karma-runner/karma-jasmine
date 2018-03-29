@@ -300,13 +300,30 @@ var getGrepOption = function (clientArguments) {
   }
 }
 
+var createRegExp = function (filter) {
+  filter = filter || ''
+  if (filter === '') {
+    return new RegExp() // to match all
+  }
+
+  var regExp = /^[/](.*)[/]([gmixXsuUAJD]*)$/ // pattern to check whether the string is RegExp pattern
+
+  var parts = regExp.exec(filter)
+  if (parts === null) {
+    return new RegExp(filter.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')) // escape functional symbols
+  }
+
+  var patternExpression = parts[1]
+  var patternSwitches = parts[2]
+  return new RegExp(patternExpression, patternSwitches)
+}
+
 /**
  * Create jasmine spec filter
  * @param {Object} options Spec filter options
  */
 var KarmaSpecFilter = function (options) {
-  var filterString = options && options.filterString() && options.filterString().replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
-  var filterPattern = new RegExp(filterString)
+  var filterPattern = createRegExp(options && options.filterString())
 
   this.matches = function (specName) {
     return filterPattern.test(specName)

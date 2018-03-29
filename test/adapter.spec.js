@@ -3,7 +3,7 @@
  These tests are executed in browser.
  */
 /* global getJasmineRequireObj, jasmineRequire, MockSocket, KarmaReporter */
-/* global formatFailedStep, , createStartFn, getGrepOption, KarmaSpecFilter, createSpecFilter */
+/* global formatFailedStep, , createStartFn, getGrepOption, createRegExp, KarmaSpecFilter, createSpecFilter */
 /* global getRelevantStackFrom: true, isExternalStackEntry: true */
 
 'use strict'
@@ -481,7 +481,72 @@ describe('jasmine adapter', function () {
     })
   })
 
-  describe('KarmaSpecFilter', function () {
+  describe('createRegExp', function () {
+    it('should match all string by null pattern', function () {
+      var regExp = createRegExp(null)
+
+      expect(regExp.test(null)).toEqual(true)
+      expect(regExp.test('bar')).toEqual(true)
+      expect(regExp.test('test')).toEqual(true)
+      expect(regExp.test('test.asfsdf.sdfgfdh')).toEqual(true)
+    })
+
+    it('should match all string by empty pattern', function () {
+      var regExp = createRegExp('')
+
+      expect(regExp.test(null)).toEqual(true)
+      expect(regExp.test('bar')).toEqual(true)
+      expect(regExp.test('test')).toEqual(true)
+      expect(regExp.test('test.asfsdf.sdfgfdh')).toEqual(true)
+    })
+
+    it('should match strings by pattern with flags', function () {
+      var regExp = createRegExp('/test.*/i')
+      expect(regExp.test(null)).toEqual(false)
+      expect(regExp.test('bar')).toEqual(false)
+      expect(regExp.test('test')).toEqual(true)
+      expect(regExp.test('test.asfsdf.sdfgfdh')).toEqual(true)
+    })
+
+    it('should match strings by pattern without flags', function () {
+      var regExp = createRegExp('/test.*/')
+      expect(regExp.test(null)).toEqual(false)
+      expect(regExp.test('bar')).toEqual(false)
+      expect(regExp.test('test')).toEqual(true)
+      expect(regExp.test('test.asfsdf.sdfgfdh')).toEqual(true)
+    })
+
+    it('should match strings by complex pattern', function () {
+      var regExp = createRegExp('/test.*[/]i/i')
+      expect(regExp.test(null)).toEqual(false)
+      expect(regExp.test('bar')).toEqual(false)
+      expect(regExp.test('test')).toEqual(false)
+      expect(regExp.test('test/i')).toEqual(true)
+    })
+  })
+
+  describe('KarmaSpecFilter(RegExp)', function () {
+    var specFilter
+
+    beforeEach(function () {
+      specFilter = new KarmaSpecFilter({
+        filterString: function () {
+          return '/test.*/'
+        }
+      })
+    })
+
+    it('should create spec filter', function () {
+      expect(specFilter).toBeDefined()
+    })
+
+    it('should filter spec by name', function () {
+      expect(specFilter.matches('bar')).toEqual(false)
+      expect(specFilter.matches('test')).toEqual(true)
+    })
+  })
+
+  describe('KarmaSpecFilter(non-RegExp)', function () {
     var specFilter
 
     beforeEach(function () {
