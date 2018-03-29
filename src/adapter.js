@@ -239,14 +239,14 @@ function KarmaReporter (tc, jasmineEnv) {
   }
 
   this.specDone = function (specResult) {
-    var skipped = specResult.status === 'disabled' || specResult.status === 'pending'
+    var skipped = specResult.status === 'disabled' || specResult.status === 'pending' || specResult.status === 'excluded'
 
     var result = {
       description: specResult.description,
       id: specResult.id,
       log: [],
       skipped: skipped,
-      disabled: specResult.status === 'disabled',
+      disabled: specResult.status === 'disabled' || specResult.status === 'excluded',
       pending: specResult.status === 'pending',
       success: specResult.failedExpectations.length === 0,
       suite: [],
@@ -348,6 +348,7 @@ function createStartFn (karma, jasmineEnv) {
     jasmineEnv = jasmineEnv || window.jasmine.getEnv()
 
     setOption(jasmineConfig.stopOnFailure, jasmineEnv.throwOnExpectationFailure)
+    setOption(jasmineConfig.failFast, jasmineEnv.stopOnSpecFailure)
     setOption(jasmineConfig.seed, jasmineEnv.seed)
     setOption(jasmineConfig.random, jasmineEnv.randomizeTests)
 
@@ -356,7 +357,7 @@ function createStartFn (karma, jasmineEnv) {
   }
 
   function setOption (option, set) {
-    if (option != null) {
+    if (option != null && typeof set === 'function') {
       set(option)
     }
   }

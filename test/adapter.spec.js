@@ -110,6 +110,18 @@ describe('jasmine adapter', function () {
       expect(karma.result).toHaveBeenCalled()
     })
 
+    it('should report excluded status', function () {
+      spec.result.status = 'excluded'
+
+      karma.result.and.callFake(function (result) {
+        expect(result.skipped).toBe(true)
+        expect(result.disabled).toBe(true)
+      })
+
+      reporter.specDone(spec.result)
+      expect(karma.result).toHaveBeenCalled()
+    })
+
     it('should report pending status', function () {
       spec.result.status = 'pending'
 
@@ -399,12 +411,30 @@ describe('jasmine adapter', function () {
       expect(jasmineEnv.throwOnExpectationFailure).toHaveBeenCalledWith(true)
     })
 
+    it('should set failFast', function () {
+      jasmineConfig.failFast = true
+      spyOn(jasmineEnv, 'stopOnSpecFailure')
+
+      createStartFn(tc, jasmineEnv)()
+
+      expect(jasmineEnv.stopOnSpecFailure).toHaveBeenCalledWith(true)
+    })
+
     it('should not set random order if client does not pass it', function () {
       spyOn(jasmineEnv, 'randomizeTests')
 
       createStartFn(tc, jasmineEnv)()
 
       expect(jasmineEnv.randomizeTests).not.toHaveBeenCalled()
+    })
+
+    it('should not fail with failFast if the jasmineEnv does not support it', function () {
+      jasmineConfig.failFast = true
+      jasmineEnv.stopOnSpecFailure = null
+
+      expect(function () {
+        createStartFn(tc, jasmineEnv)()
+      }).not.toThrowError()
     })
 
     it('should not fail if client does not set config', function () {
@@ -446,17 +476,17 @@ describe('jasmine adapter', function () {
     })
 
     it('should split by newline and return all values for which isExternalStackEntry returns true', function () {
-      isExternalStackEntry = jasmine.createSpy('isExternalStackEntry').and.returnValue(true)
+      spyOn(window, 'isExternalStackEntry').and.returnValue(true)
       expect(getRelevantStackFrom('a\nb\nc')).toEqual(['a', 'b', 'c'])
     })
 
     it('should return the all stack entries if every entry is irrelevant', function () {
-      isExternalStackEntry = jasmine.createSpy('isExternalStackEntry').and.returnValue(false)
+      spyOn(window, 'isExternalStackEntry').and.returnValue(true)
       expect(getRelevantStackFrom('a\nb\nc')).toEqual(['a', 'b', 'c'])
     })
 
     it('should return only the relevant stack entries if the stack contains relevant entries', function () {
-      isExternalStackEntry = jasmine.createSpy('isExternalStackEntry').and.callFake(function (entry) {
+      spyOn(window, 'isExternalStackEntry').and.callFake(function (entry) {
         return entry !== 'b'
       })
       expect(getRelevantStackFrom('a\nb\nc')).toEqual(['a', 'c'])
