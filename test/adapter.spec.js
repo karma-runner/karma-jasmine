@@ -87,6 +87,7 @@ describe('jasmine adapter', function () {
       karma.result.and.callFake(function (result) {
         expect(result.id).toBe(spec.id)
         expect(result.description).toBe('contains spec with an expectation')
+        expect(result.fullName).toBe('A suite contains spec with an expectation')
         expect(result.suite).toEqual(['Parent Suite', 'Child Suite'])
         expect(result.success).toBe(true)
         expect(result.skipped).toBe(false)
