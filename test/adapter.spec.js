@@ -465,7 +465,8 @@ describe('jasmine adapter', function () {
     })
 
     it('should return the all stack entries if every entry is irrelevant', function () {
-      spyOn(window, 'isExternalStackEntry').and.returnValue(true)
+      // Check the case where the filteredStack is empty
+      spyOn(window, 'isExternalStackEntry').and.returnValue(false)
       expect(getRelevantStackFrom('a\nb\nc')).toEqual(['a', 'b', 'c'])
     })
 
