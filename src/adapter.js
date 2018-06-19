@@ -360,6 +360,9 @@ function createStartFn (karma, jasmineEnv) {
     setOption(jasmineConfig.seed, jasmineEnv.seed)
     setOption(jasmineConfig.random, jasmineEnv.randomizeTests)
 
+    window.jasmine.DEFAULT_TIMEOUT_INTERVAL = jasmineConfig.timeoutInterval ||
+       window.jasmine.DEFAULT_TIMEOUT_INTERVAL
+
     jasmineEnv.addReporter(new KarmaReporter(karma, jasmineEnv))
     jasmineEnv.execute()
   }

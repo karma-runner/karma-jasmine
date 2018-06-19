@@ -80,7 +80,8 @@ module.exports = function(config) {
         random: true,
         seed: '4321',
         stopOnFailure: true,
-        failFast: true
+        failFast: true,
+        timeoutInverval: 1000
       }
     }
   })
