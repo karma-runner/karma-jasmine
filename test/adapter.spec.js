@@ -439,7 +439,6 @@ describe('jasmine adapter', function () {
       expect(jasmine.DEFAULT_TIMEOUT_INTERVAL).toBe(jasmine.DEFAULT_TIMEOUT_INTERVAL)
     })
 
-
     it('should not fail if client does not set config', function () {
       tc.config = null
 
