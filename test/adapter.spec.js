@@ -404,6 +404,18 @@ describe('jasmine adapter', function () {
       expect(jasmineEnv.stopOnSpecFailure).toHaveBeenCalledWith(true)
     })
 
+    it('should change timeoutInterval', function () {
+      var previousTimeoutInterval = jasmine.DEFAULT_TIMEOUT_INTERVAL
+
+      jasmineConfig.timeoutInterval = 10000
+
+      createStartFn(tc, jasmineEnv)()
+
+      expect(jasmine.DEFAULT_TIMEOUT_INTERVAL).toBe(jasmineConfig.timeoutInterval)
+
+      jasmine.DEFAULT_TIMEOUT_INTERVAL = previousTimeoutInterval
+    })
+
     it('should not set random order if client does not pass it', function () {
       spyOn(jasmineEnv, 'randomizeTests')
 
@@ -419,6 +431,12 @@ describe('jasmine adapter', function () {
       expect(function () {
         createStartFn(tc, jasmineEnv)()
       }).not.toThrowError()
+    })
+
+    it('should not change timeoutInterval if client does not pass it', function () {
+      createStartFn(tc, jasmineEnv)()
+
+      expect(jasmine.DEFAULT_TIMEOUT_INTERVAL).toBe(jasmine.DEFAULT_TIMEOUT_INTERVAL)
     })
 
     it('should not fail if client does not set config', function () {
