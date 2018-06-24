@@ -81,7 +81,7 @@ module.exports = function(config) {
         seed: '4321',
         stopOnFailure: true,
         failFast: true,
-        timeoutInverval: 1000
+        timeoutInterval: 1000
       }
     }
   })
