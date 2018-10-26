@@ -332,9 +332,11 @@ var createSpecFilter = function (config, jasmineEnv) {
     }
   })
 
-  jasmineEnv.specFilter = function (spec) {
-    return specFilter.matches(spec.getFullName())
-  }
+  jasmineEnv.configure({
+    specFilter: function (spec) {
+      return specFilter.matches(spec.getFullName())
+    }
+  })
 }
 
 /**
@@ -355,22 +357,14 @@ function createStartFn (karma, jasmineEnv) {
 
     jasmineEnv = jasmineEnv || window.jasmine.getEnv()
 
-    setOption(jasmineConfig.stopOnFailure, jasmineEnv.throwOnExpectationFailure)
-    setOption(jasmineConfig.failFast, jasmineEnv.stopOnSpecFailure)
-    setOption(jasmineConfig.seed, jasmineEnv.seed)
-    setOption(jasmineConfig.random, jasmineEnv.randomizeTests)
+    jasmineEnv.configure(jasmineConfig)
 
     window.jasmine.DEFAULT_TIMEOUT_INTERVAL = jasmineConfig.timeoutInterval ||
        window.jasmine.DEFAULT_TIMEOUT_INTERVAL
 
     jasmineEnv.addReporter(new KarmaReporter(karma, jasmineEnv))
-    jasmineEnv.execute()
-  }
 
-  function setOption (option, set) {
-    if (option != null && typeof set === 'function') {
-      set(option)
-    }
+    jasmineEnv.execute()
   }
 }
 

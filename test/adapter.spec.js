@@ -368,40 +368,48 @@ describe('jasmine adapter', function () {
 
     it('should set random order', function () {
       jasmineConfig.random = true
-      spyOn(jasmineEnv, 'randomizeTests')
 
       createStartFn(tc, jasmineEnv)()
 
-      expect(jasmineEnv.randomizeTests).toHaveBeenCalledWith(true)
+      expect(jasmineEnv.configuration())
+        .toEqual(jasmine.objectContaining({
+          random: true
+        }))
     })
 
     it('should set order seed', function () {
       var seed = '4321'
 
       jasmineConfig.seed = seed
-      spyOn(jasmineEnv, 'seed')
 
       createStartFn(tc, jasmineEnv)()
 
-      expect(jasmineEnv.seed).toHaveBeenCalledWith(seed)
+      expect(jasmineEnv.configuration())
+        .toEqual(jasmine.objectContaining({
+          seed: seed
+        }))
     })
 
-    it('should set stopOnFailure', function () {
-      jasmineConfig.stopOnFailure = true
-      spyOn(jasmineEnv, 'throwOnExpectationFailure')
+    it('should set oneFailurePerSpec', function () {
+      jasmineConfig.oneFailurePerSpec = true
 
       createStartFn(tc, jasmineEnv)()
 
-      expect(jasmineEnv.throwOnExpectationFailure).toHaveBeenCalledWith(true)
+      expect(jasmineEnv.configuration())
+        .toEqual(jasmine.objectContaining({
+          oneFailurePerSpec: true
+        }))
     })
 
     it('should set failFast', function () {
       jasmineConfig.failFast = true
-      spyOn(jasmineEnv, 'stopOnSpecFailure')
 
       createStartFn(tc, jasmineEnv)()
 
-      expect(jasmineEnv.stopOnSpecFailure).toHaveBeenCalledWith(true)
+      expect(jasmineEnv.configuration())
+        .toEqual(jasmine.objectContaining({
+          failFast: true
+        }))
     })
 
     it('should change timeoutInterval', function () {
@@ -602,17 +610,23 @@ describe('jasmine adapter', function () {
 
   describe('createSpecFilter', function () {
     it('should create spec filter in jasmine', function () {
-      var jasmineEnvMock = {}
-      var karmaConfMock = {
-        args: ['--grep', 'test']
-      }
       var specMock = {
         getFullName: jasmine.createSpy('getFullName').and.returnValue('test')
+      }
+      var jasmineEnvMock = {
+        configure: jasmine.createSpy('configure').and.callFake(function (obj) {
+          var specFilter = obj.specFilter
+
+          expect(specFilter(specMock)).toEqual(true)
+        })
+      }
+      var karmaConfMock = {
+        args: ['--grep', 'test']
       }
 
       createSpecFilter(karmaConfMock, jasmineEnvMock)
 
-      expect(jasmineEnvMock.specFilter(specMock)).toEqual(true)
+      expect(jasmineEnvMock.configure).toHaveBeenCalled()
     })
   })
 })
