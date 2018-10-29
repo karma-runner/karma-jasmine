@@ -367,8 +367,9 @@ function createStartFn (karma, jasmineEnv) {
     jasmineEnv.execute()
   }
 
-  function setOption (option, set) {
-    if (option != null && typeof set === 'function') {
+  function setOption (option, setter) {
+    if (option != null && typeof setter === 'function') {
+      var set = setter.bind(jasmineEnv)
       set(option)
     }
   }
