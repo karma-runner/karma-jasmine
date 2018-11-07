@@ -366,42 +366,14 @@ describe('jasmine adapter', function () {
       jasmineEnv = new jasmine.Env()
     })
 
-    it('should set random order', function () {
-      jasmineConfig.random = true
-      spyOn(jasmineEnv, 'randomizeTests')
+    it('should pass jasmineConfig directly to jasmine.configure', function () {
+      var configure = spyOn(jasmineEnv, 'configure')
+
+      jasmineConfig.foo = 42
 
       createStartFn(tc, jasmineEnv)()
 
-      expect(jasmineEnv.randomizeTests).toHaveBeenCalledWith(true)
-    })
-
-    it('should set order seed', function () {
-      var seed = '4321'
-
-      jasmineConfig.seed = seed
-      spyOn(jasmineEnv, 'seed')
-
-      createStartFn(tc, jasmineEnv)()
-
-      expect(jasmineEnv.seed).toHaveBeenCalledWith(seed)
-    })
-
-    it('should set stopOnFailure', function () {
-      jasmineConfig.stopOnFailure = true
-      spyOn(jasmineEnv, 'throwOnExpectationFailure')
-
-      createStartFn(tc, jasmineEnv)()
-
-      expect(jasmineEnv.throwOnExpectationFailure).toHaveBeenCalledWith(true)
-    })
-
-    it('should set failFast', function () {
-      jasmineConfig.failFast = true
-      spyOn(jasmineEnv, 'stopOnSpecFailure')
-
-      createStartFn(tc, jasmineEnv)()
-
-      expect(jasmineEnv.stopOnSpecFailure).toHaveBeenCalledWith(true)
+      expect(configure).toHaveBeenCalledWith(jasmineConfig)
     })
 
     it('should change timeoutInterval', function () {
@@ -414,29 +386,6 @@ describe('jasmine adapter', function () {
       expect(jasmine.DEFAULT_TIMEOUT_INTERVAL).toBe(jasmineConfig.timeoutInterval)
 
       jasmine.DEFAULT_TIMEOUT_INTERVAL = previousTimeoutInterval
-    })
-
-    it('should not set random order if client does not pass it', function () {
-      spyOn(jasmineEnv, 'randomizeTests')
-
-      createStartFn(tc, jasmineEnv)()
-
-      expect(jasmineEnv.randomizeTests).not.toHaveBeenCalled()
-    })
-
-    it('should not fail with failFast if the jasmineEnv does not support it', function () {
-      jasmineConfig.failFast = true
-      jasmineEnv.stopOnSpecFailure = null
-
-      expect(function () {
-        createStartFn(tc, jasmineEnv)()
-      }).not.toThrowError()
-    })
-
-    it('should not change timeoutInterval if client does not pass it', function () {
-      createStartFn(tc, jasmineEnv)()
-
-      expect(jasmine.DEFAULT_TIMEOUT_INTERVAL).toBe(jasmine.DEFAULT_TIMEOUT_INTERVAL)
     })
 
     it('should not fail if client does not set config', function () {
@@ -601,18 +550,31 @@ describe('jasmine adapter', function () {
   })
 
   describe('createSpecFilter', function () {
+    var jasmineEnv
+
+    beforeEach(function () {
+      jasmineEnv = new jasmine.Env()
+    })
+
     it('should create spec filter in jasmine', function () {
-      var jasmineEnvMock = {}
       var karmaConfMock = {
         args: ['--grep', 'test']
       }
-      var specMock = {
+
+      createSpecFilter(karmaConfMock, jasmineEnv)
+
+      var specFilter = jasmineEnv.configuration().specFilter
+
+      // Jasmine's default specFilter **always** returns true
+      // so test multiple possibilities
+
+      expect(specFilter({
         getFullName: jasmine.createSpy('getFullName').and.returnValue('test')
-      }
+      })).toEqual(true)
 
-      createSpecFilter(karmaConfMock, jasmineEnvMock)
-
-      expect(jasmineEnvMock.specFilter(specMock)).toEqual(true)
+      expect(specFilter({
+        getFullName: jasmine.createSpy('getFullName2').and.returnValue('foo')
+      })).toEqual(false)
     })
   })
 })

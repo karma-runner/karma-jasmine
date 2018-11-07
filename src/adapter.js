@@ -322,19 +322,26 @@ var KarmaSpecFilter = function (options) {
 }
 
 /**
+ * Configure jasmine specFilter
+ *
+ * This function is invoked from the wrapper.
+ * @see  adapter.wrapper
+ *
  * @param {Object} config The karma config
  * @param {Object} jasmineEnv jasmine environment object
  */
 var createSpecFilter = function (config, jasmineEnv) {
-  var specFilter = new KarmaSpecFilter({
+  var karmaSpecFilter = new KarmaSpecFilter({
     filterString: function () {
       return getGrepOption(config.args)
     }
   })
 
-  jasmineEnv.specFilter = function (spec) {
-    return specFilter.matches(spec.getFullName())
+  var specFilter = function (spec) {
+    return karmaSpecFilter.matches(spec.getFullName())
   }
+
+  jasmineEnv.configure({ specFilter: specFilter })
 }
 
 /**
@@ -355,22 +362,13 @@ function createStartFn (karma, jasmineEnv) {
 
     jasmineEnv = jasmineEnv || window.jasmine.getEnv()
 
-    setOption(jasmineConfig.stopOnFailure, jasmineEnv.throwOnExpectationFailure)
-    setOption(jasmineConfig.failFast, jasmineEnv.stopOnSpecFailure)
-    setOption(jasmineConfig.seed, jasmineEnv.seed)
-    setOption(jasmineConfig.random, jasmineEnv.randomizeTests)
+    jasmineEnv.configure(jasmineConfig)
 
     window.jasmine.DEFAULT_TIMEOUT_INTERVAL = jasmineConfig.timeoutInterval ||
        window.jasmine.DEFAULT_TIMEOUT_INTERVAL
 
     jasmineEnv.addReporter(new KarmaReporter(karma, jasmineEnv))
     jasmineEnv.execute()
-  }
-
-  function setOption (option, set) {
-    if (option != null && typeof set === 'function') {
-      set(option)
-    }
   }
 }
 
