@@ -203,7 +203,7 @@ describe('jasmine adapter', function () {
 
       karma.result.and.callFake(function (result) {
         expect(result.log).toEqual([
-          'Expected true to be false.\n' +
+          'Error: Expected true to be false.\n' +
           '    at /foo/bar/baz.spec.js:23:29\n' +
           '    at /foo/bar/baz.js:18:20'
         ])
@@ -229,7 +229,7 @@ describe('jasmine adapter', function () {
 
       karma.result.and.callFake(function (result) {
         expect(result.log).toEqual([
-          'Expected true to be false.\n' +
+          'Error: Expected true to be false.\n' +
           '    at stack (/foo/bar/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:1441:17)\n' +
           '    at buildExpectationResult (/foo/bar/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:1411:14)\n' +
           '    at Spec.Env.expectationResultFactory (/foo/bar/node_modules/jasmine-core/lib/jasmine-core/jasmine.js:533:18)\n' +
