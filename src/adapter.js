@@ -70,6 +70,7 @@ function formatFailedStep (step) {
   // Remove the message prior to processing the stack to prevent issues like
   // https://github.com/karma-runner/karma-jasmine/issues/79
   var stack = step.stack.replace('Error: ' + step.message, '')
+  var prefix = (stack === step.stack) ? '' : 'Error: '
 
   var dirtyRelevantStack = getRelevantStackFrom(stack)
 
@@ -85,14 +86,14 @@ function formatFailedStep (step) {
     } else {
       // Stack entry is already in the message,
       // we consider it to be a suitable message alternative:
-      relevantMessage.push(dirtyRelevantStack[i])
+      relevantMessage.push(prefix + dirtyRelevantStack[i])
     }
   }
 
   // In most cases the above will leave us with an empty message...
   if (relevantMessage.length === 0) {
     // Let's reuse the original message:
-    relevantMessage.push(step.message)
+    relevantMessage.push(prefix + step.message)
 
     // Now we probably have a repetition case where:
     // relevantMessage: ["Expected true to be false."]
