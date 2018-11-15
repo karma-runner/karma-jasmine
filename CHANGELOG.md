@@ -1,3 +1,39 @@
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/karma-runner/karma-jasmine/compare/v1.1.0...v2.0.0) (2018-11-15)
+
+
+* feat (adapter): Use jasmine's new configure method (#224) ([6663e47](https://github.com/karma-runner/karma-jasmine/commit/6663e47)), closes [#224](https://github.com/karma-runner/karma-jasmine/issues/224) [#221](https://github.com/karma-runner/karma-jasmine/issues/221)
+
+
+### Bug Fixes
+
+* **adapter:** Remove incorrect function and its call. ([#183](https://github.com/karma-runner/karma-jasmine/issues/183)) ([cada4a9](https://github.com/karma-runner/karma-jasmine/commit/cada4a9))
+* return false for every entry is irrelevant ([#206](https://github.com/karma-runner/karma-jasmine/issues/206)) ([d7523d0](https://github.com/karma-runner/karma-jasmine/commit/d7523d0)), closes [/github.com/karma-runner/karma-jasmine/pull/206#discussion_r186142116](https://github.com//github.com/karma-runner/karma-jasmine/pull/206/issues/discussion_r186142116)
+* **console:** Re-add Error: to the stack ([#228](https://github.com/karma-runner/karma-jasmine/issues/228)) ([d0b980d](https://github.com/karma-runner/karma-jasmine/commit/d0b980d))
+* **time:** report correct time since Jasmine v2.9.0 ([#197](https://github.com/karma-runner/karma-jasmine/issues/197)) ([022ee04](https://github.com/karma-runner/karma-jasmine/commit/022ee04)), closes [#196](https://github.com/karma-runner/karma-jasmine/issues/196)
+
+
+### Chores
+
+* **deps:** Drop node v4 support. ([#214](https://github.com/karma-runner/karma-jasmine/issues/214)) ([e604132](https://github.com/karma-runner/karma-jasmine/commit/e604132))
+
+
+### Features
+
+* Propagate errors thrown in afterAll blocks ([f3fa264](https://github.com/karma-runner/karma-jasmine/commit/f3fa264)), closes [#161](https://github.com/karma-runner/karma-jasmine/issues/161)
+* update the version to 2.0.0 and restrict node version available to 4.0 ([c84316e](https://github.com/karma-runner/karma-jasmine/commit/c84316e))
+
+
+### BREAKING CHANGES
+
+* `stopOnFailure`, which was previously documented in karma-jasmine's README, is
+not configuration option for jasmine. Use `oneFailurePerSpec` instead.
+
+Requires peerDependency Jasmine@^3.3.0
+* **deps:** Drop support for node 4.x
+
+
+
 <a name="1.1.2"></a>
 ## [1.1.2](https://github.com/karma-runner/karma-jasmine/compare/v1.1.0...v1.1.2) (2018-05-02)
 
