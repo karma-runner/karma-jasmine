@@ -1,3 +1,13 @@
+<a name="2.0.1"></a>
+## [2.0.1](https://github.com/karma-runner/karma-jasmine/compare/v2.0.0...v2.0.1) (2018-11-17)
+
+
+### Bug Fixes
+
+* **dep:** Depend upon the jasmine-core version we test ([#229](https://github.com/karma-runner/karma-jasmine/issues/229)) ([c4dfef5](https://github.com/karma-runner/karma-jasmine/commit/c4dfef5))
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/karma-runner/karma-jasmine/compare/v1.1.0...v2.0.0) (2018-11-15)
 
