@@ -68,14 +68,14 @@ function formatFailedStep (step) {
   // construct a stacktrace out of filename and lineno:
   if (!step.stack) {
     if (step.filename) {
-      let stack = step.filename;
+      let stack = step.filename
       if (step.lineno) {
-        stack = stack + ':' + step.lineno;
+        stack = stack + ':' + step.lineno
       }
-      relevantStack.push(stack);
+      relevantStack.push(stack)
     }
-    relevantMessage.push(step.message);
-    return relevantMessage.concat(relevantStack).join('\n');
+    relevantMessage.push(step.message)
+    return relevantMessage.concat(relevantStack).join('\n')
   }
 
   // Remove the message prior to processing the stack to prevent issues like
