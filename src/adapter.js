@@ -60,12 +60,23 @@ function getRelevantStackFrom (stack) {
  * @return {String}      Formatted step.
  */
 function formatFailedStep (step) {
-  // Safari seems to have no stack trace,
-  // so we just return the error message:
-  if (!step.stack) { return step.message }
-
   var relevantMessage = []
   var relevantStack = []
+
+  // Safari/Firefox seems to have no stack trace,
+  // so we just return the error message and if available
+  // construct a stacktrace out of filename and lineno:
+  if (!step.stack) {
+    if (step.filename) {
+      let stack = step.filename;
+      if (step.lineno) {
+        stack = stack + ':' + step.lineno;
+      }
+      relevantStack.push(stack);
+    }
+    relevantMessage.push(step.message);
+    return relevantMessage.concat(relevantStack).join('\n');
+  }
 
   // Remove the message prior to processing the stack to prevent issues like
   // https://github.com/karma-runner/karma-jasmine/issues/79
