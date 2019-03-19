@@ -68,11 +68,11 @@ function formatFailedStep (step) {
   // construct a stacktrace out of filename and lineno:
   if (!step.stack) {
     if (step.filename) {
-      let stack = step.filename
+      let stackframe = step.filename
       if (step.lineno) {
-        stack = stack + ':' + step.lineno
+        stackframe = stackframe + ':' + step.lineno
       }
-      relevantStack.push(stack)
+      relevantStack.push(stackframe)
     }
     relevantMessage.push(step.message)
     return relevantMessage.concat(relevantStack).join('\n')
