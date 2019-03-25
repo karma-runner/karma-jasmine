@@ -335,6 +335,16 @@ describe('jasmine adapter', function () {
       expect(formatFailedStep(step)).toBe('MESSAGE')
     })
 
+    it('should report message, filename and linenumber if no stack trace but filename and lineno', function () {
+      var step = {
+        passed: false,
+        lineno: 45,
+        filename: 'source/controller.js',
+        message: 'MESSAGE'
+      }
+
+      expect(formatFailedStep(step)).toBe('MESSAGE\nsource/controller.js:45')
+    })
     it('should properly format message containing new-line characters', function () {
       // FF does not have the message in the stack trace
 
