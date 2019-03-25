@@ -30,9 +30,9 @@
     "grunt-conventional-changelog": "^6.1.0",
     "grunt-conventional-github-releaser": "^1.0.0",
     "grunt-eslint": "^18.0.0",
-    "grunt-karma": "2.x",
+    "grunt-karma": "^3.0.1",
     "grunt-npm": "0.0.2",
-    "karma": "2.x || ",
+    "karma": "^4.0.1",
     "karma-chrome-launcher": "1.x || ~0.2.2",
     "karma-firefox-launcher": "1.x || ~0.1.7",
     "load-grunt-tasks": "^3.4.1"
@@ -41,7 +41,7 @@
     "karma": "*"
   },
   "engines": {
-    "node": ">= 6"
+    "node": ">= 8"
   },
   "license": "MIT",
   "contributors": [
