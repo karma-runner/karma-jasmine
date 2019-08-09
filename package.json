@@ -4,7 +4,7 @@
   "description": "A Karma plugin - adapter for Jasmine testing framework.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt"
   },
   "repository": {
     "type": "git",
