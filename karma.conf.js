@@ -1,6 +1,7 @@
 module.exports = function (config) {
   config.set({
     frameworks: ['jasmine'],
+    reporters: ['karma-jasmine'],
 
     files: [
       'src/*.js',
