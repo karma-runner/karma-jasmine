@@ -271,6 +271,12 @@ function KarmaReporter (tc, jasmineEnv) {
       }
     }
 
+    // When failSpecWithNoExpectations is true, Jasmine will report specs without expectations as failed
+    if (result.executedExpectationsCount === 0 && specResult.status === 'failed') {
+      result.success = false
+      result.log.push('Spec has no expectations')
+    }
+
     tc.result(result)
     delete specResult.startTime
   }
