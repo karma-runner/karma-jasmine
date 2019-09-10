@@ -137,6 +137,7 @@ describe('jasmine adapter', function () {
 
     it('should report executedExpectCount 0 if no expectations', function () {
       karma.result.and.callFake(function (result) {
+        expect(result.success).toBe(true)
         expect(result.executedExpectationsCount).toBe(0)
       })
 
@@ -156,6 +157,24 @@ describe('jasmine adapter', function () {
       reporter.specDone(spec.result)
 
       expect(karma.result).toHaveBeenCalled()
+    })
+
+    describe('when spec status is failed and no expect() calls ran', function () {
+      it('should report fail result and log a message', function () {
+        karma.result.and.callFake(function (result) {
+          expect(result.success).toBe(false)
+          expect(result.log.length).toBe(1)
+          expect(result.executedExpectationsCount).toBe(0)
+        })
+
+        spec.result.status = 'failed'
+        spec.result.failedExpectations = []
+        spec.result.passedExpectations = []
+
+        reporter.specDone(spec.result)
+
+        expect(karma.result).toHaveBeenCalled()
+      })
     })
 
     it('should report errors in afterAll blocks', function () {
