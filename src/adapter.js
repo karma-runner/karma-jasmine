@@ -17,14 +17,12 @@ function isExternalStackEntry (entry) {
 
 /**
  * Returns relevant stack entries.
- * @param  {String} stack Complete error stack trace.
+ * @param  {Array} stack frames
  * @return {Array}        A list of relevant stack entries.
  */
 function getRelevantStackFrom (stack) {
   var filteredStack = []
   var relevantStack = []
-
-  stack = stack.split('\n')
 
   for (var i = 0; i < stack.length; i += 1) {
     if (isExternalStackEntry(stack[i])) {
@@ -68,7 +66,7 @@ function formatFailedStep (step) {
   // construct a stacktrace out of filename and lineno:
   if (!step.stack) {
     if (step.filename) {
-      let stackframe = step.filename
+      var stackframe = step.filename
       if (step.lineno) {
         stackframe = stackframe + ':' + step.lineno
       }
@@ -80,49 +78,23 @@ function formatFailedStep (step) {
 
   // Remove the message prior to processing the stack to prevent issues like
   // https://github.com/karma-runner/karma-jasmine/issues/79
-  var stack = step.stack.replace('Error: ' + step.message, '')
-  var prefix = (stack === step.stack) ? '' : 'Error: '
-
-  var dirtyRelevantStack = getRelevantStackFrom(stack)
-
-  // PhantomJS returns multiline error message for errors coming from specs
-  // (for example when calling a non-existing function). This error is present
-  // in both `step.message` and `step.stack` at the same time, but stack seems
-  // preferable, so we iterate relevant stack, compare it to message:
-  for (var i = 0; i < dirtyRelevantStack.length; i += 1) {
-    if (typeof step.message === 'string' && step.message.indexOf(dirtyRelevantStack[i]) === -1) {
-      // Stack entry is not in the message,
-      // we consider it to be a relevant stack:
-      relevantStack.push(dirtyRelevantStack[i])
-    } else {
-      // Stack entry is already in the message,
-      // we consider it to be a suitable message alternative:
-      relevantMessage.push(prefix + dirtyRelevantStack[i])
-    }
+  var stackframes = step.stack.split('\n')
+  var messageOnStack = null
+  if (stackframes[0].indexOf(step.message) !== -1) {
+    // Remove the message if it is in the stack string (eg Chrome)
+    messageOnStack = stackframes.shift()
+  }
+  // Filter frames
+  var relevantStackFrames = getRelevantStackFrom(stackframes)
+  if (messageOnStack) {
+    // Put the message back if we removed it.
+    relevantStackFrames.unshift(messageOnStack)
+  } else {
+    // The stack did not have the step.message so add it.
+    relevantStackFrames.unshift(step.message)
   }
 
-  // In most cases the above will leave us with an empty message...
-  if (relevantMessage.length === 0) {
-    // Let's reuse the original message:
-    relevantMessage.push(prefix + step.message)
-
-    // Now we probably have a repetition case where:
-    // relevantMessage: ["Expected true to be false."]
-    // relevantStack:   ["Error: Expected true to be false.", ...]
-    if (relevantStack.length && relevantStack[0].indexOf(step.message) !== -1) {
-      // The message seems preferable, so we remove the first value from
-      // the stack to get rid of repetition :
-      relevantStack.shift()
-    }
-  }
-
-  // Example output:
-  // --------------------
-  // Chrome 40.0.2214 (Mac OS X 10.9.5) xxx should return false 1 FAILED
-  //    Expected true to be false
-  //    at /foo/bar/baz.spec.js:22:13
-  //    at /foo/bar/baz.js:18:29
-  return relevantMessage.concat(relevantStack).join('\n')
+  return relevantStackFrames.join('\n')
 }
 
 function SuiteNode (name, parent) {

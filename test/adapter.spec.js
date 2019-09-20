@@ -457,20 +457,20 @@ describe('jasmine adapter', function () {
 
     it('should split by newline and return all values for which isExternalStackEntry returns true', function () {
       spyOn(window, 'isExternalStackEntry').and.returnValue(true)
-      expect(getRelevantStackFrom('a\nb\nc')).toEqual(['a', 'b', 'c'])
+      expect(getRelevantStackFrom(['a', 'b', 'c'])).toEqual(['a', 'b', 'c'])
     })
 
     it('should return the all stack entries if every entry is irrelevant', function () {
       // Check the case where the filteredStack is empty
       spyOn(window, 'isExternalStackEntry').and.returnValue(false)
-      expect(getRelevantStackFrom('a\nb\nc')).toEqual(['a', 'b', 'c'])
+      expect(getRelevantStackFrom(['a', 'b', 'c'])).toEqual(['a', 'b', 'c'])
     })
 
     it('should return only the relevant stack entries if the stack contains relevant entries', function () {
       spyOn(window, 'isExternalStackEntry').and.callFake(function (entry) {
         return entry !== 'b'
       })
-      expect(getRelevantStackFrom('a\nb\nc')).toEqual(['a', 'c'])
+      expect(getRelevantStackFrom(['a', 'b', 'c'])).toEqual(['a', 'c'])
     })
   })
 
