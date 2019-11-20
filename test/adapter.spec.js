@@ -3,7 +3,8 @@
  These tests are executed in browser.
  */
 /* global getJasmineRequireObj, jasmineRequire, MockSocket, KarmaReporter */
-/* global formatFailedStep, , createStartFn, getGrepOption, createRegExp, KarmaSpecFilter, createSpecFilter */
+/* global formatFailedStep, , createStartFn, getGrepOption, createRegExp, createSpecFilter */
+/* global getGrepSpecsToRun, getDebugSpecToRun, getShardedSpecsToRun */
 /* global getRelevantStackFrom: true, isExternalStackEntry: true */
 
 'use strict'
@@ -536,74 +537,106 @@ describe('jasmine adapter', function () {
     })
   })
 
-  describe('KarmaSpecFilter(RegExp)', function () {
-    var specFilter
+  describe('with mock jasmine specs, ', () => {
+    var mockSpecBar
+    var mockSpecTest
+    var specs
+    var mockJasmineEnv
 
-    beforeEach(function () {
-      specFilter = new KarmaSpecFilter({
-        filterString: function () {
-          return '/test.*/'
-        }
-      })
-    })
-
-    it('should create spec filter', function () {
-      expect(specFilter).toBeDefined()
-    })
-
-    it('should filter spec by name', function () {
-      expect(specFilter.matches('bar')).toEqual(false)
-      expect(specFilter.matches('test')).toEqual(true)
-    })
-  })
-
-  describe('KarmaSpecFilter(non-RegExp)', function () {
-    var specFilter
-
-    beforeEach(function () {
-      specFilter = new KarmaSpecFilter({
-        filterString: function () {
-          return 'test'
-        }
-      })
-    })
-
-    it('should create spec filter', function () {
-      expect(specFilter).toBeDefined()
-    })
-
-    it('should filter spec by name', function () {
-      expect(specFilter.matches('bar')).toEqual(false)
-      expect(specFilter.matches('test')).toEqual(true)
-    })
-  })
-
-  describe('createSpecFilter', function () {
-    var jasmineEnv
-
-    beforeEach(function () {
-      jasmineEnv = new jasmine.Env()
-    })
-
-    it('should create spec filter in jasmine', function () {
-      var karmaConfMock = {
-        args: ['--grep', 'test']
+    beforeEach(() => {
+      mockSpecBar = {
+        getFullName: () => 'bar',
+        name: 'bar',
+        id: 2
       }
+      mockSpecTest = {
+        getFullName: () => 'test',
+        name: 'test',
+        id: 1
+      }
+      mockJasmineEnv = {
+        topSuite: () => {
+          return {
+            children: [mockSpecTest, mockSpecBar]
+          }
+        }
+      }
+      specs = mockJasmineEnv.topSuite().children
+    })
 
-      createSpecFilter(karmaConfMock, jasmineEnv)
+    describe(' getGrepSpecsToRun', function () {
+      it('should not match without grep arg', function () {
+        var karmaConfMock = {
+          args: []
+        }
+        var actualSpecs = getGrepSpecsToRun(karmaConfMock, specs)
+        expect(actualSpecs).not.toBeDefined()
+      })
 
-      var specFilter = jasmineEnv.configuration().specFilter
+      it('should filter spec by grep arg', function () {
+        var karmaConfMock = {
+          args: ['--grep', 'test']
+        }
 
-      // Jasmine's default specFilter **always** returns true
-      // so test multiple possibilities
+        var actualSpecs = getGrepSpecsToRun(karmaConfMock, specs)
+        expect(actualSpecs).toEqual([mockSpecTest])
+      })
+    })
 
-      expect(specFilter({
-        getFullName: jasmine.createSpy('getFullName').and.returnValue('test')
-      })).toEqual(true)
+    describe('getDebugSpecToRun', function () {
+      it('should not match with no params', function () {
+        var location = {}
+        var actualSpecs = getDebugSpecToRun(location, specs)
+        expect(actualSpecs).not.toBeDefined()
+      })
+      it('should match with param', function () {
+        var location = { search: '?spec=test' }
+        var actualSpecs = getDebugSpecToRun(location, specs)
+        expect(actualSpecs).toEqual([mockSpecTest])
+      })
+      it('should throw with param spec not found', function () {
+        var location = { search: '?spec=oops' }
+        expect(function () {
+          getDebugSpecToRun(location, specs)
+        }).toThrowError('No spec found with name: "oops"')
+      })
+    })
 
-      expect(specFilter({
-        getFullName: jasmine.createSpy('getFullName2').and.returnValue('foo')
-      })).toEqual(false)
+    describe('getShard', function () {
+      it('should not match without shard data', function () {
+        var clientConfig = {}
+        var actualSpecs = getShardedSpecsToRun(specs, clientConfig)
+        expect(actualSpecs).not.toBeDefined()
+      })
+      it('should match shard data', function () {
+        var clientConfig = {
+          shardIndex: 0,
+          totalShards: 2
+        }
+        var actualSpecs = getShardedSpecsToRun(specs, clientConfig)
+        expect(actualSpecs).toEqual([mockSpecTest])
+        clientConfig = {
+          shardIndex: 1,
+          totalShards: 2
+        }
+        actualSpecs = getShardedSpecsToRun(specs, clientConfig)
+        expect(actualSpecs).toEqual([mockSpecBar])
+      })
+    })
+
+    describe('createSpecFilter', function () {
+      it('should create spec filter in jasmine', function () {
+        var karmaConfMock = {
+          args: ['--grep', 'test']
+        }
+        var specFilter = createSpecFilter(karmaConfMock, mockJasmineEnv)
+
+        // Jasmine's default specFilter **always** returns true
+        // so test multiple possibilities
+
+        expect(specFilter(mockSpecTest)).toEqual(true)
+        expect(specFilter(mockSpecBar)).toEqual(false)
+      })
     })
   })
 })

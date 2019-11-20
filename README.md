@@ -12,7 +12,6 @@
 
 ## Installation
 
-
 ```bash
 $ npm install karma-jasmine --save-dev
 $ npm install jasmine-core --save-dev
@@ -72,6 +71,17 @@ module.exports = function(config) {
 }
 ```
 
+## Debug by URL
+
+Failing tests print a debug URL with `?spec=`. Use it with `--no_single_run`
+and paste it into your browser to focus on a single failing test.
+
+## Sharding
+
+By setting `config.client.shardIndex` and `config.client.totalShards`, you can
+run a subset of the full set of specs. Complete sharding support needs to be
+done in the process that calls karma, and would need to support test result
+integration across shards.
 ----
 
 For more information on Karma see the [homepage].
