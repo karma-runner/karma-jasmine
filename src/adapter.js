@@ -2,6 +2,10 @@
 
 'use strict'
 
+// Save link to native Date object
+// before it might be mocked by the user
+var _Date = Date
+
 /**
  * Decision maker for whether a stack entry is considered external to jasmine and karma.
  * @param  {String}  entry Error stack entry.
@@ -142,9 +146,6 @@ function getAllSpecNames (topSuite) {
 function KarmaReporter (tc, jasmineEnv) {
   var currentSuite = new SuiteNode()
 
-  // Save link on native Date object
-  // because user can mock it
-  var _Date = Date
   var startTimeCurrentSpec = new _Date().getTime()
 
   function handleGlobalErrors (result) {
