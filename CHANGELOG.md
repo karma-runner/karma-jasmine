@@ -1,3 +1,31 @@
+<a name="3.0.0"></a>
+# [3.0.0](https://github.com/karma-runner/karma-jasmine/compare/v2.0.1...v3.0.0) (2020-01-04)
+
+
+* Update deps and drop node v6 to match karma v4.0 (#233) ([097eed4](https://github.com/karma-runner/karma-jasmine/commit/097eed4)), closes [#233](https://github.com/karma-runner/karma-jasmine/issues/233)
+
+
+### Bug Fixes
+
+* **build:** run eslint on npm test ([#237](https://github.com/karma-runner/karma-jasmine/issues/237)) ([a12024d](https://github.com/karma-runner/karma-jasmine/commit/a12024d))
+* **stack:** On error in beforeAll/afterAll relevant information to debug are miss… ([#232](https://github.com/karma-runner/karma-jasmine/issues/232)) ([cd6f060](https://github.com/karma-runner/karma-jasmine/commit/cd6f060))
+* **travis:** use new syntax for xenial and pin to it. ([#236](https://github.com/karma-runner/karma-jasmine/issues/236)) ([cb99ef8](https://github.com/karma-runner/karma-jasmine/commit/cb99ef8))
+
+
+### Features
+
+* **adapter:** log when Jasmine fails because no expect() were run ([#238](https://github.com/karma-runner/karma-jasmine/issues/238)) ([646796e](https://github.com/karma-runner/karma-jasmine/commit/646796e))
+* **reporter:** On no-single-run and failure, emit a debug URL ([#235](https://github.com/karma-runner/karma-jasmine/issues/235)) ([76f092a](https://github.com/karma-runner/karma-jasmine/commit/76f092a))
+
+
+### BREAKING CHANGES
+
+* drop support for node v6
+
+* Also update travis config to drop v6 andd v10
+
+
+
 <a name="2.0.1"></a>
 ## [2.0.1](https://github.com/karma-runner/karma-jasmine/compare/v2.0.0...v2.0.1) (2018-11-17)
 
