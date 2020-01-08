@@ -8,10 +8,12 @@ module.exports = function (grunt) {
     var dest = src.replace('src/', 'lib/')
     var wrapper = src.replace('.js', '.wrapper')
 
-    grunt.file.copy(wrapper, dest, {process: function (content) {
-      var wrappers = content.split(/%CONTENT%\r?\n/)
-      return wrappers[0] + grunt.file.read(src) + wrappers[1]
-    }})
+    grunt.file.copy(wrapper, dest, {
+      process: function (content) {
+        var wrappers = content.split(/%CONTENT%\r?\n/)
+        return wrappers[0] + grunt.file.read(src) + wrappers[1]
+      }
+    })
 
     grunt.log.ok('Created ' + dest)
   })

@@ -1,4 +1,4 @@
-/*eslint no-unused-vars: ["error", { "varsIgnorePattern": "(createSpecFilter|createStartFn)" }]*/
+/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "(createSpecFilter|createStartFn)" }] */
 
 'use strict'
 
@@ -121,7 +121,7 @@ function processSuite (suite, pointer) {
     child = suite.children[i]
 
     if (child.children) {
-      childPointer = pointer[child.description] = {_: []}
+      childPointer = pointer[child.description] = { _: [] }
       processSuite(child, childPointer)
     } else {
       if (!pointer._) {
@@ -363,7 +363,7 @@ function createStartFn (karma, jasmineEnv) {
   }
 }
 
-function indexOf (collection, find, i /* opt*/) {
+function indexOf (collection, find, i /* opt */) {
   if (collection.indexOf) {
     return collection.indexOf(find, i)
   }
@@ -379,7 +379,7 @@ function indexOf (collection, find, i /* opt*/) {
   return -1
 }
 
-function filter (collection, filter, that /* opt*/) {
+function filter (collection, filter, that /* opt */) {
   if (collection.filter) {
     return collection.filter(filter, that)
   }
@@ -394,7 +394,7 @@ function filter (collection, filter, that /* opt*/) {
   return other
 }
 
-function map (collection, mapper, that /* opt*/) {
+function map (collection, mapper, that /* opt */) {
   if (collection.map) {
     return collection.map(mapper, that)
   }

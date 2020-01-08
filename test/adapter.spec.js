@@ -21,7 +21,7 @@ describe('jasmine adapter', function () {
       var jasmine = getJasmineRequireObj().core(jasmineRequire)
       env = jasmine.getEnv()
 
-      karma = new Karma(new MockSocket(), null, null, null, {search: ''})
+      karma = new Karma(new MockSocket(), null, null, null, { search: '' })
       reporter = new KarmaReporter(karma, env)
 
       spyOn(karma, 'result')
@@ -80,7 +80,7 @@ describe('jasmine adapter', function () {
         })
       })
 
-      reporter.jasmineStarted({totalSpecsDefined: 2})
+      reporter.jasmineStarted({ totalSpecsDefined: 2 })
     })
 
     it('should report success result', function () {
@@ -385,8 +385,8 @@ describe('jasmine adapter', function () {
     beforeEach(function () {
       jasmineConfig = {}
 
-      tc = new Karma(new MockSocket(), {}, null, null, {search: ''})
-      tc.config = {jasmine: jasmineConfig}
+      tc = new Karma(new MockSocket(), {}, null, null, { search: '' })
+      tc.config = { jasmine: jasmineConfig }
 
       spyOn(tc, 'info')
       spyOn(tc, 'complete')
