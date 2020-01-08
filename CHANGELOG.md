@@ -1,3 +1,13 @@
+<a name="3.0.3"></a>
+## [3.0.3](https://github.com/karma-runner/karma-jasmine/compare/v3.0.2...v3.0.3) (2020-01-08)
+
+
+### Bug Fixes
+
+* **npm:** ignore integration-tests/ ([#248](https://github.com/karma-runner/karma-jasmine/issues/248)) ([f0083cb](https://github.com/karma-runner/karma-jasmine/commit/f0083cb))
+
+
+
 <a name="3.0.2"></a>
 ## [3.0.2](https://github.com/karma-runner/karma-jasmine/compare/v3.0.1...v3.0.2) (2020-01-08)
 
