@@ -1,3 +1,6 @@
+.idea/
+tmp/
+integration-tests/
 .*
 src
 test
