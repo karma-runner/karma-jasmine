@@ -1,3 +1,8 @@
+<a name="3.0.2"></a>
+## [3.0.2](https://github.com/karma-runner/karma-jasmine/compare/v3.0.1...v3.0.2) (2020-01-08)
+
+
+
 <a name="3.0.1"></a>
 ## [3.0.1](https://github.com/karma-runner/karma-jasmine/compare/v1.1.0...v3.0.1) (2020-01-06)
 
