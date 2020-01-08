@@ -1,22 +1,17 @@
-sudo: false
-# the xvfb service syntax depends on distro
-dist: xenial
 language: node_js
+
 node_js:
   - "8"
   - "10"
-
-# Make sure we have new NPM.
-before_install:
-  - if [[ "`node --version`" = v0* ]] || [[ "`node --version`" = v4* ]]; then npm install -g npm@latest-3; fi
+  - "12"
 
 services:
   - xvfb
 
 before_script:
   - export DISPLAY=:99.0
-  - npm install -g grunt-cli
 
 script:
-  - grunt
-  - ./integration-tests.sh
+  - grunt && ./integration-tests.sh
+
+cache: npm
