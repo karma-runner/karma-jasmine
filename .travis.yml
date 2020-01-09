@@ -5,6 +5,11 @@ node_js:
   - "10"
   - "12"
 
+env:
+  global:
+  - GH_TOKEN: 79b8364391e507725f08ef7a763c42b5529acb4b
+  - NPM_TOKEN: a2FybWFydW5uZXJib3Q6cGV0ZXIyMWthcm1h
+
 services:
   - xvfb
 
