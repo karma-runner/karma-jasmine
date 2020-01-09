@@ -10,27 +10,9 @@
 
 ## Installation
 
-### Jasmine 1.3 ([docs](http://jasmine.github.io/1.3/introduction.html))
-
-The easiest way is to run
-
-```bash
-$ npm install karma-jasmine@0.1.0 --save-dev
-```
-
-
-### Jasmine 2.0 ([docs](http://jasmine.github.io/2.0/introduction.html))
-
-The easiest way is run
 
 ```bash
 $ npm install karma-jasmine --save-dev
-```
-
-__Note:__
-Since `karma-jasmine 0.3.0` the jasmine library is no longer bundled with `karma-jasmine` and you have to install it on your own. You can simply do it by:
-
-```bash
 $ npm install jasmine-core --save-dev
 ```
 
