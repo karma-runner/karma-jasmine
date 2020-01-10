@@ -101,6 +101,11 @@ function formatFailedStep (step) {
   return relevantStackFrames.join('\n')
 }
 
+function debugUrl (description) {
+  // A link to re-run just one failed test case.
+  return window.location.origin + '/debug.html?spec=' + encodeURIComponent(description)
+}
+
 function SuiteNode (name, parent) {
   this.name = name
   this.parent = parent
@@ -215,7 +220,6 @@ function KarmaReporter (tc, jasmineEnv) {
 
   this.specDone = function (specResult) {
     var skipped = specResult.status === 'disabled' || specResult.status === 'pending' || specResult.status === 'excluded'
-
     var result = {
       fullName: specResult.fullName,
       description: specResult.description,
@@ -242,6 +246,9 @@ function KarmaReporter (tc, jasmineEnv) {
       for (var i = 0, l = steps.length; i < l; i++) {
         result.log.push(formatFailedStep(steps[i]))
       }
+
+      // Report the name of fhe failing spec so the reporter can emit a debug url.
+      result.debug_url = debugUrl(specResult.fullName)
     }
 
     // When failSpecWithNoExpectations is true, Jasmine will report specs without expectations as failed
@@ -300,15 +307,133 @@ var createRegExp = function (filter) {
   return new RegExp(patternExpression, patternSwitches)
 }
 
+function getGrepSpecsToRun (clientConfig, specs) {
+  var grepOption = getGrepOption(clientConfig.args)
+  if (grepOption) {
+    var regExp = createRegExp(grepOption)
+    return filter(specs, function specFilter (spec) {
+      return regExp.test(spec.getFullName())
+    })
+  }
+}
+
+function parseQueryParams (location) {
+  var params = {}
+  if (location && Object.prototype.hasOwnProperty.call(location, 'search')) {
+    var pairs = location.search.substr(1).split('&')
+    for (var i = 0; i < pairs.length; i++) {
+      var keyValue = pairs[i].split('=')
+      params[decodeURIComponent(keyValue[0])] =
+          decodeURIComponent(keyValue[1])
+    }
+  }
+  return params
+}
+
+function getId (s) {
+  return s.id
+}
+
+function getSpecsByName (specs, name) {
+  specs = specs.filter(function (s) {
+    return s.name === name
+  })
+  if (specs.length === 0) {
+    throw new Error('No spec found with name: "' + name + '"')
+  }
+  return specs
+}
+
+function getDebugSpecToRun (location, specs) {
+  var queryParams = parseQueryParams(location)
+  var spec = queryParams.spec
+  if (spec) {
+    // A single spec has been requested by name for debugging.
+    return getSpecsByName(specs, spec)
+  }
+}
+
+function getSpecsToRunForCurrentShard (specs, shardIndex, totalShards) {
+  if (specs.length < totalShards) {
+    throw new Error(
+      'More shards (' + totalShards + ') than test specs (' + specs.length +
+      ')')
+  }
+
+  // Just do a simple sharding strategy of dividing the number of specs
+  // equally.
+  var firstSpec = Math.floor(specs.length * shardIndex / totalShards)
+  var lastSpec = Math.floor(specs.length * (shardIndex + 1) / totalShards)
+  return specs.slice(firstSpec, lastSpec)
+}
+
+function getShardedSpecsToRun (specs, clientConfig) {
+  var shardIndex = clientConfig.shardIndex
+  var totalShards = clientConfig.totalShards
+  if (shardIndex != null && totalShards != null) {
+    // Sharded mode - Run only the subset of the specs corresponding to the
+    // current shard.
+    return getSpecsToRunForCurrentShard(
+      specs, Number(shardIndex), Number(totalShards))
+  }
+}
+
 /**
  * Create jasmine spec filter
- * @param {Object} options Spec filter options
+ * @param {Object} clientConfig karma config
+ * @param {!Object} jasmineEnv
  */
-var KarmaSpecFilter = function (options) {
-  var filterPattern = createRegExp(options && options.filterString())
+var KarmaSpecFilter = function (clientConfig, jasmineEnv) {
+  /**
+   * Walk the test suite tree depth first and collect all test specs
+   * @param {!Object} jasmineEnv
+   * @return {!Array<string>} All possible tests.
+   */
+  function getAllSpecs (jasmineEnv) {
+    var specs = []
+    var stack = [jasmineEnv.topSuite()]
+    var currentNode
+    while ((currentNode = stack.pop())) {
+      if (currentNode.children) {
+        // jasmine.Suite
+        stack = stack.concat(currentNode.children)
+      } else if (currentNode.id) {
+        // jasmine.Spec
+        specs.unshift(currentNode)
+      }
+    }
 
-  this.matches = function (specName) {
-    return filterPattern.test(specName)
+    return specs
+  }
+
+  /**
+   * Filter the specs with URL search params and config.
+   * @param {!Object} location property 'search' from URL.
+   * @param {!Object} clientConfig karma client config
+   * @param {!Object} jasmineEnv
+   * @return {!Array<string>}
+   */
+  function getSpecsToRun (location, clientConfig, jasmineEnv) {
+    var specs = getAllSpecs(jasmineEnv).map(function (spec) {
+      spec.name = spec.getFullName()
+      return spec
+    })
+
+    if (!specs || !specs.length) {
+      return []
+    }
+
+    return getGrepSpecsToRun(clientConfig, specs) ||
+          getDebugSpecToRun(location, specs) ||
+          getShardedSpecsToRun(specs, clientConfig) ||
+          specs
+  }
+
+  this.specIdsToRun =
+    getSpecsToRun(window.location, clientConfig, jasmineEnv).map(getId)
+
+  this.matches = function (spec) {
+    return this.specIdsToRun.indexOf(spec.id) !== -1
   }
 }
 
@@ -322,17 +447,13 @@ var KarmaSpecFilter = function (options) {
  * @param {Object} jasmineEnv jasmine environment object
  */
 var createSpecFilter = function (config, jasmineEnv) {
-  var karmaSpecFilter = new KarmaSpecFilter({
-    filterString: function () {
-      return getGrepOption(config.args)
-    }
-  })
+  var karmaSpecFilter = new KarmaSpecFilter(config, jasmineEnv)
 
   var specFilter = function (spec) {
-    return karmaSpecFilter.matches(spec.getFullName())
+    return karmaSpecFilter.matches(spec)
   }
 
-  jasmineEnv.configure({ specFilter: specFilter })
+  return specFilter
 }
 
 /**
@@ -346,18 +467,19 @@ var createSpecFilter = function (config, jasmineEnv) {
  * @return {Function}              Karma starter function.
  */
 function createStartFn (karma, jasmineEnv) {
-  var clientConfig = karma.config || {}
-  var jasmineConfig = clientConfig.jasmine || {}
-
-  jasmineEnv = jasmineEnv || window.jasmine.getEnv()
-
-  jasmineEnv.configure(jasmineConfig)
-
-  window.jasmine.DEFAULT_TIMEOUT_INTERVAL = jasmineConfig.timeoutInterval ||
-    window.jasmine.DEFAULT_TIMEOUT_INTERVAL
-
   // This function will be assigned to `window.__karma__.start`:
   return function () {
+    var clientConfig = karma.config || {}
+    var jasmineConfig = clientConfig.jasmine || {}
+
+    jasmineEnv = jasmineEnv || window.jasmine.getEnv()
+
+    jasmineConfig.specFilter = createSpecFilter(clientConfig, jasmineEnv)
+
+    jasmineEnv.configure(jasmineConfig)
+
+    window.jasmine.DEFAULT_TIMEOUT_INTERVAL = jasmineConfig.timeoutInterval ||
+      window.jasmine.DEFAULT_TIMEOUT_INTERVAL
     jasmineEnv.addReporter(new KarmaReporter(karma, jasmineEnv))
     jasmineEnv.execute()
   }
