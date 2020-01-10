@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/karma-runner/karma-jasmine/compare/v3.0.3...v3.1.0) (2020-01-10)
+
+
+### Features
+
+* **adapter:** support spec=name URL and sharding ([#243](https://github.com/karma-runner/karma-jasmine/issues/243)) ([39b1582](https://github.com/karma-runner/karma-jasmine/commit/39b1582987f4b82d6da4775414f208a8433ec794))
+
 <a name="3.0.3"></a>
 ## [3.0.3](https://github.com/karma-runner/karma-jasmine/compare/v3.0.2...v3.0.3) (2020-01-08)
 
@@ -212,6 +219,3 @@ Requires peerDependency Jasmine@^3.3.0
 ### Features
 
 * **adapter:** add executedExpectationsCount to result ([666c207](https://github.com/karma-runner/karma-jasmine/commit/666c207))
-
-
-
