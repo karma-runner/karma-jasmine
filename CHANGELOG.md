@@ -57,7 +57,7 @@
 
 * drop support for node v6
 
-* Also update travis config to drop v6 andd v10
+* Also update travis config to drop v6 and v10
 * `stopOnFailure`, which was previously documented in karma-jasmine's README, is
 not configuration option for jasmine. Use `oneFailurePerSpec` instead.
 
@@ -90,7 +90,7 @@ Requires peerDependency Jasmine@^3.3.0
 
 * drop support for node v6
 
-* Also update travis config to drop v6 andd v10
+* Also update travis config to drop v6 and v10
 
 
 
