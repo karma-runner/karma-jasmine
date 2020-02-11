@@ -247,8 +247,10 @@ function KarmaReporter (tc, jasmineEnv) {
         result.log.push(formatFailedStep(steps[i]))
       }
 
-      // Report the name of fhe failing spec so the reporter can emit a debug url.
-      result.debug_url = debugUrl(specResult.fullName)
+      if (typeof window !== 'undefined' && window.location && window.location.origin) {
+        // Report the name of fhe failing spec so the reporter can emit a debug url.
+        result.debug_url = debugUrl(specResult.fullName)
+      }
     }
 
     // When failSpecWithNoExpectations is true, Jasmine will report specs without expectations as failed
