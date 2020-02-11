@@ -1,3 +1,10 @@
+## [3.1.1](https://github.com/karma-runner/karma-jasmine/compare/v3.1.0...v3.1.1) (2020-02-11)
+
+
+### Bug Fixes
+
+* **adapter:** do not emit debug url unless in a browser ([#263](https://github.com/karma-runner/karma-jasmine/issues/263)) ([9bcce88](https://github.com/karma-runner/karma-jasmine/commit/9bcce8864d7328cdd7571dda9828401034c9dbe6)), closes [#262](https://github.com/karma-runner/karma-jasmine/issues/262)
+
 # [3.1.0](https://github.com/karma-runner/karma-jasmine/compare/v3.0.3...v3.1.0) (2020-01-10)
 
 
