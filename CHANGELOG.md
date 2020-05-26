@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/karma-runner/karma-jasmine/compare/v3.1.1...v3.2.0) (2020-05-26)
+
+
+### Features
+
+* **results:** forward passedExpectations and properties ([#268](https://github.com/karma-runner/karma-jasmine/issues/268)) ([ad1d7dd](https://github.com/karma-runner/karma-jasmine/commit/ad1d7dd28d56d2612b8a502a10710591d4de1cff))
+
 ## [3.1.1](https://github.com/karma-runner/karma-jasmine/compare/v3.1.0...v3.1.1) (2020-02-11)
 
 
