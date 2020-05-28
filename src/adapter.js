@@ -350,7 +350,7 @@ function getId (s) {
 
 function getSpecsByName (specs, name) {
   specs = specs.filter(function (s) {
-    return s.name === name
+    return s.name.indexOf(name) !== -1
   })
   if (specs.length === 0) {
     throw new Error('No spec found with name: "' + name + '"')

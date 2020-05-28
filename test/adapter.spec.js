@@ -612,6 +612,11 @@ describe('jasmine adapter', function () {
         var actualSpecs = getDebugSpecToRun(location, specs)
         expect(actualSpecs).toEqual([mockSpecTest])
       })
+      it('should match with param containing only a prefix', function () {
+        var location = { search: '?spec=te' }
+        var actualSpecs = getDebugSpecToRun(location, specs)
+        expect(actualSpecs).toEqual([mockSpecTest])
+      })
       it('should throw with param spec not found', function () {
         var location = { search: '?spec=oops' }
         expect(function () {
