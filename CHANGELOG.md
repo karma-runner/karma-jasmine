@@ -1,3 +1,10 @@
+# [3.3.0](https://github.com/karma-runner/karma-jasmine/compare/v3.2.0...v3.3.0) (2020-05-28)
+
+
+### Features
+
+* **reporter:** emit info events for suiteStarted/suiteDone ([#269](https://github.com/karma-runner/karma-jasmine/issues/269)) ([7b73ce0](https://github.com/karma-runner/karma-jasmine/commit/7b73ce0abec8da370986d10cbb040fe6e5ae1d22))
+
 # [3.2.0](https://github.com/karma-runner/karma-jasmine/compare/v3.1.1...v3.2.0) (2020-05-26)
 
 
