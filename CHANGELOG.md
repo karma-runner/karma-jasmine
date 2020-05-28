@@ -1,3 +1,10 @@
+## [3.3.1](https://github.com/karma-runner/karma-jasmine/compare/v3.3.0...v3.3.1) (2020-05-28)
+
+
+### Bug Fixes
+
+* **filter:** match any portion of a spec name ([#270](https://github.com/karma-runner/karma-jasmine/issues/270)) ([ded4c4b](https://github.com/karma-runner/karma-jasmine/commit/ded4c4b13ecc0ed976ee00b0ae808dbcd134157b)), closes [#256](https://github.com/karma-runner/karma-jasmine/issues/256)
+
 # [3.3.0](https://github.com/karma-runner/karma-jasmine/compare/v3.2.0...v3.3.0) (2020-05-28)
 
 
