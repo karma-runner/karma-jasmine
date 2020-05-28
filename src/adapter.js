@@ -179,6 +179,7 @@ function KarmaReporter (tc, jasmineEnv) {
   this.jasmineStarted = function (data) {
     // TODO(vojta): Do not send spec names when polling.
     tc.info({
+      event: 'jasmineStarted',
       total: data.totalSpecsDefined,
       specs: getAllSpecNames(jasmineEnv.topSuite())
     })
@@ -198,6 +199,10 @@ function KarmaReporter (tc, jasmineEnv) {
 
   this.suiteStarted = function (result) {
     currentSuite = currentSuite.addChild(result.description)
+    tc.info({
+      event: 'suiteStarted',
+      result: result
+    })
   }
 
   this.suiteDone = function (result) {
@@ -212,6 +217,11 @@ function KarmaReporter (tc, jasmineEnv) {
     handleGlobalErrors(result)
 
     currentSuite = currentSuite.parent
+
+    tc.info({
+      event: 'suiteDone',
+      result: result
+    })
   }
 
   this.specStarted = function () {

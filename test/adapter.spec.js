@@ -85,6 +85,10 @@ describe('jasmine adapter', function () {
     })
 
     it('should report success result', function () {
+      spyOn(karma, 'info').and.callFake(function (info) {
+        expect(info.event).toBe('suiteStarted')
+        expect(info.result).toBeDefined()
+      })
       karma.result.and.callFake(function (result) {
         expect(result.id).toBe(spec.id)
         expect(result.description).toBe('contains spec with an expectation')
@@ -98,6 +102,20 @@ describe('jasmine adapter', function () {
       reporter.suiteStarted(suite.result)
       reporter.specDone(spec.result)
       expect(karma.result).toHaveBeenCalled()
+    })
+
+    it('should report suiteDone result', function () {
+      const infoSpy = spyOn(karma, 'info')
+      // The stateful adapter needs a started event.
+      reporter.suiteStarted(parentSuite.result)
+
+      infoSpy.and.callFake(function (info) {
+        expect(info.event).toBe('suiteDone')
+        expect(info.result).toBeDefined()
+        expect(info.result.description).toBe('Parent Suite')
+      })
+
+      reporter.suiteDone(parentSuite.result)
     })
 
     it('should report disabled status', function () {
