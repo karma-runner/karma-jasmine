@@ -1,3 +1,15 @@
+# [4.0.0](https://github.com/karma-runner/karma-jasmine/compare/v3.3.1...v4.0.0) (2020-08-11)
+
+
+### chore
+
+* update dependencies ([#275](https://github.com/karma-runner/karma-jasmine/issues/275)) ([0adead4](https://github.com/karma-runner/karma-jasmine/commit/0adead425d44457b2b510cee9d79e7d6c4a203f1))
+
+
+### BREAKING CHANGES
+
+*   Drop support for node 8 (add support for node 14)
+
 ## [3.3.1](https://github.com/karma-runner/karma-jasmine/compare/v3.3.0...v3.3.1) (2020-05-28)
 
 
