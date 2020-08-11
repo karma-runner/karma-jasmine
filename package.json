@@ -36,7 +36,7 @@
     "grunt-bump": "^0.8.0",
     "grunt-conventional-changelog": "^6.1.0",
     "grunt-conventional-github-releaser": "^1.0.0",
-    "grunt-eslint": "^22.0.0",
+    "grunt-eslint": "^23.0.0",
     "grunt-karma": "^4.0.0",
     "grunt-npm": "0.0.2",
     "husky": "^4.2.5",
