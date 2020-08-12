@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/karma-runner/karma-jasmine/compare/v4.0.0...v4.0.1) (2020-08-12)
+
+
+### Bug Fixes
+
+* **adapter:** filter functions from result.order ([#272](https://github.com/karma-runner/karma-jasmine/issues/272)) ([28f337c](https://github.com/karma-runner/karma-jasmine/commit/28f337caa86e9147d2110a27fb78cc072409c62a))
+
 # [4.0.0](https://github.com/karma-runner/karma-jasmine/compare/v3.3.1...v4.0.0) (2020-08-11)
 
 
