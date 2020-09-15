@@ -495,19 +495,21 @@ var createSpecFilter = function (config, jasmineEnv) {
  * @return {Function}              Karma starter function.
  */
 function createStartFn (karma, jasmineEnv) {
+  var clientConfig = karma.config || {}
+  var jasmineConfig = clientConfig.jasmine || {}
+  // Changes to jasmine global values need to happen before the file-scope
+  // code in a test is executed (describe functions)
+  window.jasmine.DEFAULT_TIMEOUT_INTERVAL = jasmineConfig.timeoutInterval ||
+    window.jasmine.DEFAULT_TIMEOUT_INTERVAL
+
   // This function will be assigned to `window.__karma__.start`:
   return function () {
-    var clientConfig = karma.config || {}
-    var jasmineConfig = clientConfig.jasmine || {}
-
     jasmineEnv = jasmineEnv || window.jasmine.getEnv()
 
     jasmineConfig.specFilter = createSpecFilter(clientConfig, jasmineEnv)
 
     jasmineEnv.configure(jasmineConfig)
 
-    window.jasmine.DEFAULT_TIMEOUT_INTERVAL = jasmineConfig.timeoutInterval ||
-      window.jasmine.DEFAULT_TIMEOUT_INTERVAL
     jasmineEnv.addReporter(new KarmaReporter(karma, jasmineEnv))
     jasmineEnv.execute()
   }
