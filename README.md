@@ -81,6 +81,32 @@ run a subset of the full set of specs. Complete sharding support needs to be
 done in the process that calls karma, and would need to support test result
 integration across shards.
 
+## Custom spec filter
+
+Providing a [custom spec filter](https://jasmine.github.io/api/edge/Configuration#specFilter) is also supported.
+
+Example:
+
+```js
+// Users are able to set a custom specFilter themselves
+
+jasmine.getEnv().configure({
+  specFilter: function (spec) {
+    return spec.getFullName() === 'spec that succeeds'
+  }
+})
+
+describe('spec', () => {
+  it('that fails', () => {
+    fail('This spec should not run!')
+  })
+
+  it('that succeeds', () => {
+    expect(1).toBe(1)
+  })
+})
+```
+
 ---
 
 For more information on Karma see the [homepage](https://karma-runner.github.io/).
