@@ -49,6 +49,12 @@ module.exports = function (grunt) {
         autoWatch: false,
         singleRun: true,
         reporters: ['dots']
+      },
+      customFilter: {
+        configFile: 'test/fixtures/custom-filter/karma.conf.js',
+        autoWatch: false,
+        singleRun: true,
+        reporters: ['dots']
       }
     },
     eslint: {
