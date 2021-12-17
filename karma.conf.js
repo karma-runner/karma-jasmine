@@ -8,7 +8,7 @@ module.exports = function (config) {
       'test/*.js'
     ],
 
-    browsers: process.env.TRAVIS ? ['Firefox'] : ['Chrome'],
+    browsers: process.env.CI ? ['FirefoxHeadless'] : ['ChromeHeadless'],
 
     autoWatch: true,
 

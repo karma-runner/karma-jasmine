@@ -1,0 +1,39 @@
+name: Tests
+
+on: [push, pull_request]
+
+env:
+  FORCE_COLOR: 2
+
+jobs:
+  run:
+    name: Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [10, 12, 14, 16]
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: grunt && ./integration-tests.sh
+
+      # FIXME
+      # run automated release process with semantic-release
+#      - if [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_EVENT_TYPE" == "push" && "$TRAVIS_NODE_VERSION" == "12" ]]; then
+#          npm i --no-save semantic-release@15 @semantic-release/changelog@3 @semantic-release/git@7;
+#          semantic-release;
+#        fi;
