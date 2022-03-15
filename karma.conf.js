@@ -8,7 +8,7 @@ module.exports = function (config) {
       'test/*.js'
     ],
 
-    browsers: ['Firefox'],
+    browsers: ['FirefoxHeadless'],
 
     autoWatch: true,
 
