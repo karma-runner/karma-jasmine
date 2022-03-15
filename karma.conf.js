@@ -8,13 +8,12 @@ module.exports = function (config) {
       'test/*.js'
     ],
 
-    browsers: process.env.TRAVIS ? ['Firefox'] : ['Chrome'],
+    browsers: ['Firefox'],
 
     autoWatch: true,
 
     plugins: [
       'karma-firefox-launcher',
-      'karma-chrome-launcher',
       require.resolve('./')
     ]
   })
