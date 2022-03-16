@@ -7,7 +7,8 @@
     "lib/*.js"
   ],
   "scripts": {
-    "test": "jasmine && grunt"
+    "test": "jasmine && grunt",
+    "release": "grunt release"
   },
   "repository": {
     "type": "git",
