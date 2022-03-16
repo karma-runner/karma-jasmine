@@ -1,5 +1,5 @@
 {
-  "name": "karma-jasmine",
+  "name": "@jginsburgn/karma-jasmine",
   "version": "4.0.1",
   "description": "A Karma plugin - adapter for Jasmine testing framework.",
   "main": "lib/index.js",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/karma-runner/karma-jasmine.git"
+    "url": "git://github.com/jginsburgn/karma-jasmine.git"
   },
   "keywords": [
     "karma-plugin",
