@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^9.1.1",
-    "@commitlint/config-conventional": "^9.1.1",
+    "@commitlint/config-angular": "^16.2.3",
     "conventional-changelog": "^3.1.21",
     "conventional-changelog-core": "^4.1.7",
     "eslint-config-standard": "^14.1.1",
