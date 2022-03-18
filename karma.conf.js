@@ -1,7 +1,7 @@
 module.exports = function (config) {
   config.set({
     frameworks: ['jasmine'],
-    reporters: ['karma-jasmine'],
+    reporters: ['karma-jasmine', 'dots'],
 
     files: [
       'src/*.js',
@@ -10,7 +10,7 @@ module.exports = function (config) {
 
     browsers: ['FirefoxHeadless'],
 
-    autoWatch: true,
+    singleRun: true,
 
     plugins: [
       'karma-firefox-launcher',
