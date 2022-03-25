@@ -23,5 +23,10 @@ jobs:
           node-version: 12
           cache: npm
       - run: npm ci
+      - run: |
+          npm run commitlint -- \
+          --verbose \
+          --from `git merge-base origin/master $GITHUB_SHA`
+      - run: npm run build
       - run: npm run test
       - run: npm run release
