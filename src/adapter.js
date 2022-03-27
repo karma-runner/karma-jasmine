@@ -348,7 +348,7 @@ function getGrepSpecsToRun (clientConfig, specs) {
 function parseQueryParams (location) {
   var params = {}
   if (location && Object.prototype.hasOwnProperty.call(location, 'search')) {
-    var pairs = location.search.substr(1).split('&')
+    var pairs = location.search.slice(1).split('&')
     for (var i = 0; i < pairs.length; i++) {
       var keyValue = pairs[i].split('=')
       params[decodeURIComponent(keyValue[0])] =
