@@ -32,7 +32,9 @@ jobs:
           --verbose \
           --from `git merge-base origin/master $GITHUB_SHA`
       - run: npm run build
-      - run: npm run test
+      - run: npm run test:unit
+      - run: npm run test:e2e
+      - run: npm run test:integration
   windows:
     name: "Node ${{ matrix.node }} on Windows: Test and Lint"
     runs-on: windows-latest
@@ -55,4 +57,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      - run: npm run test
+      - run: npm run test:unit
+      - run: npm run test:e2e
+      - run: npm run test:integration
