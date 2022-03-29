@@ -7,8 +7,15 @@
     "lib/*.js"
   ],
   "scripts": {
-    "test": "jasmine && grunt",
-    "release": "grunt release"
+    "build": "grunt build",
+    "lint": "eslint \"**/*.js\"",
+    "lint:fix": "eslint --fix \"**/*.js\"",
+    "commitlint": "commitlint",
+    "test": "jasmine && npm run test:unit && npm run test:e2e && npm run test:integration",
+    "test:unit": "jasmine",
+    "test:e2e": "karma start karma.conf.js",
+    "test:integration": "bash tools/integration-tests.sh",
+    "release": "semantic-release"
   },
   "repository": {
     "type": "git",
@@ -24,27 +31,24 @@
     "jasmine-core": "^3.6.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^9.1.1",
+    "@commitlint/cli": "^12.1.4",
     "@commitlint/config-angular": "^12.1.4",
-    "conventional-changelog": "^3.1.21",
-    "conventional-changelog-core": "^4.1.7",
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/git": "^9.0.1",
+    "@semantic-release/github": "^7.2.3",
+    "@semantic-release/npm": "^7.1.3",
+    "eslint": "^8.11.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "grunt": "^1.2.1",
-    "grunt-bump": "^0.8.0",
-    "grunt-conventional-changelog": "^6.1.0",
-    "grunt-conventional-github-releaser": "^1.0.0",
-    "grunt-eslint": "^23.0.0",
-    "grunt-karma": "^4.0.0",
-    "grunt-npm": "0.0.2",
+    "grunt": "^1.4.1",
     "husky": "^4.2.5",
     "jasmine": "^3.6.1",
     "karma": "^4.4.1",
     "karma-firefox-launcher": "^1.3.0",
-    "load-grunt-tasks": "^5.1.0"
+    "semantic-release": "^17.4.7"
   },
   "peerDependencies": {
     "karma": "*"
