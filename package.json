@@ -11,7 +11,7 @@
     "lint": "eslint \"**/*.js\"",
     "lint:fix": "eslint --fix \"**/*.js\"",
     "commitlint": "commitlint",
-    "test": "jasmine && npm run test:unit && npm run test:e2e && npm run test:integration",
+    "test": "npm run test:unit && npm run test:e2e && npm run test:integration",
     "test:unit": "jasmine",
     "test:e2e": "karma start karma.conf.js",
     "test:integration": "bash tools/integration-tests.sh",
