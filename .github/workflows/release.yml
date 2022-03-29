@@ -20,7 +20,7 @@ jobs:
       - uses: browser-actions/setup-firefox@latest
       - uses: actions/setup-node@v3
         with:
-          node-version: 12
+          node-version: 10
           cache: npm
       - run: npm ci
       - run: |
