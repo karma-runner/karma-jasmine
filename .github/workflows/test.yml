@@ -10,6 +10,7 @@ jobs:
     name: "Node ${{ matrix.node }} on Linux: Test and Lint"
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         node:
           - 10
@@ -39,6 +40,7 @@ jobs:
       run:
         shell: bash
     strategy:
+      fail-fast: false
       matrix:
         node:
           - 10
