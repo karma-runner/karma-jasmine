@@ -1,3 +1,10 @@
+## [4.0.2](https://github.com/karma-runner/karma-jasmine/compare/v4.0.1...v4.0.2) (2022-03-30)
+
+
+### Bug Fixes
+
+* sync package-lock.json and package.json ([4dacc5d](https://github.com/karma-runner/karma-jasmine/commit/4dacc5d4cae68d73337cefad5a5879a6471fe42c))
+
 ## [4.0.1](https://github.com/karma-runner/karma-jasmine/compare/v4.0.0...v4.0.1) (2020-08-12)
 
 
