@@ -28,5 +28,7 @@ jobs:
           --verbose \
           --from `git merge-base origin/master $GITHUB_SHA`
       - run: npm run build
-      - run: npm run test
+      - run: npm run test:unit
+      - run: npm run test:e2e
+      - run: npm run test:integration
       - run: npm run release
