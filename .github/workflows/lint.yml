@@ -6,24 +6,16 @@ on:
       - master
 
 jobs:
-  linux:
-    name: "Node ${{ matrix.node }} on Linux: Lint"
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        node:
-          - 10
-          - 12
-          - 14
-          - 16
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 10
           cache: npm
       - run: npm ci
       - run: npm run lint
