@@ -4,3 +4,4 @@ tmp/
 lib/adapter.js
 integration-tests/
 .DS_Store
+/karma-jasmine-*.tgz
