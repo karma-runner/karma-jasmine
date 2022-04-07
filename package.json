@@ -44,7 +44,6 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-standard": "^4.1.0",
     "grunt": "^1.5.2",
-    "husky": "^4.3.8",
     "jasmine": "^4.1.0",
     "karma": "^6.3.17",
     "karma-firefox-launcher": "^2.1.2",
@@ -54,7 +53,7 @@
     "karma": "*"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "husky": {
     "hooks": {
