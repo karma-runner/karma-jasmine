@@ -50,7 +50,7 @@
     "semantic-release": "^19.0.2"
   },
   "peerDependencies": {
-    "karma": "*"
+    "karma": "^6.0.0"
   },
   "engines": {
     "node": ">=12"
