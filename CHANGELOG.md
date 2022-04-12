@@ -1,3 +1,29 @@
+# [5.0.0](https://github.com/karma-runner/karma-jasmine/compare/v4.0.2...v5.0.0) (2022-04-12)
+
+
+### Bug Fixes
+
+* limit karma peer dependency to ^6.0.0 ([d72c124](https://github.com/karma-runner/karma-jasmine/commit/d72c124d9f30402acb31ecdf77fd517208713320))
+
+
+### Build System
+
+* drop Node.js 10 support ([ea691e8](https://github.com/karma-runner/karma-jasmine/commit/ea691e82cffe14358bfaddfc1f42f0ba58145e32))
+
+
+### Features
+
+* **deps:** update dependencies including jasmine-core ([821f094](https://github.com/karma-runner/karma-jasmine/commit/821f094801dcd8380c2dee15c0f1686e9df5dca7))
+
+
+### BREAKING CHANGES
+
+* The minimum required version of karma is 6.0.0.
+* The minimum required version of Node is 12.0.0.
+* **deps:** jasmine-core was updated to the 4.1.0.
+
+Please refer to the [release notes](https://github.com/jasmine/jasmine/blob/main/release_notes/4.0.0.md) for the complete list of changes and migration instructions.
+
 ## [4.0.2](https://github.com/karma-runner/karma-jasmine/compare/v4.0.1...v4.0.2) (2022-03-30)
 
 
