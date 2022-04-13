@@ -1,3 +1,7 @@
 {
-  "extends": "standard"
+  "root": true,
+  "extends": "standard",
+  "rules": {
+    "no-var": "off"
+  }
 }
