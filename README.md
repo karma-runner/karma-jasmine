@@ -4,7 +4,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/karma-jasmine?style=flat-square)](https://www.npmjs.com/package/karma-jasmine)
 [![Release Workflow Status](https://img.shields.io/github/workflow/status/karma-runner/karma-jasmine/Release/master?style=flat-square&logo=github&label=Release)](https://github.com/karma-runner/karma-jasmine/actions/workflows/release.yml?query=branch%3Amaster)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen?style=flat-square)](https://github.com/karma-runner/karma-jasmine)
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079)](https://github.com/semantic-release/semantic-release)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079?style=flat-square)](https://github.com/semantic-release/semantic-release)
 
 > Adapter for the [Jasmine](https://jasmine.github.io/) testing framework.
 
@@ -21,7 +21,6 @@ npm install karma-jasmine --save-dev
 module.exports = function(config) {
   config.set({
     frameworks: ['jasmine'],
-
     files: [
       '*.js'
     ]
@@ -41,10 +40,10 @@ or
 ```js
 module.exports = function(config) {
   config.set({
-    ...
+    // ...
     client: {
       args: ['--grep', '<pattern>'],
-      ...
+      // ...
     }
   })
 }
@@ -82,4 +81,4 @@ integration across shards.
 
 ---
 
-For more information on Karma see the [homepage](https://karma-runner.github.com/).
+For more information on Karma see the [homepage](https://karma-runner.github.io/).
