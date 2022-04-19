@@ -28,14 +28,16 @@ module.exports = function(config) {
 }
 ```
 
-If you want to run only some tests matching a given pattern you can do this in the following way
+If you want to run only some tests whose name match a given pattern you can do this in the following way
 
 ```bash
 $ karma start &
 $ karma run -- --grep=<pattern>
 ```
 
-or
+where pattern is either a string (e.g `--grep=#slow` runs tests containing "#slow") or a Regex (e.g `--grep=/^(?!.*#slow).*$/` runs tests _not_ containing "#slow").
+
+You can also pass it to `karma.config.js`:
 
 ```js
 module.exports = function(config) {
