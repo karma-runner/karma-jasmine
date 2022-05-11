@@ -457,11 +457,10 @@ var KarmaSpecFilter = function (clientConfig, jasmineEnv) {
           specs
   }
 
-  this.specIdsToRun =
-    getSpecsToRun(window.location, clientConfig, jasmineEnv).map(getId)
+  this.specIdsToRun = new Set(getSpecsToRun(window.location, clientConfig, jasmineEnv).map(getId))
 
   this.matches = function (spec) {
-    return this.specIdsToRun.indexOf(spec.id) !== -1
+    return this.specIdsToRun.has(spec.id)
   }
 }
 
