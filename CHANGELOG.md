@@ -1,3 +1,10 @@
+## [5.0.1](https://github.com/karma-runner/karma-jasmine/compare/v5.0.0...v5.0.1) (2022-05-13)
+
+
+### Bug Fixes
+
+* fixes matches performance issue, github[#302](https://github.com/karma-runner/karma-jasmine/issues/302) ([e964fa6](https://github.com/karma-runner/karma-jasmine/commit/e964fa60ad63826e2e85f712eb119c524f4ef428))
+
 # [5.0.0](https://github.com/karma-runner/karma-jasmine/compare/v4.0.2...v5.0.0) (2022-04-12)
 
 
