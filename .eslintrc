@@ -2,6 +2,10 @@
   "root": true,
   "extends": "standard",
   "rules": {
-    "no-var": "off"
+    "no-var": "off",
+    "linebreak-style": [
+      "error",
+      "unix"
+    ]
   }
 }
