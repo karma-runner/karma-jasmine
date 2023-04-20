@@ -487,8 +487,9 @@ var KarmaSpecFilter = function (clientConfig, jasmineEnv) {
 var createSpecFilter = function (config, jasmineEnv) {
   var karmaSpecFilter = new KarmaSpecFilter(config, jasmineEnv)
 
+  var originalSpecFilter = jasmineEnv.configuration().specFilter
   var specFilter = function (spec) {
-    return karmaSpecFilter.matches(spec)
+    return originalSpecFilter(spec) && karmaSpecFilter.matches(spec)
   }
 
   return specFilter
@@ -513,7 +514,6 @@ function createStartFn (karma, jasmineEnv) {
     jasmineEnv = jasmineEnv || window.jasmine.getEnv()
 
     jasmineConfig.specFilter = createSpecFilter(clientConfig, jasmineEnv)
-
     jasmineEnv.configure(jasmineConfig)
 
     window.jasmine.DEFAULT_TIMEOUT_INTERVAL = jasmineConfig.timeoutInterval ||
