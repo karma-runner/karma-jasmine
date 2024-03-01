@@ -429,7 +429,9 @@ describe('jasmine adapter', function () {
 
       jasmineConfig.timeoutInterval = 10000
 
-      createStartFn(tc, jasmineEnv)()
+      // Create the __start__ function but do not call it (simulate JS file scope
+      // execution but not load event handling)
+      createStartFn(tc, jasmineEnv)
 
       expect(jasmine.DEFAULT_TIMEOUT_INTERVAL).toBe(jasmineConfig.timeoutInterval)
 
