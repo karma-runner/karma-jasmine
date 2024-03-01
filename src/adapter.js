@@ -82,12 +82,23 @@ function formatFailedStep (step) {
 
   // Remove the message prior to processing the stack to prevent issues like
   // https://github.com/karma-runner/karma-jasmine/issues/79
-  var stackframes = step.stack.split('\n')
+
+  // Jasmine filters empty newlines from the stack so remove them from the
+  // message before searching for it. Also, also remove the trailing newline (if
+  // present) so that when the message is put back on the top of the stack it
+  // doesn't introduce an extra newline.
+  var messageWithoutEmptyLines = step.message.replace(/\n+/g, '\n').replace(/\n$/, '')
+  var messageStartIndex = step.stack.indexOf(messageWithoutEmptyLines)
+  var firstNewlineIndex = step.stack.indexOf('\n')
   var messageOnStack = null
-  if (stackframes[0].indexOf(step.message) !== -1) {
+  var stack = step.stack
+  if (messageStartIndex !== -1 && messageStartIndex < firstNewlineIndex) {
     // Remove the message if it is in the stack string (eg Chrome)
-    messageOnStack = stackframes.shift()
+    messageOnStack = step.stack.substring(0, messageStartIndex + messageWithoutEmptyLines.length)
+    stack = step.stack.substring(messageStartIndex + messageWithoutEmptyLines.length)
   }
+
+  var stackframes = stack.split('\n')
   // Filter frames
   var relevantStackFrames = getRelevantStackFrom(stackframes)
   if (messageOnStack) {

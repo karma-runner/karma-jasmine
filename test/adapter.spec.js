@@ -359,7 +359,7 @@ describe('jasmine adapter', function () {
         stack: '@file.js:123\n'
       }
 
-      expect(formatFailedStep(step)).toMatch(/^Jasmine fail message/)
+      expect(formatFailedStep(step)).toBe('Jasmine fail message\n@file.js:123')
     })
 
     it('should report message if no stack trace', function () {
@@ -383,6 +383,7 @@ describe('jasmine adapter', function () {
 
       expect(formatFailedStep(step)).toBe('MESSAGE\nsource/controller.js:45')
     })
+
     it('should properly format message containing new-line characters', function () {
       // FF does not have the message in the stack trace
 
@@ -392,7 +393,17 @@ describe('jasmine adapter', function () {
         stack: 'Error: Jasmine fail\nmessage\n@file.js:123'
       }
 
-      expect(formatFailedStep(step)).toMatch('Jasmine fail\nmessage\n@file.js:123')
+      expect(formatFailedStep(step)).toBe('Error: Jasmine fail\nmessage\n@file.js:123')
+    })
+
+    it('should properly format message containing repeated new-line characters', function () {
+      var step = {
+        passed: false,
+        message: 'Failed: 1. failure message\n\n\n2. another failure\n3. a third failure\n\n\n\n',
+        stack: 'Error: Failed: 1. failure message\n2. another failure\n3. a third failure\n    at <Jasmine>\n    at UserContext.<anonymous> (/base/jasmine/test.js:13:9)\n    at <Jasmine>'
+      }
+
+      expect(formatFailedStep(step)).toBe('Error: Failed: 1. failure message\n2. another failure\n3. a third failure\n    at <Jasmine>\n    at UserContext.<anonymous> (/base/jasmine/test.js:13:9)\n    at <Jasmine>')
     })
   })
 
