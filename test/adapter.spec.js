@@ -572,17 +572,21 @@ describe('jasmine adapter', function () {
         name: 'test',
         id: 1
       }
+      var mockConfiguration = {
+        specFilter: jasmine.createSpy().and.returnValue(true)
+      }
       mockJasmineEnv = {
         topSuite: () => {
           return {
             children: [mockSpecTest, mockSpecBar]
           }
-        }
+        },
+        configuration: () => mockConfiguration
       }
       specs = mockJasmineEnv.topSuite().children
     })
 
-    describe(' getGrepSpecsToRun', function () {
+    describe('getGrepSpecsToRun', function () {
       it('should not match without grep arg', function () {
         var karmaConfMock = {
           args: []
@@ -659,6 +663,16 @@ describe('jasmine adapter', function () {
 
         expect(specFilter(mockSpecTest)).toEqual(true)
         expect(specFilter(mockSpecBar)).toEqual(false)
+      })
+      it('should still allow a custom spec filter', function () {
+        var karmaConfMock = {}
+        mockJasmineEnv.configuration().specFilter.and.returnValue(false)
+        var specFilter = createSpecFilter(karmaConfMock, mockJasmineEnv)
+        expect(specFilter(mockSpecTest)).toEqual(false)
+        expect(specFilter(mockSpecBar)).toEqual(false)
+        expect(mockJasmineEnv.configuration().specFilter).toHaveBeenCalledTimes(2)
+        expect(mockJasmineEnv.configuration().specFilter).toHaveBeenCalledWith(mockSpecTest)
+        expect(mockJasmineEnv.configuration().specFilter).toHaveBeenCalledWith(mockSpecBar)
       })
     })
   })

@@ -1,3 +1,10 @@
+# [5.1.0](https://github.com/karma-runner/karma-jasmine/compare/v5.0.1...v5.1.0) (2022-06-16)
+
+
+### Features
+
+* **spec-filter:** allow custom specFilter ([b73dbd6](https://github.com/karma-runner/karma-jasmine/commit/b73dbd69050bc7e192b1ad0ac9bb880f0ec00a0e))
+
 ## [5.0.1](https://github.com/karma-runner/karma-jasmine/compare/v5.0.0...v5.0.1) (2022-05-13)
 
 
