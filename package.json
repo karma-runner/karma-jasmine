@@ -36,7 +36,7 @@
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^8.0.4",
-    "@semantic-release/npm": "^9.0.1",
+    "@semantic-release/npm": "^13.1.5",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.26.0",
@@ -48,7 +48,7 @@
     "jasmine": "^4.1.0",
     "karma": "^6.3.18",
     "karma-firefox-launcher": "^2.1.2",
-    "semantic-release": "^19.0.2"
+    "semantic-release": "^25.0.3"
   },
   "peerDependencies": {
     "karma": "^6.0.0"
